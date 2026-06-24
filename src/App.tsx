@@ -57,6 +57,16 @@ export default function App() {
   const [examPapers, setExamPapers] = useState<ExamPaper[]>([]);
   const [selectedExamPassageIndex, setSelectedExamPassageIndex] = useState(0);
 
+  // Interactive exam/worksheet solving states
+  const [userAnswers, setUserAnswers] = useState<Record<string, {
+    q1: Record<number, string>;
+    q2a: Record<number, string>;
+    q2b: Record<number, string>;
+    q3: Record<number, string>;
+    q4: Record<number, string>;
+  }>>({});
+  const [gradedPapers, setGradedPapers] = useState<Record<string, boolean>>({});
+
   // Dynamic exams generator hook
   useEffect(() => {
     const papers = generateSudanExams(
@@ -66,6 +76,8 @@ export default function App() {
       examScope === "lesson" ? examLessonId : undefined
     );
     setExamPapers(papers);
+    setUserAnswers({});
+    setGradedPapers({});
   }, [pageCount, examScope, examUnitId, examLessonId]);
 
   // Sync state selections on navigation history
@@ -157,6 +169,120 @@ export default function App() {
     }
   };
 
+  const handleAnswerChange = (
+    paperId: string,
+    questionType: "q1" | "q2a" | "q2b" | "q3" | "q4",
+    idx: number,
+    value: string
+  ) => {
+    setUserAnswers(prev => {
+      const paperAns = prev[paperId] || { q1: {}, q2a: {}, q2b: {}, q3: {}, q4: {} };
+      return {
+        ...prev,
+        [paperId]: {
+          ...paperAns,
+          [questionType]: {
+            ...paperAns[questionType],
+            [idx]: value
+          }
+        }
+      };
+    });
+  };
+
+  const checkComprehensionAnswer = (userAns: string, correctAns: string): boolean => {
+    const user = userAns.trim().toLowerCase();
+    const correct = correctAns.trim().toLowerCase();
+    if (!user) return false;
+    
+    // Exact or partial direct match
+    if (user === correct || (correct.includes(user) && user.length > 3)) return true;
+    
+    // Check key numbers
+    const numbersInCorrect: string[] = correct.match(/\d+/g) || [];
+    const numbersInUser: string[] = user.match(/\d+/g) || [];
+    if (numbersInCorrect.length > 0) {
+      if (numbersInCorrect.some(num => numbersInUser.includes(num))) return true;
+    }
+    
+    // Core content words (remove stop words)
+    const stopWords = new Set(["the", "and", "for", "with", "about", "was", "she", "they", "them", "did", "does", "what", "where", "why", "who", "how", "much", "many", "has", "got", "her", "his", "their", "are", "were", "into", "from", "in", "it", "to", "of", "on", "as", "by", "that", "this", "he", "is", "a", "an"]);
+    const correctWords = correct
+      .split(/[\s,.\-()?!'"]+/)
+      .map(w => w.trim())
+      .filter(w => w.length > 2 && !stopWords.has(w));
+      
+    if (correctWords.length === 0) return true;
+    
+    const matchedWords = correctWords.filter(w => user.includes(w));
+    // If at least one or two core content words match, or 50% of them
+    return matchedWords.length >= Math.min(1, Math.ceil(correctWords.length * 0.5));
+  };
+
+  const checkWritingAnswer = (userAns: string, correctAns: string): boolean => {
+    const cleanUser = userAns.trim().toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ");
+    const cleanCorrect = correctAns.trim().toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ");
+    return cleanUser === cleanCorrect;
+  };
+
+  const calculatePaperScore = (examPaper: ExamPaper) => {
+    const paperAns = userAnswers[examPaper.id] || { q1: {}, q2a: {}, q2b: {}, q3: {}, q4: {} };
+    let score = 0;
+    
+    // Q1 Comprehension: 4 questions, 2 Marks each = 8 Marks
+    examPaper.passage.questions.forEach((q, idx) => {
+      const ans = paperAns.q1[idx] || "";
+      if (q.isTrueFalse) {
+        if (ans.trim().toLowerCase() === q.correctTF?.toLowerCase()) {
+          score += 2;
+        }
+      } else {
+        if (checkComprehensionAnswer(ans, q.answer)) {
+          score += 2;
+        }
+      }
+    });
+    
+    // Q2 Part A Spelling: 4 questions, 1 Mark each = 4 Marks
+    examPaper.spelling.forEach((s, idx) => {
+      const ans = paperAns.q2a[idx] || "";
+      if (ans.trim().toUpperCase() === s.word.toUpperCase()) {
+        score += 1;
+      }
+    });
+    
+    // Q2 Part B Vocab Matching: 5 questions, 1 Mark each = 5 Marks
+    const sortedSentences = [...examPaper.vocabMatching]
+      .sort((a, b) => a.definitionOrSentence.length - b.definitionOrSentence.length);
+    
+    examPaper.vocabMatching.forEach((vm, idx) => {
+      const ans = paperAns.q2b[idx] || "";
+      const correctIndex = sortedSentences.findIndex(item => item.definitionOrSentence === vm.definitionOrSentence);
+      const correctLetter = String.fromCharCode(65 + correctIndex);
+      if (ans.trim().toUpperCase() === correctLetter) {
+        score += 1;
+      }
+    });
+    
+    // Q3 Grammar: 5 questions, 1 Mark each = 5 Marks
+    examPaper.grammar.forEach((g, idx) => {
+      const ans = paperAns.q3[idx] || "";
+      if (ans === g.correct) {
+        score += 1;
+      }
+    });
+    
+    // Q4 Writing: 2 questions, 4 Marks each = 8 Marks
+    examPaper.writing.forEach((w, idx) => {
+      const ans = paperAns.q4[idx] || "";
+      if (checkWritingAnswer(ans, w.ordered)) {
+        score += 4;
+      }
+    });
+    
+    return score;
+  };
+
   const handleGenerateNewExam = () => {
     const nextIndex = selectedExamPassageIndex + 1;
     setSelectedExamPassageIndex(nextIndex);
@@ -167,6 +293,8 @@ export default function App() {
       examScope === "lesson" ? examLessonId : undefined
     );
     setExamPapers(papers);
+    setUserAnswers({});
+    setGradedPapers({});
   };
   
   // Voice selection mode (Vibrant server-side AI Voice with zero-config HTML5 audio fallbacks)
@@ -2046,164 +2174,362 @@ export default function App() {
 
                   {/* RENDER PAGES LIST (A4 PRINT CONTAINERS) */}
                   <div className="flex flex-col gap-8">
-                    {examPapers.map((examPaper, paperIdx) => (
-                      <div 
-                        key={examPaper.id}
-                        className="print-container text-slate-800 text-left page-break"
-                        style={{ direction: "ltr" }}
-                      >
-                        {/* Page indicator for preview screen */}
-                        <div className="absolute top-4 right-4 bg-indigo-50 text-indigo-700 text-xs px-3 py-1 rounded-full font-black no-print">
-                          Sheet {paperIdx + 1} of {examPapers.length}
-                        </div>
+                    {examPapers.map((examPaper, paperIdx) => {
+                      const paperAns = userAnswers[examPaper.id] || { q1: {}, q2a: {}, q2b: {}, q3: {}, q4: {} };
+                      const isGraded = gradedPapers[examPaper.id];
+                      const score = isGraded ? calculatePaperScore(examPaper) : 0;
+                      
+                      // Sort vocab matching sentences once for consistency
+                      const sortedSentences = [...examPaper.vocabMatching]
+                        .sort((a, b) => a.definitionOrSentence.length - b.definitionOrSentence.length);
 
-                        {/* WATERMARK LAYER (CONDITIONAL) */}
-                        {!watermarkRemoved && (
-                          <div 
-                            className="watermark absolute inset-0 pointer-events-none select-none flex items-center justify-center rotate-[-30deg] text-slate-100 font-black text-3xl sm:text-5xl uppercase tracking-widest text-center"
-                            style={{ opacity: 0.1, zIndex: 0 }}
-                          >
-                            SMILE English Grade 6 Companion • Teacher Copy • Watermark Active • Password 20302060
-                          </div>
-                        )}
-
-                        {/* Official Sudan School Header */}
-                        <div className="border-b-4 border-double border-slate-800 pb-5 mb-6 text-center relative z-10" style={{ fontFamily: "Inter, sans-serif" }}>
-                          <div className="flex justify-between items-center text-xs font-bold text-slate-600 mb-2 uppercase">
-                            <div>Republic of Sudan<br />Ministry of Education</div>
-                            <div className="text-2xl">🇸🇩</div>
-                            <div className="text-right">SMILE Series Companion<br />National Exam Center</div>
-                          </div>
-                          
-                          <div className="mt-4">
-                            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight uppercase">
-                              National General Certificate Examination - Grade 6
-                            </h1>
-                            <h2 className="text-md font-extrabold text-slate-700 mt-1">
-                              Subject: English Language (SMILE Series - Pupil's Book 3)
-                            </h2>
-                            <div className="text-xs font-bold text-slate-500 mt-1 flex justify-center gap-6">
-                              <span>Time Allowed: 1 Hour 30 Minutes</span>
-                              <span>•</span>
-                              <span>Total Marks: 30 Marks</span>
-                            </div>
+                      return (
+                        <div 
+                          key={examPaper.id}
+                          className="print-container text-slate-800 text-left page-break"
+                          style={{ direction: "ltr" }}
+                        >
+                          {/* Page indicator for preview screen */}
+                          <div className="absolute top-4 right-4 bg-indigo-50 text-indigo-700 text-xs px-3 py-1 rounded-full font-black no-print">
+                            Sheet {paperIdx + 1} of {examPapers.length}
                           </div>
 
-                          {/* Pupil metadata spaces */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6 text-xs font-extrabold text-left pt-4 border-t border-slate-200">
-                            <div className="flex gap-2">
-                              <span>Pupil's Name:</span>
-                              <span className="flex-1 border-b border-dashed border-slate-400"></span>
+                          {/* WATERMARK LAYER (CONDITIONAL) */}
+                          {!watermarkRemoved && (
+                            <div 
+                              className="watermark absolute inset-0 pointer-events-none select-none flex items-center justify-center rotate-[-30deg] text-slate-100 font-black text-3xl sm:text-5xl uppercase tracking-widest text-center"
+                              style={{ opacity: 0.1, zIndex: 0 }}
+                            >
+                              SMILE English Grade 6 Companion • Teacher Copy • Watermark Active • Password 20302060
                             </div>
-                            <div className="flex gap-2">
-                              <span>School Name:</span>
-                              <span className="flex-1 border-b border-dashed border-slate-400"></span>
-                            </div>
-                            <div className="flex gap-2">
-                              <span>Date:</span>
-                              <span className="w-24 border-b border-dashed border-slate-400"></span>
-                            </div>
-                          </div>
-                        </div>
+                          )}
 
-                        {/* EXAM QUESTIONS SPACE */}
-                        <div className="relative z-10 space-y-8" style={{ fontFamily: "Inter, sans-serif" }}>
-                          
-                          {/* QUESTION 1: COMPREHENSION PASSAGE */}
-                          <div>
-                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                              <span>Question 1: Reading Comprehension</span>
-                              <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
-                            </h3>
-                            <p className="text-xs text-slate-500 font-bold mb-3 italic">
-                              Read the following passage carefully, then answer the questions below:
-                            </p>
-                            
-                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs sm:text-sm leading-relaxed font-medium text-slate-800 mb-4 text-justify">
-                              <strong className="block text-slate-900 text-sm mb-1.5 uppercase tracking-wide underline">{examPaper.passage.title}</strong>
-                              {examPaper.passage.text}
-                            </div>
-
-                            <div className="space-y-4">
-                              {examPaper.passage.questions.map((q, idx) => (
-                                <div key={`q1-${idx}`} className="text-xs">
-                                  <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
-                                    <span className="text-slate-500">{idx + 1}.</span>
-                                    <p className="flex-1 text-left">{q.question}</p>
-                                    <span className="font-bold text-slate-400 shrink-0 ml-1">
-                                      {q.isTrueFalse ? "[ True / False ]" : "....................."}
-                                    </span>
-                                  </div>
-                                  {q.isTrueFalse ? (
-                                    <div className="flex gap-4 mt-2 ml-4 font-bold text-slate-400 text-[11px] justify-start">
-                                      <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O True</span>
-                                      <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O False</span>
-                                    </div>
-                                  ) : (
-                                    <div className="mt-2.5 ml-4 border-b border-dashed border-slate-300 h-6"></div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* QUESTION 2: VOCABULARY & SPELLING */}
-                          <div>
-                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                              <span>Question 2: Vocabulary & Spelling</span>
-                              <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
-                            </h3>
-                            
-                            {/* Subpart A: Missing Letters */}
-                            <div className="mb-6">
-                              <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
-                                A) Complete the missing letters of the following words according to the given clues: (4 Marks)
+                          {/* Interactive Grading Panel */}
+                          <div className="bg-slate-50 border border-slate-200 p-4 mb-6 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4 no-print text-right" style={{ direction: "rtl" }}>
+                            <div className="w-full sm:w-auto">
+                              <h4 className="text-sm font-black text-slate-800 flex items-center gap-2 justify-end">
+                                <span className="text-indigo-600 font-bold">تفاعلية حل وتصحيح ورقة العمل</span>
+                                <span>📝</span>
+                              </h4>
+                              <p className="text-[11px] text-slate-500 font-bold mt-1">
+                                قم بحل الأسئلة على الشاشة ثم اضغط تصحيح، وإذا قمت بطباعة الصفحة ستظهر إجاباتك مكتوبة بشكل رسمي!
                               </p>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ml-2">
-                                {examPaper.spelling.map((s, idx) => (
-                                  <div key={`sp-${idx}`} className="text-xs flex flex-col gap-1 bg-slate-50/40 p-2.5 rounded-lg border border-slate-100">
-                                    <span className="font-extrabold text-slate-800 text-left">
-                                      {idx + 1}. Clue: <span className="font-medium text-slate-600">{s.clue}</span>
+                            </div>
+                            
+                            <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end">
+                              {!isGraded ? (
+                                <button
+                                  onClick={() => {
+                                    setGradedPapers(prev => ({ ...prev, [examPaper.id]: true }));
+                                  }}
+                                  className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2.5 rounded-xl border-b-4 border-emerald-800 active:scale-95 transition-all cursor-pointer"
+                                >
+                                  تصحيح وإعطاء الدرجة 🏁
+                                </button>
+                              ) : (
+                                <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                                  <div className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl font-extrabold text-xs flex items-center gap-1.5">
+                                    <span>النتيجة:</span>
+                                    <span className="text-sm font-black text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded-lg">
+                                      {score} / 30
                                     </span>
-                                    <div className="flex items-center gap-3 mt-1.5 font-mono text-sm tracking-widest font-black text-left">
-                                      <span className="text-slate-400 bg-white border border-slate-200 px-3 py-1 rounded select-all uppercase">
-                                        {s.gapped}
-                                      </span>
-                                      <span className="text-[10px] text-slate-300 font-sans tracking-normal">Answer: ......................</span>
-                                    </div>
+                                    <span>{score >= 25 ? "ممتاز جداً! 🌟" : score >= 15 ? "عمل جيد! 👍" : "تحتاج لمراجعة 📚"}</span>
                                   </div>
-                                ))}
+                                  
+                                  <button
+                                    onClick={() => {
+                                      setGradedPapers(prev => ({ ...prev, [examPaper.id]: false }));
+                                      setUserAnswers(prev => {
+                                        const copy = { ...prev };
+                                        delete copy[examPaper.id];
+                                        return copy;
+                                      });
+                                    }}
+                                    className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-black px-3.5 py-2.5 rounded-xl border border-indigo-200 active:scale-95 transition-all cursor-pointer"
+                                  >
+                                    إعادة المحاولة 🔄
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Official Sudan School Header */}
+                          <div className="border-b-4 border-double border-slate-800 pb-5 mb-6 text-center relative z-10" style={{ fontFamily: "Inter, sans-serif" }}>
+                            <div className="flex justify-between items-center text-xs font-bold text-slate-600 mb-2 uppercase">
+                              <div>Republic of Sudan<br />Ministry of Education</div>
+                              <div className="text-2xl">🇸🇩</div>
+                              <div className="text-right">SMILE Series Companion<br />National Exam Center</div>
+                            </div>
+                            
+                            <div className="mt-4">
+                              <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight uppercase">
+                                National General Certificate Examination - Grade 6
+                              </h1>
+                              <h2 className="text-md font-extrabold text-slate-700 mt-1">
+                                Subject: English Language (SMILE Series - Pupil's Book 3)
+                              </h2>
+                              <div className="text-xs font-bold text-slate-500 mt-1 flex justify-center gap-6">
+                                <span>Time Allowed: 1 Hour 30 Minutes</span>
+                                <span>•</span>
+                                <span>Total Marks: 30 Marks</span>
                               </div>
                             </div>
 
-                            {/* Subpart B: Vocabulary Matching */}
+                            {/* Pupil metadata spaces */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6 text-xs font-extrabold text-left pt-4 border-t border-slate-200">
+                              <div className="flex gap-2">
+                                <span>Pupil's Name:</span>
+                                <span className="flex-1 border-b border-dashed border-slate-400"></span>
+                              </div>
+                              <div className="flex gap-2">
+                                <span>School Name:</span>
+                                <span className="flex-1 border-b border-dashed border-slate-400"></span>
+                              </div>
+                              <div className="flex gap-2">
+                                <span>Date:</span>
+                                <span className="w-24 border-b border-dashed border-slate-400"></span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* EXAM QUESTIONS SPACE */}
+                          <div className="relative z-10 space-y-8" style={{ fontFamily: "Inter, sans-serif" }}>
+                            
+                            {/* QUESTION 1: COMPREHENSION PASSAGE */}
                             <div>
-                              <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
-                                B) Match the English words in Column A with their correct example sentence context in Column B: (4 Marks)
+                              <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                                <span>Question 1: Reading Comprehension</span>
+                                <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                              </h3>
+                              <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                                Read the following passage carefully, then answer the questions below:
                               </p>
                               
-                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-4 text-xs font-extrabold">
-                                <div>
-                                  <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 uppercase text-[10px] text-left">Column A (Word)</span>
-                                  <div className="space-y-3">
-                                    {examPaper.vocabMatching.map((vm, idx) => (
-                                      <div key={`va-${idx}`} className="flex justify-between items-center h-10 border border-slate-200/50 bg-slate-50/50 px-3 rounded-lg text-left">
-                                        <span>{idx + 1}. <strong className="text-indigo-900 uppercase">{vm.word}</strong></span>
-                                        <span className="text-slate-400 font-mono text-[10px] mr-2">(    )</span>
+                              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs sm:text-sm leading-relaxed font-medium text-slate-800 mb-4 text-justify">
+                                <strong className="block text-slate-900 text-sm mb-1.5 uppercase tracking-wide underline">{examPaper.passage.title}</strong>
+                                {examPaper.passage.text}
+                              </div>
+
+                              <div className="space-y-4">
+                                {examPaper.passage.questions.map((q, idx) => {
+                                  const currentVal = paperAns.q1[idx] || "";
+                                  const isCorrectTF = q.isTrueFalse ? currentVal.trim().toLowerCase() === q.correctTF?.toLowerCase() : checkComprehensionAnswer(currentVal, q.answer);
+
+                                  return (
+                                    <div key={`q1-${idx}`} className="text-xs">
+                                      <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                        <span className="text-slate-500">{idx + 1}.</span>
+                                        <p className="flex-1 text-left">{q.question}</p>
+                                        <span className="font-bold text-slate-400 shrink-0 ml-1">
+                                          {q.isTrueFalse ? "[ True / False ]" : "....................."}
+                                        </span>
                                       </div>
-                                    ))}
-                                  </div>
+
+                                      {/* Interactive True / False Choice */}
+                                      {q.isTrueFalse ? (
+                                        <>
+                                          <div className="flex gap-3 mt-2 ml-4 font-bold text-slate-400 text-[11px] justify-start no-print">
+                                            <button
+                                              disabled={isGraded}
+                                              onClick={() => handleAnswerChange(examPaper.id, "q1", idx, "True")}
+                                              className={`px-3 py-1.5 border rounded-lg cursor-pointer transition-all ${
+                                                currentVal === "True" 
+                                                  ? "bg-indigo-600 text-white border-indigo-600 font-extrabold" 
+                                                  : "bg-white text-slate-600 hover:bg-slate-50 border-slate-300"
+                                              }`}
+                                            >
+                                              True
+                                            </button>
+                                            <button
+                                              disabled={isGraded}
+                                              onClick={() => handleAnswerChange(examPaper.id, "q1", idx, "False")}
+                                              className={`px-3 py-1.5 border rounded-lg cursor-pointer transition-all ${
+                                                currentVal === "False" 
+                                                  ? "bg-indigo-600 text-white border-indigo-600 font-extrabold" 
+                                                  : "bg-white text-slate-600 hover:bg-slate-50 border-slate-300"
+                                              }`}
+                                            >
+                                              False
+                                            </button>
+                                          </div>
+
+                                          {/* Print view display */}
+                                          <div className="hidden print:flex gap-4 mt-1.5 ml-4 font-bold text-slate-500 text-[11px] justify-start">
+                                            <span className={currentVal === "True" ? "underline font-black text-slate-900" : ""}>
+                                              {currentVal === "True" ? "✓ True" : "O True"}
+                                            </span>
+                                            <span className={currentVal === "False" ? "underline font-black text-slate-900" : ""}>
+                                              {currentVal === "False" ? "✓ False" : "O False"}
+                                            </span>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          {/* Interactive open text response */}
+                                          <input
+                                            type="text"
+                                            placeholder="Write your answer..."
+                                            disabled={isGraded}
+                                            value={currentVal}
+                                            onChange={(e) => handleAnswerChange(examPaper.id, "q1", idx, e.target.value)}
+                                            className="mt-2 ml-4 w-full max-w-lg border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none no-print"
+                                          />
+
+                                          {/* Print view display */}
+                                          <div className="mt-2.5 ml-4 border-b border-dashed border-slate-300 h-6 flex items-end">
+                                            <span className="text-xs font-bold text-slate-900 bg-white px-2 italic">
+                                              {currentVal || <span className="text-slate-200 select-none print:hidden">Answer: ..........................................................................</span>}
+                                            </span>
+                                          </div>
+                                        </>
+                                      )}
+
+                                      {/* Grading corrections display */}
+                                      {isGraded && (
+                                        <div className="mt-1.5 ml-4 font-bold text-xs no-print">
+                                          {isCorrectTF ? (
+                                            <span className="text-emerald-600 flex items-center gap-1">✓ Correct (2/2 Marks)</span>
+                                          ) : (
+                                            <span className="text-rose-600 flex flex-col gap-0.5">
+                                              <span>✗ Incorrect (0/2 Marks)</span>
+                                              <span className="text-slate-500 font-medium">
+                                                Correct answer: {q.isTrueFalse ? q.correctTF : `"${q.answer}"`}
+                                              </span>
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            {/* QUESTION 2: VOCABULARY & SPELLING */}
+                            <div>
+                              <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                                <span>Question 2: Vocabulary & Spelling</span>
+                                <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                              </h3>
+                              
+                              {/* Subpart A: Missing Letters */}
+                              <div className="mb-6">
+                                <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
+                                  A) Complete the missing letters of the following words according to the given clues: (4 Marks)
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ml-2">
+                                  {examPaper.spelling.map((s, idx) => {
+                                    const currentVal = paperAns.q2a[idx] || "";
+                                    const isCorrect = currentVal.trim().toUpperCase() === s.word.toUpperCase();
+
+                                    return (
+                                      <div key={`sp-${idx}`} className="text-xs flex flex-col gap-1 bg-slate-50/40 p-2.5 rounded-lg border border-slate-100">
+                                        <span className="font-extrabold text-slate-800 text-left">
+                                          {idx + 1}. Clue: <span className="font-medium text-slate-600">{s.clue}</span>
+                                        </span>
+                                        <div className="flex items-center gap-3 mt-1.5 font-mono text-sm tracking-widest font-black text-left">
+                                          <span className="text-slate-400 bg-white border border-slate-200 px-3 py-1 rounded select-all uppercase shrink-0">
+                                            {s.gapped}
+                                          </span>
+                                          
+                                          {/* Interactive spelling input */}
+                                          <input
+                                            type="text"
+                                            placeholder="Write word..."
+                                            disabled={isGraded}
+                                            value={currentVal}
+                                            onChange={(e) => handleAnswerChange(examPaper.id, "q2a", idx, e.target.value.toUpperCase())}
+                                            className="font-sans tracking-normal font-bold bg-white border border-slate-200 rounded px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none w-28 uppercase no-print"
+                                          />
+
+                                          <span className="hidden print:inline text-[10px] text-slate-300 font-sans tracking-normal">
+                                            Answer: <strong className="font-mono text-xs text-slate-900 border-b border-dashed border-slate-400 px-3">{currentVal || "......................"}</strong>
+                                          </span>
+                                        </div>
+
+                                        {/* Spelling correction feedback */}
+                                        {isGraded && (
+                                          <div className="mt-1 font-bold text-xs no-print">
+                                            {isCorrect ? (
+                                              <span className="text-emerald-600 flex items-center gap-1">✓ Correct (1/1 Mark)</span>
+                                            ) : (
+                                              <span className="text-rose-600 flex flex-col gap-0.5">
+                                                <span>✗ Incorrect (0/1 Mark)</span>
+                                                <span className="text-slate-500 font-mono text-[11px] uppercase">Correct: {s.word}</span>
+                                              </span>
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
+                              </div>
+
+                              {/* Subpart B: Vocabulary Matching */}
+                              <div>
+                                <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
+                                  B) Match the English words in Column A with their correct example sentence context in Column B: (4 Marks)
+                                </p>
                                 
-                                <div>
-                                  <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 text-left uppercase text-[10px]">Column B (Sentence Context)</span>
-                                  <div className="space-y-3">
-                                    {(() => {
-                                      // Sort deterministically to avoid random shuffling on updates/hovers
-                                      const sortedSentences = [...examPaper.vocabMatching]
-                                        .sort((a, b) => a.definitionOrSentence.length - b.definitionOrSentence.length);
-                                      
-                                      return sortedSentences.map((vm, idx) => {
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-4 text-xs font-extrabold">
+                                  <div>
+                                    <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 uppercase text-[10px] text-left">Column A (Word)</span>
+                                    <div className="space-y-3">
+                                      {examPaper.vocabMatching.map((vm, idx) => {
+                                        const currentVal = paperAns.q2b[idx] || "";
+                                        
+                                        const correctIndex = sortedSentences.findIndex(item => item.definitionOrSentence === vm.definitionOrSentence);
+                                        const correctLetter = String.fromCharCode(65 + correctIndex);
+                                        const isCorrect = currentVal.trim().toUpperCase() === correctLetter;
+
+                                        return (
+                                          <div key={`va-${idx}`} className="flex justify-between items-center min-h-[40px] border border-slate-200/50 bg-slate-50/50 px-3 rounded-lg text-left">
+                                            <span>{idx + 1}. <strong className="text-indigo-900 uppercase">{vm.word}</strong></span>
+                                            
+                                            <div className="flex items-center gap-2">
+                                              {/* Print letter indicator */}
+                                              <span className="text-indigo-700 font-mono text-xs font-black">
+                                                ( <span className="px-1 border-b border-dashed border-slate-400 font-extrabold min-w-[12px] inline-block text-center">{currentVal || "   "}</span> )
+                                              </span>
+
+                                              {/* Interactive matching dropdown */}
+                                              <select
+                                                disabled={isGraded}
+                                                value={currentVal}
+                                                onChange={(e) => handleAnswerChange(examPaper.id, "q2b", idx, e.target.value)}
+                                                className="bg-white border border-slate-300 rounded-lg px-1.5 py-1 text-[11px] font-black focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center w-20 shrink-0 no-print"
+                                              >
+                                                <option value="">Select...</option>
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                              </select>
+                                            </div>
+
+                                            {/* matching feedback */}
+                                            {isGraded && (
+                                              <div className="ml-2 font-bold text-[10px] no-print shrink-0">
+                                                {isCorrect ? (
+                                                  <span className="text-emerald-600">✓ (1/1)</span>
+                                                ) : (
+                                                  <span className="text-rose-600">✗ Ans: {correctLetter}</span>
+                                                )}
+                                              </div>
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                  
+                                  <div>
+                                    <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 text-left uppercase text-[10px]">Column B (Sentence Context)</span>
+                                    <div className="space-y-3">
+                                      {sortedSentences.map((vm, idx) => {
                                         const letter = String.fromCharCode(65 + idx); // A, B, C, D, E
                                         return (
                                           <div key={`vb-${idx}`} className="flex justify-between items-center min-h-[40px] border border-slate-200/50 bg-slate-50/50 px-3 py-1 rounded-lg text-left">
@@ -2213,82 +2539,171 @@ export default function App() {
                                             </span>
                                           </div>
                                         );
-                                      });
-                                    })()}
+                                      })}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
 
-                          {/* QUESTION 3: GRAMMAR & LANGUAGE STRUCTURES */}
-                          <div>
-                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                              <span>Question 3: Grammar & Language Structures</span>
-                              <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
-                            </h3>
-                            <p className="text-xs text-slate-500 font-bold mb-3 italic">
-                              Choose the correct option from the brackets to complete each sentence: (8 Marks)
-                            </p>
+                            {/* QUESTION 3: GRAMMAR & LANGUAGE STRUCTURES */}
+                            <div>
+                              <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                                <span>Question 3: Grammar & Language Structures</span>
+                                <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                              </h3>
+                              <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                                Choose the correct option from the brackets to complete each sentence: (8 Marks)
+                              </p>
 
-                            <div className="space-y-4 ml-2">
-                              {examPaper.grammar.map((g, idx) => (
-                                <div key={`gm-${idx}`} className="text-xs">
-                                  <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
-                                    <span className="text-slate-500">{idx + 1}.</span>
-                                    <p className="flex-1 leading-relaxed text-left">
-                                      {g.question.replace("________", "______________________")}
-                                    </p>
-                                  </div>
-                                  <div className="flex gap-4 mt-2 ml-4 font-semibold text-slate-500 text-[11px] justify-start">
-                                    {g.options.map((opt, oIdx) => (
-                                      <span key={oIdx} className="border border-slate-200 rounded-lg bg-slate-50/50 px-3 py-1">
-                                        [ ] {opt}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                              ))}
+                              <div className="space-y-4 ml-2">
+                                {examPaper.grammar.map((g, idx) => {
+                                  const currentVal = paperAns.q3[idx] || "";
+                                  const isCorrect = currentVal === g.correct;
+
+                                  return (
+                                    <div key={`gm-${idx}`} className="text-xs">
+                                      <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                        <span className="text-slate-500">{idx + 1}.</span>
+                                        <p className="flex-1 leading-relaxed text-left">
+                                          {g.question.replace("________", "______________________")}
+                                        </p>
+                                      </div>
+
+                                      {/* Interactive Grammar Pill Badges */}
+                                      <div className="flex flex-wrap gap-2 mt-2 ml-4 no-print">
+                                        {g.options.map((opt, oIdx) => {
+                                          const isSelected = currentVal === opt;
+                                          let btnClass = "border border-slate-200 rounded-xl bg-slate-50/50 px-3.5 py-1.5 cursor-pointer text-xs font-bold transition-all hover:bg-indigo-50 hover:text-indigo-900";
+                                          if (isSelected) {
+                                            btnClass = "border border-indigo-600 bg-indigo-600 text-white px-3.5 py-1.5 cursor-pointer text-xs font-bold transition-all shadow-sm";
+                                          }
+                                          if (isGraded) {
+                                            if (opt === g.correct) {
+                                              btnClass = "border border-emerald-500 bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-bold cursor-default shadow-sm";
+                                            } else if (isSelected) {
+                                              btnClass = "border border-rose-500 bg-rose-500 text-white px-3.5 py-1.5 text-xs font-bold cursor-default shadow-sm";
+                                            } else {
+                                              btnClass = "border border-slate-100 bg-slate-50/20 text-slate-400 px-3.5 py-1.5 text-xs font-bold cursor-default pointer-events-none";
+                                            }
+                                          }
+
+                                          return (
+                                            <button
+                                              key={oIdx}
+                                              disabled={isGraded}
+                                              onClick={() => handleAnswerChange(examPaper.id, "q3", idx, opt)}
+                                              className={btnClass}
+                                            >
+                                              {opt}
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+
+                                      {/* Print view display */}
+                                      <div className="hidden print:flex gap-4 mt-2 ml-4 font-semibold text-slate-500 text-[11px] justify-start">
+                                        {g.options.map((opt, oIdx) => {
+                                          const isSelected = currentVal === opt;
+                                          return (
+                                            <span key={oIdx} className={`border border-slate-200 rounded bg-slate-50/50 px-2.5 py-0.5 text-slate-700 ${isSelected ? "underline font-extrabold text-slate-900 bg-indigo-50/40" : ""}`}>
+                                              {isSelected ? "[✓] " : "[ ] "} {opt}
+                                            </span>
+                                          );
+                                        })}
+                                      </div>
+
+                                      {/* grammar correction label */}
+                                      {isGraded && (
+                                        <div className="mt-1.5 font-bold text-xs ml-4 no-print">
+                                          {isCorrect ? (
+                                            <span className="text-emerald-600">✓ Correct (1/1 Mark)</span>
+                                          ) : (
+                                            <span className="text-rose-600">
+                                              ✗ Incorrect (0/1 Mark). Correct answer: <strong className="underline">{g.correct}</strong>
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </div>
-                          </div>
 
-                          {/* QUESTION 4: WRITING & REORDERING */}
-                          <div>
-                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                              <span>Question 4: Writing & Sentence Construction</span>
-                              <span className="font-bold text-xs lowercase text-slate-500">(6 Marks)</span>
-                            </h3>
-                            <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
-                              Reorder the following jumbled words to construct a chronologically correct, meaningful sentence: (6 Marks)
-                            </p>
+                            {/* QUESTION 4: WRITING & REORDERING */}
+                            <div>
+                              <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                                <span>Question 4: Writing & Sentence Construction</span>
+                                <span className="font-bold text-xs lowercase text-slate-500">(6 Marks)</span>
+                              </h3>
+                              <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
+                                Reorder the following jumbled words to construct a chronologically correct, meaningful sentence: (6 Marks)
+                              </p>
 
-                            <div className="space-y-6 ml-2">
-                              {examPaper.writing.map((w, idx) => (
-                                <div key={`wt-${idx}`} className="text-xs flex flex-col gap-2">
-                                  <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
-                                    <span className="text-slate-500">{idx + 1}. Words:</span>
-                                    <span className="flex-1 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg font-mono text-slate-700 font-bold text-left">
-                                      {w.jumbled}
-                                    </span>
-                                  </div>
-                                  <div className="ml-4">
-                                    <span className="text-[10px] text-slate-400 block mb-1 text-left">Write your complete sentence here:</span>
-                                    <div className="border-b border-dashed border-slate-400 h-6"></div>
-                                  </div>
-                                </div>
-                              ))}
+                              <div className="space-y-6 ml-2">
+                                {examPaper.writing.map((w, idx) => {
+                                  const currentVal = paperAns.q4[idx] || "";
+                                  const isCorrect = checkWritingAnswer(currentVal, w.ordered);
+
+                                  return (
+                                    <div key={`wt-${idx}`} className="text-xs flex flex-col gap-2">
+                                      <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                        <span className="text-slate-500">{idx + 1}. Words:</span>
+                                        <span className="flex-1 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg font-mono text-slate-700 font-bold text-left">
+                                          {w.jumbled}
+                                        </span>
+                                      </div>
+
+                                      {/* Interactive text box */}
+                                      <input
+                                        type="text"
+                                        placeholder="Write correct sentence..."
+                                        disabled={isGraded}
+                                        value={currentVal}
+                                        onChange={(e) => handleAnswerChange(examPaper.id, "q4", idx, e.target.value)}
+                                        className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none no-print"
+                                      />
+
+                                      {/* Print view display */}
+                                      <div className="ml-4">
+                                        <span className="text-[10px] text-slate-400 block mb-1 text-left print:block">Write your complete sentence here:</span>
+                                        <div className="border-b border-dashed border-slate-400 h-6 flex items-end">
+                                          <span className="text-xs font-bold text-slate-900 bg-white px-2 italic">
+                                            {currentVal}
+                                          </span>
+                                        </div>
+                                      </div>
+
+                                      {/* writing correction label */}
+                                      {isGraded && (
+                                        <div className="mt-1 font-bold text-xs ml-4 no-print">
+                                          {isCorrect ? (
+                                            <span className="text-emerald-600 flex items-center gap-1">✓ Correct (4/4 Marks)</span>
+                                          ) : (
+                                            <span className="text-rose-600 flex flex-col gap-0.5">
+                                              <span>✗ Incorrect (0/4 Marks)</span>
+                                              <span className="text-slate-500 font-medium">Model Answer: "{w.ordered}"</span>
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </div>
-                          </div>
 
-                          {/* Encouragement Footer */}
-                          <div className="border-t border-slate-300 pt-6 mt-8 flex justify-between items-center text-xs font-bold text-slate-500">
-                            <span>Sudanese Pupil Companion • Excellent Pupil Award</span>
-                            <span className="italic text-slate-800 uppercase tracking-wider">🌟 Best of Luck & Outstanding Success 🌟</span>
-                          </div>
+                            {/* Encouragement Footer */}
+                            <div className="border-t border-slate-300 pt-6 mt-8 flex justify-between items-center text-xs font-bold text-slate-500">
+                              <span>Sudanese Pupil Companion • Excellent Pupil Award</span>
+                              <span className="italic text-slate-800 uppercase tracking-wider">🌟 Best of Luck & Outstanding Success 🌟</span>
+                            </div>
 
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </motion.div>
               )}
