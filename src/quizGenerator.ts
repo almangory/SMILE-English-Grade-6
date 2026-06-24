@@ -373,7 +373,7 @@ export function generateQuiz(
 
   // 1. FILTER BY SCOPE
   if (scope === "all") {
-    pool = [...HANDCRAFTED_TRIVIA];
+    pool = HANDCRAFTED_TRIVIA.filter((t) => SMILE_UNITS.some(u => u.id === t.unitId));
   } else if (scope === "unit") {
     pool = HANDCRAFTED_TRIVIA.filter((t) => t.unitId === targetUnitId);
   } else if (scope === "lesson") {

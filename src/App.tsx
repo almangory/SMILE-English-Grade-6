@@ -24,7 +24,9 @@ import {
   Play,
   Square,
   Eye,
-  EyeOff
+  EyeOff,
+  Maximize2,
+  Minimize2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { SMILE_UNITS } from "./smileData";
@@ -38,6 +40,31 @@ export default function App() {
   
   // Voice selection mode (Vibrant server-side AI Voice with zero-config HTML5 audio fallbacks)
   const [voiceMode, setVoiceMode] = useState<"system" | "gemini">("gemini");
+
+  // Fullscreen state and handlers
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error("Error enabling fullscreen:", err);
+      });
+    } else {
+      document.exitFullscreen().catch((err) => {
+        console.error("Error exiting fullscreen:", err);
+      });
+    }
+  };
 
   // Game states
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
@@ -405,6 +432,25 @@ export default function App() {
         </div>
 
         <div className="flex gap-3 items-center">
+          {/* Fullscreen Button */}
+          <button
+            onClick={toggleFullscreen}
+            className="flex items-center gap-2 bg-white px-5 py-3 rounded-[24px] shadow-sm border-b-4 border-gray-200 text-sky-800 font-extrabold hover:bg-sky-50 active:scale-95 transition-all cursor-pointer"
+            title={isFullscreen ? "الخروج من الشاشة الكاملة" : "شاشة كاملة"}
+          >
+            {isFullscreen ? (
+              <>
+                <Minimize2 className="w-5 h-5 text-sky-600 animate-pulse" />
+                <span className="hidden sm:inline text-sm">الخروج من ملء الشاشة</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="w-5 h-5 text-sky-600" />
+                <span className="hidden sm:inline text-sm">شاشة كاملة</span>
+              </>
+            )}
+          </button>
+
           <div className="bg-white px-6 py-3 rounded-[24px] shadow-sm border-b-4 border-gray-200 flex items-center gap-2">
             <span className="text-2xl">⭐️</span>
             <span className="text-lg sm:text-xl font-black text-amber-500">{points} Points</span>
