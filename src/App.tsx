@@ -26,17 +26,127 @@ import {
   Eye,
   EyeOff,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Printer,
+  Lock,
+  Unlock,
+  FileText
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { SMILE_UNITS } from "./smileData";
 import { UnitItem, Lesson, WordItem, ChatMessage } from "./types";
 import { generateQuiz } from "./quizGenerator";
+import { generateSudanExam, ExamPaper } from "./examGenerator";
 
 export default function App() {
   const [selectedUnit, setSelectedUnit] = useState<UnitItem>(SMILE_UNITS[0]);
   const [selectedLesson, setSelectedLesson] = useState<Lesson>(SMILE_UNITS[0].lessons[0]);
-  const [activeTab, setActiveTab] = useState<"book" | "dictionary" | "quiz" | "adventure" | "syllabus">("book");
+  const [activeTab, setActiveTab] = useState<"book" | "dictionary" | "quiz" | "adventure" | "syllabus" | "print">("book");
+  
+  // Back button interception & Exit confirm state
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+
+  // A4 Printable Worksheet / Exam states
+  const [watermarkRemoved, setWatermarkRemoved] = useState(false);
+  const [watermarkPassword, setWatermarkPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [examPaper, setExamPaper] = useState<ExamPaper>(generateSudanExam(0));
+  const [selectedExamPassageIndex, setSelectedExamPassageIndex] = useState(0);
+
+  // Sync state selections on navigation history
+  useEffect(() => {
+    // Check if initial state is set
+    if (!window.history.state) {
+      window.history.replaceState({ isInitial: true, tab: "book" }, "");
+      window.history.pushState({ tab: "book", unitId: SMILE_UNITS[0].id, lessonId: SMILE_UNITS[0].lessons[0].id }, "");
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state) {
+        const state = event.state;
+        if (state.isInitial) {
+          // Re-push state so page doesn't exit right away, and show Arabic confirmation dialog
+          window.history.pushState({ tab: activeTab, unitId: selectedUnit.id, lessonId: selectedLesson.id }, "");
+          setShowExitConfirm(true);
+        } else {
+          if (state.tab) {
+            setActiveTab(state.tab);
+          }
+          if (state.unitId) {
+            const unit = SMILE_UNITS.find((u) => u.id === state.unitId);
+            if (unit) setSelectedUnit(unit);
+          }
+          if (state.lessonId) {
+            const unit = SMILE_UNITS.find((u) => u.id === (state.unitId || selectedUnit.id));
+            if (unit) {
+              const lesson = unit.lessons.find((l) => l.id === state.lessonId);
+              if (lesson) setSelectedLesson(lesson);
+            }
+          }
+        }
+      } else {
+        setShowExitConfirm(true);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [activeTab, selectedUnit, selectedLesson]);
+
+  // Intercept beforeunload for safety on refresh or site leave
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "هل أنت متأكد من مغادرة البرنامج؟ نقاطك وتقدمك قد تضيع.";
+      return "هل أنت متأكد من مغادرة البرنامج؟ نقاطك وتقدمك قد تضيع.";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const navigateToTab = (tab: "book" | "dictionary" | "quiz" | "adventure" | "syllabus" | "print") => {
+    setActiveTab(tab);
+    window.history.pushState({ tab, unitId: selectedUnit.id, lessonId: selectedLesson.id }, "");
+  };
+
+  const navigateToUnit = (unit: UnitItem) => {
+    setSelectedUnit(unit);
+    setSelectedLesson(unit.lessons[0]);
+    // reset quiz index
+    setCurrentQuizIndex(0);
+    setSelectedAnswer(null);
+    setQuizScore(0);
+    setQuizScoreFinished(false);
+    window.history.pushState({ tab: activeTab, unitId: unit.id, lessonId: unit.lessons[0].id }, "");
+  };
+
+  const navigateToLesson = (lesson: Lesson) => {
+    setSelectedLesson(lesson);
+    setCurrentQuizIndex(0);
+    setSelectedAnswer(null);
+    setQuizScore(0);
+    setQuizScoreFinished(false);
+    window.history.pushState({ tab: activeTab, unitId: selectedUnit.id, lessonId: lesson.id }, "");
+  };
+
+  const handleRemoveWatermark = () => {
+    if (watermarkPassword === "20302060") {
+      setWatermarkRemoved(true);
+      setPasswordError("");
+    } else {
+      setPasswordError("رمز المرور خاطئ! الرجاء إدخال الرمز الصحيح لإزالة العلامة المائية.");
+    }
+  };
+
+  const handleGenerateNewExam = () => {
+    const nextIndex = selectedExamPassageIndex + 1;
+    setSelectedExamPassageIndex(nextIndex);
+    setExamPaper(generateSudanExam(nextIndex));
+  };
   
   // Voice selection mode (Vibrant server-side AI Voice with zero-config HTML5 audio fallbacks)
   const [voiceMode, setVoiceMode] = useState<"system" | "gemini">("gemini");
@@ -263,21 +373,11 @@ export default function App() {
 
   // Synchronize first lesson whenever unit changes
   const handleUnitSelect = (unit: UnitItem) => {
-    setSelectedUnit(unit);
-    setSelectedLesson(unit.lessons[0]);
-    // reset quiz index
-    setCurrentQuizIndex(0);
-    setSelectedAnswer(null);
-    setQuizScore(0);
-    setQuizScoreFinished(false);
+    navigateToUnit(unit);
   };
 
   const handleLessonSelect = (lesson: Lesson) => {
-    setSelectedLesson(lesson);
-    setCurrentQuizIndex(0);
-    setSelectedAnswer(null);
-    setQuizScore(0);
-    setQuizScoreFinished(false);
+    navigateToLesson(lesson);
   };
 
   // Text-To-Speech function using full-stack API or speech synthesis fallback
@@ -574,11 +674,11 @@ export default function App() {
         <main className="lg:col-span-9 flex flex-col gap-6">
           
           {/* Main Interactive Sub-tabs selection - Bento Style */}
-          <div className="bg-white rounded-[32px] p-2 shadow-sm border-b-6 border-sky-100 flex flex-wrap gap-1.5">
+          <div className="bg-white rounded-[32px] p-2 shadow-sm border-b-6 border-sky-100 flex flex-wrap gap-1.5 no-print">
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveTab("book")}
+              onClick={() => navigateToTab("book")}
               className={`flex-1 min-w-[110px] py-4 px-3 rounded-[24px] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                 activeTab === "book"
                   ? "bg-sky-500 text-white border-b-4 border-sky-700 shadow-md"
@@ -593,7 +693,7 @@ export default function App() {
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveTab("dictionary")}
+              onClick={() => navigateToTab("dictionary")}
               className={`flex-1 min-w-[110px] py-4 px-3 rounded-[24px] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                 activeTab === "dictionary"
                   ? "bg-amber-400 text-white border-b-4 border-amber-600 shadow-md"
@@ -608,7 +708,7 @@ export default function App() {
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveTab("quiz")}
+              onClick={() => navigateToTab("quiz")}
               className={`flex-1 min-w-[110px] py-4 px-3 rounded-[24px] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                 activeTab === "quiz"
                   ? "bg-emerald-400 text-white border-b-4 border-emerald-600 shadow-md"
@@ -623,7 +723,7 @@ export default function App() {
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveTab("adventure")}
+              onClick={() => navigateToTab("adventure")}
               className={`flex-1 min-w-[110px] py-4 px-3 rounded-[24px] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                 activeTab === "adventure"
                   ? "bg-purple-500 text-white border-b-4 border-purple-700 shadow-md"
@@ -638,7 +738,7 @@ export default function App() {
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveTab("syllabus")}
+              onClick={() => navigateToTab("syllabus")}
               className={`flex-1 min-w-[110px] py-4 px-3 rounded-[24px] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                 activeTab === "syllabus"
                   ? "bg-rose-500 text-white border-b-4 border-rose-700 shadow-md"
@@ -648,6 +748,21 @@ export default function App() {
               <Grid className="w-5 h-5 mb-0.5" />
               <span>Syllabus Map</span>
               <span className="text-[10px] opacity-80 font-bold">Book Outline</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigateToTab("print")}
+              className={`flex-1 min-w-[110px] py-4 px-3 rounded-[24px] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                activeTab === "print"
+                  ? "bg-indigo-600 text-white border-b-4 border-indigo-800 shadow-md"
+                  : "bg-transparent hover:bg-slate-100/85 text-indigo-950 font-bold"
+              }`}
+            >
+              <Printer className="w-5 h-5 mb-0.5 text-indigo-500 group-hover:text-white" />
+              <span>A4 Worksheets</span>
+              <span className="text-[10px] opacity-80 font-bold">Sudan Exam</span>
             </motion.button>
           </div>
 
@@ -1631,6 +1746,367 @@ export default function App() {
                   </div>
                 </motion.div>
               )}
+
+              {/* TAB 6: PRINT WORKSHEET GENERATOR (صانع أوراق العمل A4) */}
+              {activeTab === "print" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex flex-col gap-6"
+                >
+                  {/* Style override to control clean A4 printing */}
+                  <style dangerouslySetInnerHTML={{ __html: `
+                    @media print {
+                      body, html {
+                        background: white !important;
+                        color: black !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                      }
+                      header, footer, aside, .no-print, button, input {
+                        display: none !important;
+                      }
+                      main {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                      }
+                      .print-container {
+                        border: none !important;
+                        box-shadow: none !important;
+                        margin: 0 !important;
+                        padding: 0.5cm !important;
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        background: white !important;
+                      }
+                      .watermark {
+                        color: rgba(0, 0, 0, 0.05) !important;
+                      }
+                    }
+                  `}} />
+
+                  <div className="bg-gradient-to-r from-indigo-600 to-sky-600 text-white p-6 rounded-[32px] border-b-6 border-r-6 border-indigo-900/80 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 no-print">
+                    <div className="flex-1">
+                      <span className="text-[10px] bg-indigo-500 text-white font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                        SMILE SERIES • BOOK 3
+                      </span>
+                      <h3 className="text-2xl font-black flex items-center gap-2 uppercase tracking-wide mt-1">
+                        <Printer className="w-6 h-6 animate-pulse" />
+                        صانع أوراق العمل والامتحانات الوزارية A4
+                      </h3>
+                      <p className="text-xs text-indigo-100 font-bold mt-1">
+                        هنا يمكنك توليد اختبارات تفاعلية وورق عمل جاهز للطباعة مباشرة بحجم A4 مطابق تماماً لنمط امتحانات الشهادة السودانية الوزارية للصف السادس.
+                      </p>
+                    </div>
+                    
+                    <button
+                      onClick={() => window.print()}
+                      className="bg-white hover:bg-indigo-50 text-indigo-700 font-black px-6 py-3.5 rounded-2xl border-b-4 border-slate-200 transition-all active:scale-95 flex items-center gap-2 cursor-pointer transform"
+                    >
+                      <Printer className="w-5 h-5" />
+                      <span>طباعة ورق العمل (A4)</span>
+                    </button>
+                  </div>
+
+                  {/* Watermark Protection Management Panel */}
+                  <div className="bg-slate-50 p-5 rounded-[28px] border-2 border-dashed border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 no-print">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl ${watermarkRemoved ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"}`}>
+                        {watermarkRemoved ? <Unlock className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
+                      </div>
+                      <div className="text-right">
+                        <h4 className="text-sm font-black text-slate-800">العلامة المائية للاختبار المطبوع</h4>
+                        <p className="text-xs font-bold text-slate-500">
+                          {watermarkRemoved 
+                            ? "تمت إزالة العلامة المائية بنجاح! يمكنك الآن طباعة ورقة العمل بشكل رسمي ونظيف." 
+                            : "الامتحان محمي بعلامة مائية. لإزالتها، يرجى إدخال رمز المرور الخاص بالمعلم (20302060)."}
+                        </p>
+                      </div>
+                    </div>
+
+                    {!watermarkRemoved ? (
+                      <div className="flex flex-col gap-1.5 w-full md:w-auto">
+                        <div className="flex gap-2">
+                          <input
+                            type="password"
+                            placeholder="رمز مرور إزالة العلامة (20302060)"
+                            value={watermarkPassword}
+                            onChange={(e) => setWatermarkPassword(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === "Enter") handleRemoveWatermark(); }}
+                            className="bg-white px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full md:w-56 text-center"
+                          />
+                          <button
+                            onClick={handleRemoveWatermark}
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-4 py-2.5 rounded-xl text-xs cursor-pointer transition-colors whitespace-nowrap"
+                          >
+                            إزالة 🔓
+                          </button>
+                        </div>
+                        {passwordError && (
+                          <span className="text-[11px] font-bold text-rose-600 text-right">{passwordError}</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="bg-emerald-50 text-emerald-700 font-extrabold text-xs px-4 py-2 rounded-xl border border-emerald-200">
+                        ✅ تم فتح الميزة وإزالة العلامة المائية
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Exam Settings / Regenerator */}
+                  <div className="bg-white p-5 rounded-[28px] border border-slate-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 no-print">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">📝</span>
+                      <div className="text-right">
+                        <h4 className="text-sm font-black text-slate-800">خيارات توليد الامتحان</h4>
+                        <p className="text-xs font-bold text-slate-500">
+                          اضغط على الزر لتوليد نموذج امتحان وزاري مختلف بأسئلة وعناوين نصوص قراءة جديدة تلقائياً!
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={handleGenerateNewExam}
+                      className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-black px-5 py-3 rounded-xl border border-indigo-200 text-xs flex items-center gap-2 cursor-pointer transition-all active:scale-95"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                      <span>توليد نموذج امتحان جديد</span>
+                    </button>
+                  </div>
+
+                  {/* A4 PRINT CONTAINER SHEET look on-screen */}
+                  <div 
+                    id="printable-exam-area"
+                    className="print-container bg-white rounded-[32px] border-4 border-slate-100 p-8 sm:p-12 shadow-md relative overflow-hidden text-slate-800 text-left"
+                    style={{ direction: "ltr", minHeight: "1123px" }}
+                  >
+                    
+                    {/* WATERMARK LAYER (CONDITIONAL) */}
+                    {!watermarkRemoved && (
+                      <div 
+                        className="watermark absolute inset-0 pointer-events-none select-none flex items-center justify-center rotate-[-30deg] text-slate-100 font-black text-3xl sm:text-5xl uppercase tracking-widest text-center"
+                        style={{ opacity: 0.1, zIndex: 0 }}
+                      >
+                        SMILE English Grade 6 Companion • Teacher Copy • Watermark Active • Password 20302060
+                      </div>
+                    )}
+
+                    {/* Official Sudan School Header */}
+                    <div className="border-b-4 border-double border-slate-800 pb-5 mb-6 text-center relative z-10" style={{ fontFamily: "Inter, sans-serif" }}>
+                      <div className="flex justify-between items-center text-xs font-bold text-slate-600 mb-2 uppercase">
+                        <div>Republic of Sudan<br />Ministry of Education</div>
+                        <div className="text-2xl">🇸🇩</div>
+                        <div className="text-right">جمهورية السودان<br />وزارة التربية والتعليم</div>
+                      </div>
+                      
+                      <div className="mt-4">
+                        <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight uppercase">
+                          National General Certificate Examination - Grade 6
+                        </h1>
+                        <h2 className="text-md font-extrabold text-slate-700 mt-1">
+                          Subject: English Language (SMILE Series - Pupil's Book 3)
+                        </h2>
+                        <div className="text-xs font-bold text-slate-500 mt-1 flex justify-center gap-6">
+                          <span>Time Allowed: 1 Hour 30 Minutes</span>
+                          <span>•</span>
+                          <span>Total Marks: 30 Marks</span>
+                        </div>
+                      </div>
+
+                      {/* Pupil metadata spaces */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6 text-xs font-extrabold text-left pt-4 border-t border-slate-200">
+                        <div className="flex gap-2">
+                          <span>Pupil's Name:</span>
+                          <span className="flex-1 border-b border-dashed border-slate-400"></span>
+                        </div>
+                        <div className="flex gap-2">
+                          <span>School Name:</span>
+                          <span className="flex-1 border-b border-dashed border-slate-400"></span>
+                        </div>
+                        <div className="flex gap-2">
+                          <span>Date:</span>
+                          <span className="w-24 border-b border-dashed border-slate-400"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* EXAM QUESTIONS SPACE */}
+                    <div className="relative z-10 space-y-8" style={{ fontFamily: "Inter, sans-serif" }}>
+                      
+                      {/* QUESTION 1: COMPREHENSION PASSAGE */}
+                      <div>
+                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                          <span>Question 1: Reading Comprehension</span>
+                          <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                        </h3>
+                        <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                          Read the following passage carefully, then answer the questions below:
+                        </p>
+                        
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs sm:text-sm leading-relaxed font-medium text-slate-800 mb-4 text-justify">
+                          <strong className="block text-slate-900 text-sm mb-1.5 uppercase tracking-wide underline">{examPaper.passage.title}</strong>
+                          {examPaper.passage.text}
+                        </div>
+
+                        <div className="space-y-4">
+                          {examPaper.passage.questions.map((q, idx) => (
+                            <div key={`q1-${idx}`} className="text-xs">
+                              <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                <span className="text-slate-500">{idx + 1}.</span>
+                                <p className="flex-1 text-left">{q.question}</p>
+                                <span className="font-bold text-slate-400 shrink-0 ml-1">
+                                  {q.isTrueFalse ? "[ True / False ]" : "....................."}
+                                </span>
+                              </div>
+                              {q.isTrueFalse ? (
+                                <div className="flex gap-4 mt-2 ml-4 font-bold text-slate-400 text-[11px] justify-start">
+                                  <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O True</span>
+                                  <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O False</span>
+                                </div>
+                              ) : (
+                                <div className="mt-2.5 ml-4 border-b border-dashed border-slate-300 h-6"></div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* QUESTION 2: VOCABULARY & SPELLING */}
+                      <div>
+                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                          <span>Question 2: Vocabulary & Spelling</span>
+                          <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                        </h3>
+                        
+                        {/* Subpart A: Missing Letters */}
+                        <div className="mb-6">
+                          <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                            A) Complete the missing letters of the following words according to the given clues: (4 Marks)
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ml-2">
+                            {examPaper.spelling.map((s, idx) => (
+                              <div key={`sp-${idx}`} className="text-xs flex flex-col gap-1 bg-slate-50/40 p-2.5 rounded-lg border border-slate-100">
+                                <span className="font-extrabold text-slate-800 text-left">
+                                  {idx + 1}. Clue: <span className="font-medium text-slate-600">{s.clue}</span>
+                                </span>
+                                <div className="flex items-center gap-3 mt-1.5 font-mono text-sm tracking-widest font-black text-left">
+                                  <span className="text-slate-400 bg-white border border-slate-200 px-3 py-1 rounded select-all uppercase">
+                                    {s.gapped}
+                                  </span>
+                                  <span className="text-[10px] text-slate-300 font-sans tracking-normal">Answer: ......................</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Subpart B: Vocabulary Matching */}
+                        <div>
+                          <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                            B) Match the English words with their correct Arabic meaning translation: (4 Marks)
+                          </p>
+                          
+                          <div className="grid grid-cols-2 gap-6 ml-4 text-xs font-extrabold">
+                            <div>
+                              <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 uppercase text-[10px] text-left">Column A</span>
+                              <div className="space-y-3">
+                                {examPaper.vocabMatching.map((vm, idx) => (
+                                  <div key={`va-${idx}`} className="flex justify-between items-center h-8 border border-slate-200/50 bg-slate-50/50 px-3 rounded-lg text-left">
+                                    <span>{idx + 1}. <strong className="text-indigo-900 uppercase">{vm.word}</strong></span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            
+                            <div style={{ direction: "rtl" }}>
+                              <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 text-right uppercase text-[10px]" style={{ direction: "ltr" }}>Column B (Arabic)</span>
+                              <div className="space-y-3">
+                                {examPaper.vocabMatching.map((vm, idx) => (
+                                  <div key={`vb-${idx}`} className="flex justify-between items-center h-8 border border-slate-200/50 bg-slate-50/50 px-3 rounded-lg text-right">
+                                    <span className="font-black text-slate-700">{vm.arabic}</span>
+                                    <span className="text-slate-400 font-mono text-[10px]">( )</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* QUESTION 3: GRAMMAR & LANGUAGE STRUCTURES */}
+                      <div>
+                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                          <span>Question 3: Grammar & Language Structures</span>
+                          <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                        </h3>
+                        <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                          Choose the correct option from the brackets to complete each sentence: (8 Marks)
+                        </p>
+
+                        <div className="space-y-4 ml-2">
+                          {examPaper.grammar.map((g, idx) => (
+                            <div key={`gm-${idx}`} className="text-xs">
+                              <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                <span className="text-slate-500">{idx + 1}.</span>
+                                <p className="flex-1 leading-relaxed text-left">
+                                  {g.question.replace("________", "______________________")}
+                                </p>
+                              </div>
+                              <div className="flex gap-4 mt-2 ml-4 font-semibold text-slate-500 text-[11px] justify-start">
+                                {g.options.map((opt, oIdx) => (
+                                  <span key={oIdx} className="border border-slate-200 rounded-lg bg-slate-50/50 px-3 py-1">
+                                    [ ] {opt}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* QUESTION 4: WRITING & REORDERING */}
+                      <div>
+                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                          <span>Question 4: Writing & Sentence Construction</span>
+                          <span className="font-bold text-xs lowercase text-slate-500">(6 Marks)</span>
+                        </h3>
+                        <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
+                          Reorder the following jumbled words to construct a chronologically correct, meaningful sentence: (6 Marks)
+                        </p>
+
+                        <div className="space-y-6 ml-2">
+                          {examPaper.writing.map((w, idx) => (
+                            <div key={`wt-${idx}`} className="text-xs flex flex-col gap-2">
+                              <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                <span className="text-slate-500">{idx + 1}. Words:</span>
+                                <span className="flex-1 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg font-mono text-slate-700 font-bold text-left">
+                                  {w.jumbled}
+                                </span>
+                              </div>
+                              <div className="ml-4">
+                                <span className="text-[10px] text-slate-400 block mb-1 text-left">Write your complete sentence here:</span>
+                                <div className="border-b border-dashed border-slate-400 h-6"></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Encouragement Footer */}
+                      <div className="border-t border-slate-300 pt-6 mt-8 flex justify-between items-center text-xs font-bold text-slate-500">
+                        <span>Sudanese Pupil Companion • Excellent Pupil Award</span>
+                        <span className="italic text-slate-800 uppercase tracking-wider">🌟 Best of Luck / بالتوفيق والنجاح 🌟</span>
+                      </div>
+
+                    </div>
+                  </div>
+                </motion.div>
+              )}
             </AnimatePresence>
             
           </div>
@@ -1639,6 +2115,45 @@ export default function App() {
 
       {/* Hidden Audio Player for absolute compatibility in iframe sandbox contexts */}
       <audio ref={audioPlayerRef} className="hidden" aria-hidden="true" />
+
+      {/* Exit Confirmation Dialog Modal */}
+      <AnimatePresence>
+        {showExitConfirm && (
+          <div className="fixed inset-0 bg-slate-950/65 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-[32px] p-6 sm:p-8 max-w-md w-full shadow-2xl border-4 border-amber-400 text-center relative"
+              style={{ direction: "rtl" }}
+            >
+              <span className="text-6xl mb-4 block">👋</span>
+              <h3 className="text-2xl font-black text-slate-800 mb-2">هل أنت متأكد من مغادرة البرنامج؟</h3>
+              <p className="text-slate-500 font-bold text-sm mb-6 leading-relaxed">
+                ستفقد جميع نقاطك المحفوظة مؤقتاً ({points} نقطة) والتقدم الذي أحرزته! ابقَ معنا للمزيد من الألعاب والتحديات الممتعة في منهج SMILE English!
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => setShowExitConfirm(false)}
+                  className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-black py-3.5 px-6 rounded-2xl border-b-4 border-emerald-700 active:scale-95 transition-transform cursor-pointer"
+                >
+                  لا، البقاء والاستمرار 🎮
+                </button>
+                <button
+                  onClick={() => {
+                    setShowExitConfirm(false);
+                    // Force redirect or close if supported, otherwise go back
+                    window.location.href = "about:blank";
+                  }}
+                  className="flex-1 bg-rose-100 hover:bg-rose-200 text-rose-700 font-extrabold py-3.5 px-6 rounded-2xl active:scale-95 transition-transform cursor-pointer"
+                >
+                  نعم، المغادرة والخروج 🚪
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Sudan Modern Learning Pupil English Footer Credits */}
       <footer className="max-w-6xl w-full mx-auto mt-8 py-6 text-center text-sky-700/60 font-semibold border-t border-sky-100">
