@@ -36,7 +36,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { SMILE_UNITS } from "./smileData";
 import { UnitItem, Lesson, WordItem, ChatMessage } from "./types";
 import { generateQuiz } from "./quizGenerator";
-import { generateSudanExam, ExamPaper } from "./examGenerator";
+import { generateSudanExams, ExamPaper } from "./examGenerator";
 
 export default function App() {
   const [selectedUnit, setSelectedUnit] = useState<UnitItem>(SMILE_UNITS[0]);
@@ -50,8 +50,23 @@ export default function App() {
   const [watermarkRemoved, setWatermarkRemoved] = useState(false);
   const [watermarkPassword, setWatermarkPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [examPaper, setExamPaper] = useState<ExamPaper>(generateSudanExam(0));
+  const [pageCount, setPageCount] = useState<number>(1);
+  const [examScope, setExamScope] = useState<"all" | "unit" | "lesson">("all");
+  const [examUnitId, setExamUnitId] = useState<number>(SMILE_UNITS[0].id);
+  const [examLessonId, setExamLessonId] = useState<number>(SMILE_UNITS[0].lessons[0].id);
+  const [examPapers, setExamPapers] = useState<ExamPaper[]>([]);
   const [selectedExamPassageIndex, setSelectedExamPassageIndex] = useState(0);
+
+  // Dynamic exams generator hook
+  useEffect(() => {
+    const papers = generateSudanExams(
+      pageCount,
+      examScope,
+      examScope === "all" ? undefined : examUnitId,
+      examScope === "lesson" ? examLessonId : undefined
+    );
+    setExamPapers(papers);
+  }, [pageCount, examScope, examUnitId, examLessonId]);
 
   // Sync state selections on navigation history
   useEffect(() => {
@@ -145,7 +160,13 @@ export default function App() {
   const handleGenerateNewExam = () => {
     const nextIndex = selectedExamPassageIndex + 1;
     setSelectedExamPassageIndex(nextIndex);
-    setExamPaper(generateSudanExam(nextIndex));
+    const papers = generateSudanExams(
+      pageCount,
+      examScope,
+      examScope === "all" ? undefined : examUnitId,
+      examScope === "lesson" ? examLessonId : undefined
+    );
+    setExamPapers(papers);
   };
   
   // Voice selection mode (Vibrant server-side AI Voice with zero-config HTML5 audio fallbacks)
@@ -1758,15 +1779,21 @@ export default function App() {
                   {/* Style override to control clean A4 printing */}
                   <style dangerouslySetInnerHTML={{ __html: `
                     @media print {
+                      @page {
+                        size: A4;
+                        margin: 0 !important;
+                      }
                       body, html {
                         background: white !important;
                         color: black !important;
                         padding: 0 !important;
                         margin: 0 !important;
+                        width: 21cm !important;
+                        height: 29.7cm !important;
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
                       }
-                      header, footer, aside, .no-print, button, input {
+                      header, footer, aside, .no-print, button, input, select {
                         display: none !important;
                       }
                       main {
@@ -1779,13 +1806,39 @@ export default function App() {
                         border: none !important;
                         box-shadow: none !important;
                         margin: 0 !important;
-                        padding: 0.5cm !important;
-                        width: 100% !important;
-                        max-width: 100% !important;
+                        padding: 1.2cm 1cm !important;
+                        width: 21cm !important;
+                        height: 29.7cm !important;
+                        max-width: 21cm !important;
+                        max-height: 29.7cm !important;
+                        box-sizing: border-box !important;
                         background: white !important;
+                        page-break-after: always;
+                        break-after: page;
+                        position: relative !important;
+                        overflow: hidden !important;
                       }
                       .watermark {
-                        color: rgba(0, 0, 0, 0.05) !important;
+                        color: rgba(0, 0, 0, 0.04) !important;
+                      }
+                    }
+                    @media screen {
+                      .print-container {
+                        width: 21cm !important;
+                        height: 29.7cm !important;
+                        max-width: 100% !important;
+                        margin: 0 auto 2rem auto !important;
+                        padding: 1.5cm 1.2cm !important;
+                        box-sizing: border-box !important;
+                        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1) !important;
+                        background: white !important;
+                        border: 1px solid #e2e8f0 !important;
+                        border-radius: 24px !important;
+                        position: relative !important;
+                        overflow: hidden !important;
+                      }
+                      .page-break {
+                        margin-bottom: 2rem;
                       }
                     }
                   `}} />
@@ -1859,251 +1912,383 @@ export default function App() {
                   </div>
 
                   {/* Exam Settings / Regenerator */}
-                  <div className="bg-white p-5 rounded-[28px] border border-slate-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 no-print">
+                  <div className="bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm flex flex-col gap-6 no-print">
                     <div className="flex items-center gap-3">
                       <span className="text-3xl">📝</span>
                       <div className="text-right">
-                        <h4 className="text-sm font-black text-slate-800">خيارات توليد الامتحان</h4>
+                        <h4 className="text-sm font-black text-slate-800">إعدادات طباعة وتوليد أوراق العمل</h4>
                         <p className="text-xs font-bold text-slate-500">
-                          اضغط على الزر لتوليد نموذج امتحان وزاري مختلف بأسئلة وعناوين نصوص قراءة جديدة تلقائياً!
+                          قم بتحديد نطاق الأسئلة، وعدد الصفحات التي ترغب بطباعتها دفعة واحدة دون أي تكرار للأسئلة!
                         </p>
                       </div>
                     </div>
-                    
-                    <button
-                      onClick={handleGenerateNewExam}
-                      className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-black px-5 py-3 rounded-xl border border-indigo-200 text-xs flex items-center gap-2 cursor-pointer transition-all active:scale-95"
-                    >
-                      <RotateCcw className="w-4 h-4" />
-                      <span>توليد نموذج امتحان جديد</span>
-                    </button>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2 border-t border-slate-100">
+                      
+                      {/* Scope Selector */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-slate-600 text-right">نطاق المنهج (Scope):</label>
+                        <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl">
+                          <button
+                            onClick={() => setExamScope("all")}
+                            className={`py-2 px-1 rounded-lg text-[11px] font-black transition-all ${
+                              examScope === "all" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-700 hover:bg-slate-200"
+                            }`}
+                          >
+                            كامل المنهج
+                          </button>
+                          <button
+                            onClick={() => {
+                              setExamScope("unit");
+                              setExamUnitId(selectedUnit.id);
+                            }}
+                            className={`py-2 px-1 rounded-lg text-[11px] font-black transition-all ${
+                              examScope === "unit" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-700 hover:bg-slate-200"
+                            }`}
+                          >
+                            بالوحدة
+                          </button>
+                          <button
+                            onClick={() => {
+                              setExamScope("lesson");
+                              setExamUnitId(selectedUnit.id);
+                              setExamLessonId(selectedUnit.lessons[0].id);
+                            }}
+                            className={`py-2 px-1 rounded-lg text-[11px] font-black transition-all ${
+                              examScope === "lesson" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-700 hover:bg-slate-200"
+                            }`}
+                          >
+                            بالدرس
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Unit Dropdown */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-slate-600 text-right">الوحدة الدراسية:</label>
+                        <select
+                          disabled={examScope === "all"}
+                          value={examUnitId}
+                          onChange={(e) => {
+                            const uid = Number(e.target.value);
+                            setExamUnitId(uid);
+                            const unitObj = SMILE_UNITS.find((u) => u.id === uid);
+                            if (unitObj && unitObj.lessons.length > 0) {
+                              setExamLessonId(unitObj.lessons[0].id);
+                            }
+                          }}
+                          className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none disabled:opacity-50 text-right"
+                          style={{ direction: "rtl" }}
+                        >
+                          {SMILE_UNITS.map((u) => (
+                            <option key={u.id} value={u.id}>
+                              الوحدة {u.id}: {u.title}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Lesson Dropdown */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-slate-600 text-right">الدرس المحدد:</label>
+                        <select
+                          disabled={examScope !== "lesson"}
+                          value={examLessonId}
+                          onChange={(e) => setExamLessonId(Number(e.target.value))}
+                          className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none disabled:opacity-50 text-right"
+                          style={{ direction: "rtl" }}
+                        >
+                          {SMILE_UNITS.find((u) => u.id === examUnitId)?.lessons.map((l) => (
+                            <option key={l.id} value={l.id}>
+                              {l.title}
+                            </option>
+                          )) || <option>لا يوجد دروس</option>}
+                        </select>
+                      </div>
+
+                      {/* Number of Pages Selector */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-slate-600 text-right">عدد الأوراق (A4 Sheets):</label>
+                        <div className="flex items-center justify-between gap-2 border border-slate-200 rounded-xl p-1 bg-slate-50">
+                          <button
+                            onClick={() => setPageCount(Math.min(5, pageCount + 1))}
+                            className="w-8 h-8 rounded-lg bg-white hover:bg-slate-100 flex items-center justify-center font-black border border-slate-200 shadow-sm transition-transform active:scale-95 text-slate-800"
+                          >
+                            +
+                          </button>
+                          <span className="font-extrabold text-sm text-indigo-950">{pageCount} {pageCount === 1 ? "ورقة" : "أوراق"}</span>
+                          <button
+                            onClick={() => setPageCount(Math.max(1, pageCount - 1))}
+                            className="w-8 h-8 rounded-lg bg-white hover:bg-slate-100 flex items-center justify-center font-black border border-slate-200 shadow-sm transition-transform active:scale-95 text-slate-800"
+                          >
+                            -
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div className="flex justify-between items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                      <div className="flex items-center gap-2 text-[11px] font-bold text-slate-500">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>جاهز للطباعة المباشرة من المتصفح باستخدام هيدر وزاري متكامل</span>
+                      </div>
+                      
+                      <button
+                        onClick={handleGenerateNewExam}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 cursor-pointer transition-all active:scale-95"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        <span>توليد محتوى عشوائي جديد</span>
+                      </button>
+                    </div>
                   </div>
 
-                  {/* A4 PRINT CONTAINER SHEET look on-screen */}
-                  <div 
-                    id="printable-exam-area"
-                    className="print-container bg-white rounded-[32px] border-4 border-slate-100 p-8 sm:p-12 shadow-md relative overflow-hidden text-slate-800 text-left"
-                    style={{ direction: "ltr", minHeight: "1123px" }}
-                  >
-                    
-                    {/* WATERMARK LAYER (CONDITIONAL) */}
-                    {!watermarkRemoved && (
+                  {/* RENDER PAGES LIST (A4 PRINT CONTAINERS) */}
+                  <div className="flex flex-col gap-8">
+                    {examPapers.map((examPaper, paperIdx) => (
                       <div 
-                        className="watermark absolute inset-0 pointer-events-none select-none flex items-center justify-center rotate-[-30deg] text-slate-100 font-black text-3xl sm:text-5xl uppercase tracking-widest text-center"
-                        style={{ opacity: 0.1, zIndex: 0 }}
+                        key={examPaper.id}
+                        className="print-container text-slate-800 text-left page-break"
+                        style={{ direction: "ltr" }}
                       >
-                        SMILE English Grade 6 Companion • Teacher Copy • Watermark Active • Password 20302060
-                      </div>
-                    )}
-
-                    {/* Official Sudan School Header */}
-                    <div className="border-b-4 border-double border-slate-800 pb-5 mb-6 text-center relative z-10" style={{ fontFamily: "Inter, sans-serif" }}>
-                      <div className="flex justify-between items-center text-xs font-bold text-slate-600 mb-2 uppercase">
-                        <div>Republic of Sudan<br />Ministry of Education</div>
-                        <div className="text-2xl">🇸🇩</div>
-                        <div className="text-right">جمهورية السودان<br />وزارة التربية والتعليم</div>
-                      </div>
-                      
-                      <div className="mt-4">
-                        <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight uppercase">
-                          National General Certificate Examination - Grade 6
-                        </h1>
-                        <h2 className="text-md font-extrabold text-slate-700 mt-1">
-                          Subject: English Language (SMILE Series - Pupil's Book 3)
-                        </h2>
-                        <div className="text-xs font-bold text-slate-500 mt-1 flex justify-center gap-6">
-                          <span>Time Allowed: 1 Hour 30 Minutes</span>
-                          <span>•</span>
-                          <span>Total Marks: 30 Marks</span>
-                        </div>
-                      </div>
-
-                      {/* Pupil metadata spaces */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6 text-xs font-extrabold text-left pt-4 border-t border-slate-200">
-                        <div className="flex gap-2">
-                          <span>Pupil's Name:</span>
-                          <span className="flex-1 border-b border-dashed border-slate-400"></span>
-                        </div>
-                        <div className="flex gap-2">
-                          <span>School Name:</span>
-                          <span className="flex-1 border-b border-dashed border-slate-400"></span>
-                        </div>
-                        <div className="flex gap-2">
-                          <span>Date:</span>
-                          <span className="w-24 border-b border-dashed border-slate-400"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* EXAM QUESTIONS SPACE */}
-                    <div className="relative z-10 space-y-8" style={{ fontFamily: "Inter, sans-serif" }}>
-                      
-                      {/* QUESTION 1: COMPREHENSION PASSAGE */}
-                      <div>
-                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                          <span>Question 1: Reading Comprehension</span>
-                          <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
-                        </h3>
-                        <p className="text-xs text-slate-500 font-bold mb-3 italic">
-                          Read the following passage carefully, then answer the questions below:
-                        </p>
-                        
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs sm:text-sm leading-relaxed font-medium text-slate-800 mb-4 text-justify">
-                          <strong className="block text-slate-900 text-sm mb-1.5 uppercase tracking-wide underline">{examPaper.passage.title}</strong>
-                          {examPaper.passage.text}
+                        {/* Page indicator for preview screen */}
+                        <div className="absolute top-4 right-4 bg-indigo-50 text-indigo-700 text-xs px-3 py-1 rounded-full font-black no-print">
+                          Sheet {paperIdx + 1} of {examPapers.length}
                         </div>
 
-                        <div className="space-y-4">
-                          {examPaper.passage.questions.map((q, idx) => (
-                            <div key={`q1-${idx}`} className="text-xs">
-                              <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
-                                <span className="text-slate-500">{idx + 1}.</span>
-                                <p className="flex-1 text-left">{q.question}</p>
-                                <span className="font-bold text-slate-400 shrink-0 ml-1">
-                                  {q.isTrueFalse ? "[ True / False ]" : "....................."}
-                                </span>
-                              </div>
-                              {q.isTrueFalse ? (
-                                <div className="flex gap-4 mt-2 ml-4 font-bold text-slate-400 text-[11px] justify-start">
-                                  <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O True</span>
-                                  <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O False</span>
-                                </div>
-                              ) : (
-                                <div className="mt-2.5 ml-4 border-b border-dashed border-slate-300 h-6"></div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* QUESTION 2: VOCABULARY & SPELLING */}
-                      <div>
-                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                          <span>Question 2: Vocabulary & Spelling</span>
-                          <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
-                        </h3>
-                        
-                        {/* Subpart A: Missing Letters */}
-                        <div className="mb-6">
-                          <p className="text-xs text-slate-500 font-bold mb-3 italic">
-                            A) Complete the missing letters of the following words according to the given clues: (4 Marks)
-                          </p>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ml-2">
-                            {examPaper.spelling.map((s, idx) => (
-                              <div key={`sp-${idx}`} className="text-xs flex flex-col gap-1 bg-slate-50/40 p-2.5 rounded-lg border border-slate-100">
-                                <span className="font-extrabold text-slate-800 text-left">
-                                  {idx + 1}. Clue: <span className="font-medium text-slate-600">{s.clue}</span>
-                                </span>
-                                <div className="flex items-center gap-3 mt-1.5 font-mono text-sm tracking-widest font-black text-left">
-                                  <span className="text-slate-400 bg-white border border-slate-200 px-3 py-1 rounded select-all uppercase">
-                                    {s.gapped}
-                                  </span>
-                                  <span className="text-[10px] text-slate-300 font-sans tracking-normal">Answer: ......................</span>
-                                </div>
-                              </div>
-                            ))}
+                        {/* WATERMARK LAYER (CONDITIONAL) */}
+                        {!watermarkRemoved && (
+                          <div 
+                            className="watermark absolute inset-0 pointer-events-none select-none flex items-center justify-center rotate-[-30deg] text-slate-100 font-black text-3xl sm:text-5xl uppercase tracking-widest text-center"
+                            style={{ opacity: 0.1, zIndex: 0 }}
+                          >
+                            SMILE English Grade 6 Companion • Teacher Copy • Watermark Active • Password 20302060
                           </div>
-                        </div>
+                        )}
 
-                        {/* Subpart B: Vocabulary Matching */}
-                        <div>
-                          <p className="text-xs text-slate-500 font-bold mb-3 italic">
-                            B) Match the English words with their correct Arabic meaning translation: (4 Marks)
-                          </p>
+                        {/* Official Sudan School Header */}
+                        <div className="border-b-4 border-double border-slate-800 pb-5 mb-6 text-center relative z-10" style={{ fontFamily: "Inter, sans-serif" }}>
+                          <div className="flex justify-between items-center text-xs font-bold text-slate-600 mb-2 uppercase">
+                            <div>Republic of Sudan<br />Ministry of Education</div>
+                            <div className="text-2xl">🇸🇩</div>
+                            <div className="text-right">SMILE Series Companion<br />National Exam Center</div>
+                          </div>
                           
-                          <div className="grid grid-cols-2 gap-6 ml-4 text-xs font-extrabold">
-                            <div>
-                              <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 uppercase text-[10px] text-left">Column A</span>
-                              <div className="space-y-3">
-                                {examPaper.vocabMatching.map((vm, idx) => (
-                                  <div key={`va-${idx}`} className="flex justify-between items-center h-8 border border-slate-200/50 bg-slate-50/50 px-3 rounded-lg text-left">
-                                    <span>{idx + 1}. <strong className="text-indigo-900 uppercase">{vm.word}</strong></span>
-                                  </div>
-                                ))}
-                              </div>
+                          <div className="mt-4">
+                            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight uppercase">
+                              National General Certificate Examination - Grade 6
+                            </h1>
+                            <h2 className="text-md font-extrabold text-slate-700 mt-1">
+                              Subject: English Language (SMILE Series - Pupil's Book 3)
+                            </h2>
+                            <div className="text-xs font-bold text-slate-500 mt-1 flex justify-center gap-6">
+                              <span>Time Allowed: 1 Hour 30 Minutes</span>
+                              <span>•</span>
+                              <span>Total Marks: 30 Marks</span>
                             </div>
-                            
-                            <div style={{ direction: "rtl" }}>
-                              <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 text-right uppercase text-[10px]" style={{ direction: "ltr" }}>Column B (Arabic)</span>
-                              <div className="space-y-3">
-                                {examPaper.vocabMatching.map((vm, idx) => (
-                                  <div key={`vb-${idx}`} className="flex justify-between items-center h-8 border border-slate-200/50 bg-slate-50/50 px-3 rounded-lg text-right">
-                                    <span className="font-black text-slate-700">{vm.arabic}</span>
-                                    <span className="text-slate-400 font-mono text-[10px]">( )</span>
-                                  </div>
-                                ))}
-                              </div>
+                          </div>
+
+                          {/* Pupil metadata spaces */}
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6 text-xs font-extrabold text-left pt-4 border-t border-slate-200">
+                            <div className="flex gap-2">
+                              <span>Pupil's Name:</span>
+                              <span className="flex-1 border-b border-dashed border-slate-400"></span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span>School Name:</span>
+                              <span className="flex-1 border-b border-dashed border-slate-400"></span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span>Date:</span>
+                              <span className="w-24 border-b border-dashed border-slate-400"></span>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* QUESTION 3: GRAMMAR & LANGUAGE STRUCTURES */}
-                      <div>
-                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                          <span>Question 3: Grammar & Language Structures</span>
-                          <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
-                        </h3>
-                        <p className="text-xs text-slate-500 font-bold mb-3 italic">
-                          Choose the correct option from the brackets to complete each sentence: (8 Marks)
-                        </p>
+                        {/* EXAM QUESTIONS SPACE */}
+                        <div className="relative z-10 space-y-8" style={{ fontFamily: "Inter, sans-serif" }}>
+                          
+                          {/* QUESTION 1: COMPREHENSION PASSAGE */}
+                          <div>
+                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                              <span>Question 1: Reading Comprehension</span>
+                              <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                            </h3>
+                            <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                              Read the following passage carefully, then answer the questions below:
+                            </p>
+                            
+                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs sm:text-sm leading-relaxed font-medium text-slate-800 mb-4 text-justify">
+                              <strong className="block text-slate-900 text-sm mb-1.5 uppercase tracking-wide underline">{examPaper.passage.title}</strong>
+                              {examPaper.passage.text}
+                            </div>
 
-                        <div className="space-y-4 ml-2">
-                          {examPaper.grammar.map((g, idx) => (
-                            <div key={`gm-${idx}`} className="text-xs">
-                              <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
-                                <span className="text-slate-500">{idx + 1}.</span>
-                                <p className="flex-1 leading-relaxed text-left">
-                                  {g.question.replace("________", "______________________")}
-                                </p>
-                              </div>
-                              <div className="flex gap-4 mt-2 ml-4 font-semibold text-slate-500 text-[11px] justify-start">
-                                {g.options.map((opt, oIdx) => (
-                                  <span key={oIdx} className="border border-slate-200 rounded-lg bg-slate-50/50 px-3 py-1">
-                                    [ ] {opt}
-                                  </span>
+                            <div className="space-y-4">
+                              {examPaper.passage.questions.map((q, idx) => (
+                                <div key={`q1-${idx}`} className="text-xs">
+                                  <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                    <span className="text-slate-500">{idx + 1}.</span>
+                                    <p className="flex-1 text-left">{q.question}</p>
+                                    <span className="font-bold text-slate-400 shrink-0 ml-1">
+                                      {q.isTrueFalse ? "[ True / False ]" : "....................."}
+                                    </span>
+                                  </div>
+                                  {q.isTrueFalse ? (
+                                    <div className="flex gap-4 mt-2 ml-4 font-bold text-slate-400 text-[11px] justify-start">
+                                      <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O True</span>
+                                      <span className="border border-slate-300 rounded px-3 py-1 cursor-pointer">O False</span>
+                                    </div>
+                                  ) : (
+                                    <div className="mt-2.5 ml-4 border-b border-dashed border-slate-300 h-6"></div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* QUESTION 2: VOCABULARY & SPELLING */}
+                          <div>
+                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                              <span>Question 2: Vocabulary & Spelling</span>
+                              <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                            </h3>
+                            
+                            {/* Subpart A: Missing Letters */}
+                            <div className="mb-6">
+                              <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
+                                A) Complete the missing letters of the following words according to the given clues: (4 Marks)
+                              </p>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ml-2">
+                                {examPaper.spelling.map((s, idx) => (
+                                  <div key={`sp-${idx}`} className="text-xs flex flex-col gap-1 bg-slate-50/40 p-2.5 rounded-lg border border-slate-100">
+                                    <span className="font-extrabold text-slate-800 text-left">
+                                      {idx + 1}. Clue: <span className="font-medium text-slate-600">{s.clue}</span>
+                                    </span>
+                                    <div className="flex items-center gap-3 mt-1.5 font-mono text-sm tracking-widest font-black text-left">
+                                      <span className="text-slate-400 bg-white border border-slate-200 px-3 py-1 rounded select-all uppercase">
+                                        {s.gapped}
+                                      </span>
+                                      <span className="text-[10px] text-slate-300 font-sans tracking-normal">Answer: ......................</span>
+                                    </div>
+                                  </div>
                                 ))}
                               </div>
                             </div>
-                          ))}
-                        </div>
-                      </div>
 
-                      {/* QUESTION 4: WRITING & REORDERING */}
-                      <div>
-                        <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
-                          <span>Question 4: Writing & Sentence Construction</span>
-                          <span className="font-bold text-xs lowercase text-slate-500">(6 Marks)</span>
-                        </h3>
-                        <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
-                          Reorder the following jumbled words to construct a chronologically correct, meaningful sentence: (6 Marks)
-                        </p>
-
-                        <div className="space-y-6 ml-2">
-                          {examPaper.writing.map((w, idx) => (
-                            <div key={`wt-${idx}`} className="text-xs flex flex-col gap-2">
-                              <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
-                                <span className="text-slate-500">{idx + 1}. Words:</span>
-                                <span className="flex-1 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg font-mono text-slate-700 font-bold text-left">
-                                  {w.jumbled}
-                                </span>
-                              </div>
-                              <div className="ml-4">
-                                <span className="text-[10px] text-slate-400 block mb-1 text-left">Write your complete sentence here:</span>
-                                <div className="border-b border-dashed border-slate-400 h-6"></div>
+                            {/* Subpart B: Vocabulary Matching */}
+                            <div>
+                              <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
+                                B) Match the English words in Column A with their correct example sentence context in Column B: (4 Marks)
+                              </p>
+                              
+                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-4 text-xs font-extrabold">
+                                <div>
+                                  <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 uppercase text-[10px] text-left">Column A (Word)</span>
+                                  <div className="space-y-3">
+                                    {examPaper.vocabMatching.map((vm, idx) => (
+                                      <div key={`va-${idx}`} className="flex justify-between items-center h-10 border border-slate-200/50 bg-slate-50/50 px-3 rounded-lg text-left">
+                                        <span>{idx + 1}. <strong className="text-indigo-900 uppercase">{vm.word}</strong></span>
+                                        <span className="text-slate-400 font-mono text-[10px] mr-2">(    )</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <span className="block border-b border-slate-200 pb-1 mb-2 text-slate-400 text-left uppercase text-[10px]">Column B (Sentence Context)</span>
+                                  <div className="space-y-3">
+                                    {(() => {
+                                      // Sort deterministically to avoid random shuffling on updates/hovers
+                                      const sortedSentences = [...examPaper.vocabMatching]
+                                        .sort((a, b) => a.definitionOrSentence.length - b.definitionOrSentence.length);
+                                      
+                                      return sortedSentences.map((vm, idx) => {
+                                        const letter = String.fromCharCode(65 + idx); // A, B, C, D, E
+                                        return (
+                                          <div key={`vb-${idx}`} className="flex justify-between items-center min-h-[40px] border border-slate-200/50 bg-slate-50/50 px-3 py-1 rounded-lg text-left">
+                                            <span className="font-bold text-slate-700">
+                                              <span className="text-indigo-600 mr-2">[{letter}]</span>
+                                              {vm.definitionOrSentence}
+                                            </span>
+                                          </div>
+                                        );
+                                      });
+                                    })()}
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          ))}
+                          </div>
+
+                          {/* QUESTION 3: GRAMMAR & LANGUAGE STRUCTURES */}
+                          <div>
+                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                              <span>Question 3: Grammar & Language Structures</span>
+                              <span className="font-bold text-xs lowercase text-slate-500">(8 Marks)</span>
+                            </h3>
+                            <p className="text-xs text-slate-500 font-bold mb-3 italic">
+                              Choose the correct option from the brackets to complete each sentence: (8 Marks)
+                            </p>
+
+                            <div className="space-y-4 ml-2">
+                              {examPaper.grammar.map((g, idx) => (
+                                <div key={`gm-${idx}`} className="text-xs">
+                                  <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                    <span className="text-slate-500">{idx + 1}.</span>
+                                    <p className="flex-1 leading-relaxed text-left">
+                                      {g.question.replace("________", "______________________")}
+                                    </p>
+                                  </div>
+                                  <div className="flex gap-4 mt-2 ml-4 font-semibold text-slate-500 text-[11px] justify-start">
+                                    {g.options.map((opt, oIdx) => (
+                                      <span key={oIdx} className="border border-slate-200 rounded-lg bg-slate-50/50 px-3 py-1">
+                                        [ ] {opt}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* QUESTION 4: WRITING & REORDERING */}
+                          <div>
+                            <h3 className="text-sm font-black uppercase text-slate-900 border-b-2 border-slate-800 pb-1 mb-3 flex justify-between">
+                              <span>Question 4: Writing & Sentence Construction</span>
+                              <span className="font-bold text-xs lowercase text-slate-500">(6 Marks)</span>
+                            </h3>
+                            <p className="text-xs text-slate-500 font-bold mb-3 italic text-left">
+                              Reorder the following jumbled words to construct a chronologically correct, meaningful sentence: (6 Marks)
+                            </p>
+
+                            <div className="space-y-6 ml-2">
+                              {examPaper.writing.map((w, idx) => (
+                                <div key={`wt-${idx}`} className="text-xs flex flex-col gap-2">
+                                  <div className="flex items-start gap-1 font-extrabold text-slate-800 text-left">
+                                    <span className="text-slate-500">{idx + 1}. Words:</span>
+                                    <span className="flex-1 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg font-mono text-slate-700 font-bold text-left">
+                                      {w.jumbled}
+                                    </span>
+                                  </div>
+                                  <div className="ml-4">
+                                    <span className="text-[10px] text-slate-400 block mb-1 text-left">Write your complete sentence here:</span>
+                                    <div className="border-b border-dashed border-slate-400 h-6"></div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Encouragement Footer */}
+                          <div className="border-t border-slate-300 pt-6 mt-8 flex justify-between items-center text-xs font-bold text-slate-500">
+                            <span>Sudanese Pupil Companion • Excellent Pupil Award</span>
+                            <span className="italic text-slate-800 uppercase tracking-wider">🌟 Best of Luck & Outstanding Success 🌟</span>
+                          </div>
+
                         </div>
                       </div>
-
-                      {/* Encouragement Footer */}
-                      <div className="border-t border-slate-300 pt-6 mt-8 flex justify-between items-center text-xs font-bold text-slate-500">
-                        <span>Sudanese Pupil Companion • Excellent Pupil Award</span>
-                        <span className="italic text-slate-800 uppercase tracking-wider">🌟 Best of Luck / بالتوفيق والنجاح 🌟</span>
-                      </div>
-
-                    </div>
+                    ))}
                   </div>
                 </motion.div>
               )}
