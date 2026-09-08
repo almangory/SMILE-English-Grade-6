@@ -1065,6 +1065,13 @@ export default function App() {
                         alt={selectedLesson.title}
                         className="w-full h-full object-cover object-center transition-all duration-200"
                         loading="eager"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          const fallbackSrc = selectedUnit.illustration || "/illustrations/unit1_back_to_school.jpg";
+                          if (target.src !== fallbackSrc) {
+                            target.src = fallbackSrc;
+                          }
+                        }}
                       />
                       <div className="absolute bottom-2.5 right-3 bg-slate-950/85 backdrop-blur-sm text-white text-[10px] sm:text-[11px] font-black px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md border border-white/20">
                         <Sparkles className="w-3.5 h-3.5 text-amber-300" />
