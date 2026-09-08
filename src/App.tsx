@@ -676,7 +676,7 @@ export default function App() {
           <div className="w-16 h-16 bg-yellow-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-3xl animate-spin-slow">☀️</div>
           <div>
             <h1 className="text-3xl sm:text-4xl font-black text-sky-800 tracking-tight leading-none uppercase">SMILE English</h1>
-            <p className="text-sky-600 font-bold text-sm sm:text-lg">Grade 5 • School Textbook Companion</p>
+            <p className="text-sky-600 font-bold text-sm sm:text-lg">Grade 6 • Basic Level • SMILE Book 6</p>
           </div>
         </div>
 
@@ -793,7 +793,7 @@ export default function App() {
             </div>
 
             <button
-              onClick={() => speakText("Welcome to SMILE English Grade 5 pupil! As-salamu alaykum!", "Kore")}
+              onClick={() => speakText("Welcome to SMILE English Grade 6 pupil! As-salamu alaykum!", "Kore")}
               className="mt-1 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs uppercase py-3 px-4 rounded-[16px] border-b-4 border-emerald-700 transition-all flex items-center justify-center gap-2 cursor-pointer transform active:translate-y-0.5"
             >
               <Volume2 className="w-4 h-4" />
@@ -1144,7 +1144,7 @@ export default function App() {
                       <h3 className="text-lg sm:text-xl font-black text-teal-955 flex items-center gap-2 uppercase tracking-wide">
                         🎒 Interactive Picture Dictionary
                       </h3>
-                      <p className="text-xs font-bold text-teal-850 mt-1">Learn new words from Sudan's Grade 3 book by clicking pronunciation options and hearing active examples!</p>
+                      <p className="text-xs font-bold text-teal-850 mt-1">Learn new words from Sudan's Grade 6 book by clicking pronunciation options and hearing active examples!</p>
                     </div>
                   </div>
 
@@ -1225,7 +1225,7 @@ export default function App() {
                       <div className="border-b border-slate-100 pb-4 text-center">
                         <span className="text-4xl animate-bounce inline-block">📝🎒</span>
                         <h4 className="text-xl font-black text-slate-800 uppercase mt-2">Personalized Exam Setup • إعداد الاختبار</h4>
-                        <p className="text-xs font-bold text-slate-500 mt-1">Practice and challenge yourself on Grade 3 English syllabus!</p>
+                        <p className="text-xs font-bold text-slate-500 mt-1">Practice and challenge yourself on Grade 6 English syllabus!</p>
                       </div>
 
                       {/* Scope Selectors */}
@@ -1462,7 +1462,7 @@ export default function App() {
                             >
                               Quit Test 👋
                             </button>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">SMILE Grade 5 Exam</span>
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">SMILE Grade 6 Exam</span>
                           </div>
                         </div>
                       );
@@ -1810,7 +1810,7 @@ export default function App() {
                 >
                   <div className="bg-gradient-to-r from-rose-500 to-orange-500 text-white p-6 rounded-[32px] border-b-6 border-r-6 border-rose-800/80">
                     <h3 className="text-xl font-black flex items-center gap-2 uppercase tracking-wide">
-                      📚 SMILE Grade 5 Syllabus Map
+                      📚 SMILE Grade 6 Syllabus Map
                     </h3>
                     <p className="text-xs text-rose-100 font-bold mt-1">
                       Explore the whole textbook here! Tap any unit to learn, play songs, and test your vocabulary instantly!
@@ -1974,7 +1974,7 @@ export default function App() {
                   <div className="bg-gradient-to-r from-indigo-600 to-sky-600 text-white p-6 rounded-[32px] border-b-6 border-r-6 border-indigo-900/80 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 no-print">
                     <div className="flex-1">
                       <span className="text-[10px] bg-indigo-500 text-white font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                        SMILE SERIES • BOOK 3
+                        SMILE SERIES • BOOK 6
                       </span>
                       <h3 className="text-2xl font-black flex items-center gap-2 uppercase tracking-wide mt-1">
                         <Printer className="w-6 h-6 animate-pulse" />
@@ -2267,7 +2267,7 @@ export default function App() {
                                 National General Certificate Examination - Grade 6
                               </h1>
                               <h2 className="text-md font-extrabold text-slate-700 mt-1">
-                                Subject: English Language (SMILE Series - Pupil's Book 3)
+                                Subject: English Language (SMILE Series - Pupil's Book 6)
                               </h2>
                               <div className="text-xs font-bold text-slate-500 mt-1 flex justify-center gap-6">
                                 <span>Time Allowed: 1 Hour 30 Minutes</span>
@@ -2758,9 +2758,9 @@ export default function App() {
       {/* Sudan Modern Learning Pupil English Footer Credits */}
       <footer className="max-w-6xl w-full mx-auto mt-8 py-6 text-center text-sky-700/60 font-semibold border-t border-sky-100">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs uppercase tracking-wider font-extrabold px-4">
-          <p>© SMILE English • Grade 5 Interactive Companion</p>
+          <p>© SMILE English • Grade 6 Interactive Companion</p>
           <div className="flex gap-3">
-            <span className="text-sky-800">Pupil's Book 3</span>
+            <span className="text-sky-800">Pupil's Book 6</span>
             <span>•</span>
             <span className="text-sky-800">Sudan</span>
           </div>

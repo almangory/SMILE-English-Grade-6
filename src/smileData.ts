@@ -2,26 +2,138 @@ import { UnitItem } from "./types";
 
 export const SMILE_UNITS: UnitItem[] = [
   {
-    id: 7,
+    id: 1,
+    title: "Back to School",
+    arabicTitle: "العودة إلى المدرسة",
+    color: "bg-blue-400 text-blue-950 border-blue-600",
+    icon: "🎒",
+    words: [
+      { id: "w1-1", word: "Secretary Bird", arabic: "طائر الكاتب / صقر الجديان", image: "🦅", example: "The secretary bird is the emblem of Sudan.", soundText: "The secretary bird is the emblem of Sudan.", unit: 1 },
+      { id: "w1-2", word: "Emblem", arabic: "شعار رسمي", image: "🇸🇩", example: "The secretary bird is the emblem of our country.", soundText: "The secretary bird is the emblem of our country.", unit: 1 },
+      { id: "w1-3", word: "Timetable", arabic: "جدول دراسي", image: "📅", example: "We have got Science at half past nine on our timetable.", soundText: "We have got Science at half past nine on our timetable.", unit: 1 },
+      { id: "w1-4", word: "Independent", arabic: "مستقل", image: "🚩", example: "On 1st January 1956 Sudan became an independent country.", soundText: "On the first of January 1956 Sudan became an independent country.", unit: 1 },
+      { id: "w1-5", word: "Crocodile", arabic: "تمساح النيل", image: "🐊", example: "Nile crocodiles are big and live in the river.", soundText: "Nile crocodiles are big and live in the river.", unit: 1 },
+      { id: "w1-6", word: "Ostrich", arabic: "نعامة", image: "🦤", example: "An ostrich is a big bird that lives in deserts.", soundText: "An ostrich is a big bird that lives in deserts.", unit: 1 }
+    ],
+    lessons: [
+      {
+        id: 1,
+        title: "Lesson 1: Welcome Back & Timetable",
+        type: "conversation",
+        content: {
+          songText: "Welcome back from holiday! Welcome back to school today!\nIt was nice with your family, with your mum and dad.\nBut you're with your friends, so don't be sad!\nThere's science and maths, lots of subjects are new.\nThere's geography and history, and English too!\nSmile! Be happy! Be happy you are here,\nTo learn lots of new things in school this year!",
+          dialogue: [
+            { speaker: "Sara", text: "When is Science on Sunday?", voice: "Zephyr" },
+            { speaker: "Osama", text: "It's at half past nine.", voice: "Kore" },
+            { speaker: "Sara", text: "Which days have got History?", voice: "Zephyr" },
+            { speaker: "Osama", text: "We've got History on Monday and Tuesday.", voice: "Kore" },
+            { speaker: "Sara", text: "What do we study first on Sunday?", voice: "Zephyr" },
+            { speaker: "Osama", text: "We study Arabic at eight o'clock.", voice: "Kore" }
+          ]
+        }
+      },
+      {
+        id: 2,
+        title: "Lesson 2: Children's Holidays",
+        type: "conversation",
+        content: {
+          dialogue: [
+            { speaker: "Osama", text: "I was in Port Sudan with my brother. My beach holiday was great!", voice: "Kore" },
+            { speaker: "Sara", text: "I was in the country at my uncle's farm. We were very busy.", voice: "Zephyr" },
+            { speaker: "Mona", text: "I was in Dubai with my aunt and her family. It was very hot!", voice: "Puck" },
+            { speaker: "Hassan", text: "I was with my family in Khartoum. It was boring without school.", voice: "Charon" }
+          ]
+        }
+      },
+      {
+        id: 3,
+        title: "Lesson 3: Along the River Nile",
+        type: "song",
+        content: {
+          songText: "Along the River Nile, dates grow on tall palm trees,\nAnd sharks swim in the warm waters of the Red Sea.\nCamels walk on the sand through the desert heat,\nAnd birds fly over the mountains of the west and east.\nHerders look after their cattle in the evening dark,\nElephants and ibexes sleep in Dinder Park.\nEvery man, woman and child across our great land,\nStand up and say: 'This is our Sudan!'"
+        }
+      },
+      {
+        id: 4,
+        title: "Lesson 4: The Secretary Bird",
+        type: "conversation",
+        content: {
+          dialogue: [
+            { speaker: "Amna", text: "What is the official emblem of Sudan?", voice: "Zephyr" },
+            { speaker: "Hassan", text: "The secretary bird is the emblem of Sudan. Sudanese people like these birds.", voice: "Kore" },
+            { speaker: "Amna", text: "What colour are their faces?", voice: "Zephyr" },
+            { speaker: "Hassan", text: "Young birds have got yellow faces, but adult secretary birds have got red faces.", voice: "Kore" },
+            { speaker: "Amna", text: "Why can secretary birds run so fast?", voice: "Zephyr" },
+            { speaker: "Hassan", text: "Because they have got long legs! They are 1m 30cm tall and eat snakes and small animals.", voice: "Kore" }
+          ]
+        }
+      },
+      {
+        id: 5,
+        title: "Lesson 5: Sukkar and the Crocodile (Part 1)",
+        type: "conversation",
+        content: {
+          dialogue: [
+            { speaker: "Sukkar", text: "Hello Mr Crocodile! These delicious mangoes are for your wife.", voice: "Puck" },
+            { speaker: "Mr Crocodile", text: "Thank you Sukkar! You always give us mangoes. Come to lunch with us today.", voice: "Charon" },
+            { speaker: "Mrs Crocodile", text: "I want meat, not mangoes! Bring me the heart of the monkey!", voice: "Zephyr" },
+            { speaker: "Mr Crocodile", text: "Never mind, Sukkar. Mrs Crocodile wants to eat your heart today, not mangoes!", voice: "Charon" }
+          ]
+        }
+      },
+      {
+        id: 6,
+        title: "Lesson 6: Sukkar's Escape (Part 2)",
+        type: "conversation",
+        content: {
+          dialogue: [
+            { speaker: "Sukkar", text: "My heart is in my house in the tree! Can we go back and get it for Mrs Crocodile?", voice: "Puck" },
+            { speaker: "Mr Crocodile", text: "Yes, let's swim back to your tree quickly.", voice: "Charon" },
+            { speaker: "Sukkar", text: "Haha! I don't want lunch. I'm not hungry! Bye Mr Crocodile!", voice: "Puck" },
+            { speaker: "Mr Crocodile", text: "Mrs Crocodile, Sukkar isn't coming to lunch. He says he isn't hungry.", voice: "Charon" },
+            { speaker: "Mrs Crocodile", text: "Sukkar isn't hungry, but I am! And I am very angry!", voice: "Zephyr" }
+          ]
+        }
+      },
+      {
+        id: 7,
+        title: "Lesson 7: Sudan Independence Day",
+        type: "song",
+        content: {
+          songText: "It is the first of January, 1956. It is a sunny and hot day here in Khartoum, and a beautiful day for Sudan! Prime Minister Ismail Al-Azhari is raising the Sudanese flag. There are thousands of people in the streets. Men, women and children are standing and watching. People are clapping, children are waving flags and cheering. Sudan is now an independent country! Everyone is happy and smiling."
+        }
+      },
+      {
+        id: 8,
+        title: "Lesson 8: Unit 1 Revision & Ostrich",
+        type: "song",
+        content: {
+          songText: "An ostrich lives usually in deserts. It weighs about 60 kilograms. Its colour is black and white. Its wings are sometimes 2 metres long! It cannot fly, but it can run very fast across the desert sand. Review words: adult, child, daughter, history, geography, timetable, emblem, crocodile."
+        }
+      }
+    ]
+  },
+  {
+    id: 2,
     title: "Maths in our Life",
     arabicTitle: "الرياضيات في حياتنا",
     color: "bg-orange-400 text-orange-950 border-orange-600",
     icon: "🧮",
     words: [
-      { id: "w7-1", word: "Calculate", arabic: "يحسب", image: "💻", example: "We use numbers when we need to calculate.", soundText: "We use numbers when we need to calculate things.", unit: 7 },
-      { id: "w7-2", word: "Symbol", arabic: "رمز", image: "➕", example: "Arabs invented new symbols for the numbers one to nine.", soundText: "Arabs invented new symbols for the numbers one to nine.", unit: 7 },
-      { id: "w7-3", word: "Pyramid", arabic: "هرم", image: "🔺", example: "Sudanese people used numbers when they built pyramids.", soundText: "Sudanese people used numbers when they built pyramids.", unit: 7 },
-      { id: "w7-4", word: "Thirsty", arabic: "عطشان", image: "🥵", example: "One day a crow was thirsty and wanted some water.", soundText: "One day a crow was thirsty and wanted some water.", unit: 7 },
-      { id: "w7-5", word: "Stones", arabic: "أحجار", image: "🪨", example: "She dropped stones into the jar.", soundText: "She dropped stones into the jar to make the water rise.", unit: 7 },
-      { id: "w7-6", word: "Heart", arabic: "قلب", image: "❤️", example: "Our heart makes about a hundred thousand beats every 24 hours.", soundText: "Our heart makes about a hundred thousand beats every twenty-four hours.", unit: 7 }
+      { id: "w2-1", word: "Calculate", arabic: "يحسب", image: "💻", example: "We use numbers when we need to calculate.", soundText: "We use numbers when we need to calculate things.", unit: 2 },
+      { id: "w2-2", word: "Symbol", arabic: "رمز", image: "➕", example: "Arabs invented new symbols for the numbers one to nine.", soundText: "Arabs invented new symbols for the numbers one to nine.", unit: 2 },
+      { id: "w2-3", word: "Pyramid", arabic: "هرم", image: "🔺", example: "Sudanese people used numbers when they built pyramids.", soundText: "Sudanese people used numbers when they built pyramids.", unit: 2 },
+      { id: "w2-4", word: "Thirsty", arabic: "عطشان", image: "🥵", example: "One day a crow was thirsty and wanted some water.", soundText: "One day a crow was thirsty and wanted some water.", unit: 2 },
+      { id: "w2-5", word: "Stones", arabic: "أحجار", image: "🪨", example: "She dropped stones into the jar to make the water rise.", soundText: "She dropped stones into the jar to make the water rise.", unit: 2 },
+      { id: "w2-6", word: "Heart", arabic: "قلب", image: "❤️", example: "Our heart makes about a hundred thousand beats every 24 hours.", soundText: "Our heart makes about a hundred thousand beats every twenty-four hours.", unit: 2 }
     ],
     lessons: [
       {
         id: 1,
-        title: "Lesson 1: Dates and Numbers",
+        title: "Lesson 1: Numbers Everywhere & Dates",
         type: "song",
         content: {
-          songText: "We use numbers when we use our mobile phones. We use them to make a phone call, to send a text message or an email. We can also use the numbers on our mobile phones to know the time or the date and when we need to calculate.\n\nPractice dates:\n- 23rd March 2020: The twenty-third of March, two thousand and twenty.\n- 5th September 1742: The fifth of September, seventeen forty-two.\n- 11th June 1827: The eleventh of June, eighteen twenty-seven.\n- 2nd January 1995: The second of January, nineteen ninety-five.\n- 10th August 1431: The tenth of August, fourteen thirty-one.\n- 21st February 2022: The twenty-first of February, two thousand and twenty-two."
+          songText: "Look to the left and look to the right,\nAnd look up and down.\nWhich numbers can we see,\nWhen we look around?\nNumbers, numbers everywhere,\nNumbers when we look\nAt prices, computers and mobile phones,\nOr on the pages of our book.\nNumbers on coins, numbers on money,\nNumbers to give the time or date,\nNumbers on watches, numbers on clocks,\nNumbers to count or calculate!\n\nDates Practice:\n- 23rd March 2020: The twenty-third of March, two thousand and twenty.\n- 5th December 1868: The fifth of December, eighteen sixty-eight.\n- 30th April 1968: The thirtieth of April, nineteen sixty-eight.\n- 2nd July 2013: The second of July, two thousand and thirteen."
         }
       },
       {
@@ -30,21 +142,21 @@ export const SMILE_UNITS: UnitItem[] = [
         type: "conversation",
         content: {
           dialogue: [
-            { speaker: "Salah", text: "Where can we see numbers, Elham?", voice: "Kore" },
-            { speaker: "Elham", text: "We can see numbers everywhere: on cars, in shops, in books, on money and on phones.", voice: "Zephyr" },
-            { speaker: "Salah", text: "When did people start to count?", voice: "Kore" },
-            { speaker: "Elham", text: "People started to count and use numbers about 25,000 years ago. They wrote symbols on the walls of caves.", voice: "Zephyr" },
-            { speaker: "Salah", text: "Who invented a symbol for zero?", voice: "Kore" },
-            { speaker: "Elham", text: "The Indians invented a symbol for zero a long time ago. And the Arabs invented new symbols for numbers.", voice: "Zephyr" }
+            { speaker: "Salah", text: "When did people first start to count?", voice: "Kore" },
+            { speaker: "Elham", text: "25,000 years ago, people lived in caves. They drew symbols on cave walls to count.", voice: "Zephyr" },
+            { speaker: "Salah", text: "When were the pyramids built?", voice: "Kore" },
+            { speaker: "Elham", text: "5,000 years ago, Sudanese and Egyptian people built pyramids using maths and numbers.", voice: "Zephyr" },
+            { speaker: "Salah", text: "Who invented zero and modern number symbols?", voice: "Kore" },
+            { speaker: "Elham", text: "2,000 years ago Indians invented zero, and 1,000 years ago Arabs invented symbols 1 to 9!", voice: "Zephyr" }
           ]
         }
       },
       {
         id: 3,
-        title: "Lesson 3: Our Strong Heart",
+        title: "Lesson 3: Amazing Body Numbers",
         type: "song",
         content: {
-          songText: "An heart weighs about 300 grams. It is very strong. Our heart makes about a hundred thousand beats every twenty-four hours. It sends the blood around our body and back to our heart in only 20 seconds."
+          songText: "Our body is full of amazing numbers!\n- 32: The number of teeth in our mouth.\n- 206: The number of bones in our body.\n- 100,000: The average number of hairs on a human head.\n- 100,000: The average number of beats our heart makes in 24 hours.\n- 5,000: The average number of steps we take in one day.\n- 1095: The number of days in three years.\n- Our heart weighs about 300 grams and pumps blood in only 20 seconds."
         }
       },
       {
@@ -53,93 +165,105 @@ export const SMILE_UNITS: UnitItem[] = [
         type: "conversation",
         content: {
           dialogue: [
-            { speaker: "Hassan", text: "One day a crow was thirsty and wanted some water.", voice: "Puck" },
-            { speaker: "Ahmed", text: "Yes, it saw some water in a water jar and landed next to it.", voice: "Kore" },
-            { speaker: "Hassan", text: "Could she reach the water?", voice: "Puck" },
-            { speaker: "Ahmed", text: "No, she put her beak in the jar but couldn't reach the water. Then she dropped stones into the jar.", voice: "Kore" },
-            { speaker: "Hassan", text: "What happened after that?", voice: "Puck" },
-            { speaker: "Ahmed", text: "The water rose and the crow could drink. She was very clever!", voice: "Kore" }
+            { speaker: "Hassan", text: "One hot day, a thirsty crow flew over the fields looking for water.", voice: "Puck" },
+            { speaker: "Ahmed", text: "She saw a water jar, but the water inside was too low for her beak!", voice: "Kore" },
+            { speaker: "Hassan", text: "What did the clever crow do?", voice: "Puck" },
+            { speaker: "Ahmed", text: "She looked around and saw small stones. She dropped them one by one into the jar.", voice: "Kore" },
+            { speaker: "Hassan", text: "Did the water rise up?", voice: "Puck" },
+            { speaker: "Ahmed", text: "Yes! Little by little the water rose to the top and the crow could drink happily.", voice: "Kore" }
           ]
         }
       },
       {
         id: 5,
-        title: "Lesson 5: Pyramids School Trip",
-        type: "song",
+        title: "Lesson 5: Pyramids Trip (Quantities)",
+        type: "conversation",
         content: {
-          songText: "Sara's class has got a school trip. They are going to the pyramids near Bejerawiya. Sara, Elham and Mona are helping to put water, sandwiches, juice, bags of crisps and other things on the bus. Their teacher is counting things and the bus driver is looking at a map."
+          dialogue: [
+            { speaker: "Teacher", text: "How much fruit and food do we need for the bus trip?", voice: "Charon" },
+            { speaker: "Sara", text: "We need 40 oranges, 4 kilograms of grapes, and 40 sandwiches.", voice: "Zephyr" },
+            { speaker: "Teacher", text: "How many bottles of water do we have?", voice: "Charon" },
+            { speaker: "Elham", text: "We have got 50 bottles of water and 30 cartons of juice.", voice: "Puck" },
+            { speaker: "Teacher", text: "How many seats are there on the bus?", voice: "Charon" },
+            { speaker: "Mona", text: "There are 35 seats for pupils and 4 seats for teachers.", voice: "Zephyr" }
+          ]
         }
       },
       {
         id: 6,
-        title: "Lesson 6: A Day Without Numbers",
+        title: "Lesson 6: Hassan's Bad Dream",
         type: "song",
         content: {
-          songText: "Mona had a bad dream last Monday. She dreamt of a day without numbers. She dreamt she was late for school. Her mother couldn't cook any food because she didn't know the quantities. Her father couldn't go shopping."
+          songText: "Hassan didn't sleep well last night. He had a bad dream about a day without numbers!\nHe couldn't read his clock, so he got up late.\nHe couldn't watch TV because there were no channel numbers.\nHe couldn't catch the bus because there were no bus numbers.\nHe couldn't phone his friends, buy anything, or find his page in his book!\nWhen he woke up and saw numbers on his phone and clock, he was very happy!"
         }
       },
       {
         id: 7,
-        title: "Lesson 7: Maths in Jobs",
+        title: "Lesson 7: Maths in Different Jobs",
         type: "song",
         content: {
-          songText: "Maths is important in many jobs. Astronauts use Maths to help them calculate how to control rockets. Doctors and nurses use Maths to check temperatures. Farmers need to calculate prices for their food. Learn these jobs: nurse, doctor, writer, dentist, farmer, policeman, carpenter, builder, teacher, astronaut, shopkeeper."
+          songText: "Maths is important in many jobs:\n- A nurse uses maths to take temperatures and check blood pressure.\n- A builder uses maths to calculate the number of bricks and materials for a house.\n- A shopkeeper uses maths to weigh food and calculate prices.\n- A teacher uses numbers to help young people learn.\n- A carpenter uses maths to calculate how much wood to use for chairs and tables.\n- An astronaut uses maths to control rockets in space."
         }
       },
       {
         id: 8,
-        title: "Lesson 8: Amazing Body Facts",
+        title: "Lesson 8: Unit 2 Revision",
         type: "song",
         content: {
-          songText: "There are lots of interesting numbers. We have twenty fingers and toes on our hands and feet. We have thirty-two teeth in our mouths. We take about five thousand steps in one day and we have about 100,000 hairs on our heads."
+          songText: "Reviewing numbers and grammar: We use 'how much' for uncountable things like water, money and fruit. We use 'how many' for countable things like oranges, bottles and teeth. Remember: People started to count 25,000 years ago. Indians invented zero, and Arabs gave the world numbers 1 to 9."
         }
       }
     ]
   },
   {
-    id: 8,
+    id: 3,
     title: "Inventions and New Things",
     arabicTitle: "الاختراعات والأشياء الجديدة",
     color: "bg-purple-400 text-purple-950 border-purple-600",
     icon: "💡",
     words: [
-      { id: "w8-1", word: "Shadoof", arabic: "شادوف", image: "🪵", example: "A shadoof is smaller than a saqia.", soundText: "A shadoof is smaller than a saqia.", unit: 8 },
-      { id: "w8-2", word: "Saqia", arabic: "ساقية", image: "🎡", example: "Animals like donkeys pull the saqia.", soundText: "Animals like donkeys pull the saqia.", unit: 8 },
-      { id: "w8-3", word: "Pump", arabic: "مضخة", image: "⛽", example: "Pumps are faster than shadoofs or saqias.", soundText: "Pumps are faster than shadoofs or saqias.", unit: 8 },
-      { id: "w8-4", word: "Vaccination", arabic: "تطعيم", image: "💉", example: "Vaccinations protect people against tetanus and measles.", soundText: "Vaccinations protect people against tetanus and measles.", unit: 8 },
-      { id: "w8-5", word: "Parachute", arabic: "مظلة هبوط", image: "🪂", example: "The parachute helps people land safely.", soundText: "The parachute helps people land safely.", unit: 8 },
-      { id: "w8-6", word: "Dear", arabic: "غالٍ / عزيز", image: "💰", example: "Pumps are faster but they are dearer and dirtier.", soundText: "Pumps are faster but they are dearer and dirtier.", unit: 8 }
+      { id: "w3-1", word: "Shadoof", arabic: "شادوف", image: "🪵", example: "A shadoof is smaller than a saqia.", soundText: "A shadoof is smaller than a saqia.", unit: 3 },
+      { id: "w3-2", word: "Saqia", arabic: "ساقية", image: "🎡", example: "Animals like donkeys or cows pull the saqia.", soundText: "Animals like donkeys or cows pull the saqia.", unit: 3 },
+      { id: "w3-3", word: "Pump", arabic: "مضخة ميكانيكية", image: "⛽", example: "Pumps are faster than shadoofs or saqias.", soundText: "Pumps are faster than shadoofs or saqias.", unit: 3 },
+      { id: "w3-4", word: "Vaccination", arabic: "تطعيم / لقاح", image: "💉", example: "Vaccinations protect children against tetanus and measles.", soundText: "Vaccinations protect children against tetanus and measles.", unit: 3 },
+      { id: "w3-5", word: "Parachute", arabic: "مظلة هبوط", image: "🪂", example: "Leonardo da Vinci drew ideas for a parachute.", soundText: "Leonardo da Vinci drew ideas for a parachute.", unit: 3 },
+      { id: "w3-6", word: "Dear", arabic: "غالٍ في السعر", image: "💰", example: "Motor pumps are faster, but they are dearer and dirtier.", soundText: "Motor pumps are faster, but they are dearer and dirtier.", unit: 3 }
     ],
     lessons: [
       {
         id: 1,
-        title: "Lesson 1: Ways to Travel",
-        type: "song",
+        title: "Lesson 1: Ways to Travel & Communicate",
+        type: "conversation",
         content: {
-          songText: "There are many different ways to travel. The oldest way is on foot. You can run or walk. In the past people travelled on horses, donkeys or camels. Now they have got faster and easier ways to travel, like by car, bus or by plane."
+          dialogue: [
+            { speaker: "Ali", text: "Which is the newest of these ways to travel?", voice: "Kore" },
+            { speaker: "Omar", text: "I think a rocket is the newest way to travel, and a bike is the cheapest.", voice: "Zephyr" },
+            { speaker: "Ali", text: "Is a text message a better way to communicate than a letter?", voice: "Kore" },
+            { speaker: "Omar", text: "Yes, sending a text is much faster and easier than writing a letter.", voice: "Zephyr" }
+          ]
         }
       },
       {
         id: 2,
-        title: "Lesson 2: Irrigation Methods",
+        title: "Lesson 2: Irrigation Inventions",
         type: "conversation",
         content: {
           dialogue: [
-            { speaker: "Ahmed", text: "How can farmers water their fields in different ways?", voice: "Kore" },
-            { speaker: "Granddad", text: "They can use a shadoof to get water from a river, a canal or a well. They can also use a saqia.", voice: "Zephyr" },
-            { speaker: "Ahmed", text: "What animals pull the saqia, Granddad?", voice: "Kore" },
-            { speaker: "Granddad", text: "Animals like donkeys pull the saqia. They can also use a motor pump.", voice: "Zephyr" },
-            { speaker: "Ahmed", text: "Are motor pumps fast and clean?", voice: "Kore" },
-            { speaker: "Granddad", text: "Pumps are faster than shadoofs or saqias but they are dearer and dirtier.", voice: "Zephyr" }
+            { speaker: "Ahmed", text: "Granddad, how do you get water from the River Nile to the fields?", voice: "Kore" },
+            { speaker: "Granddad", text: "Look Ahmed. This saqia lifts water from the river into the canals.", voice: "Charon" },
+            { speaker: "Ahmed", text: "I saw motor pumps from the bus. Aren't pumps faster?", voice: "Kore" },
+            { speaker: "Granddad", text: "Yes, motor pumps are faster, but a saqia is cleaner, quieter, and cheaper to use!", voice: "Charon" },
+            { speaker: "Ahmed", text: "And what about the shadoof?", voice: "Kore" },
+            { speaker: "Granddad", text: "A shadoof is older and slower than a saqia, but farmers used it for thousands of years.", voice: "Charon" }
           ]
         }
       },
       {
         id: 3,
-        title: "Lesson 3: Important Vaccinations",
+        title: "Lesson 3: Staying Healthy & Vaccinations",
         type: "song",
         content: {
-          songText: "Vaccinations are important inventions. Doctors use them to protect people against health problems like tetanus and measles. Doctors or nurses give vaccinations to children and to people when they are older."
+          songText: "Rules to stay healthy:\n- We must clean our teeth after we eat.\n- We must wash our hands before meals.\n- We must drink clean water when we exercise.\n- We mustn't watch lots of TV all day.\n- We mustn't eat lots of junk food and sweets.\n- Health Facts: Vaccinations are important inventions! Doctors and nurses give vaccinations to protect children and adults against dangerous diseases like tetanus and measles."
         }
       },
       {
@@ -147,7 +271,7 @@ export const SMILE_UNITS: UnitItem[] = [
         title: "Lesson 4: Leonardo da Vinci",
         type: "song",
         content: {
-          songText: "Leonardo da Vinci was a famous inventor and artist. When he was a boy in Italy he was outside all the time. He studied and drew animals and plants. He thought of the idea of planes when he watched birds in the air."
+          songText: "Leonardo da Vinci was born in Italy in 1452. When he was a boy, he was always outside studying birds, animals and plants carefully. When he was an adult, he was a famous artist who painted wonderful pictures. He was also a brilliant inventor who thought of ideas for rockets, planes, helicopters and parachutes hundreds of years before they were built!"
         }
       },
       {
@@ -155,160 +279,186 @@ export const SMILE_UNITS: UnitItem[] = [
         title: "Lesson 5: The Winter Traveller",
         type: "song",
         content: {
-          songText: "A traveller arrived at a small village on a cold winter night. He didn't have any money or any food and he was cold, hungry and tired. He asked people in the village for help but they didn't help him, so he made a fire and sat and waited."
+          songText: "A poor traveller arrived in a village late on a cold night in winter. The moon and stars were in the sky. The traveller didn't have any food or money. He went from house to house asking: 'Can you help me?' But no one gave him food. The answer was always: 'I can't help, ask my neighbour.' The traveller was cold and hungry, so he thought of a clever new 'invention'!"
         }
       },
       {
         id: 6,
         title: "Lesson 6: Making Stone Soup",
-        type: "song",
+        type: "conversation",
         content: {
-          songText: "The traveller waited next to the fire. A villager came to speak to him and gave the traveller some salt and pepper. Another villager gave the traveller onions and carrots. Little by little the traveller got enough food to make some soup."
+          dialogue: [
+            { speaker: "Villager 1", text: "What are you doing over that fire?", voice: "Zephyr" },
+            { speaker: "Traveller", text: "I'm making stone soup! It is almost ready, but it needs some salt.", voice: "Kore" },
+            { speaker: "Villager 1", text: "I have got some salt! Here, put it in.", voice: "Zephyr" },
+            { speaker: "Villager 2", text: "Are you cooking soup? Have you got any onions and carrots?", voice: "Puck" },
+            { speaker: "Traveller", text: "No, onions and carrots would make stone soup delicious!", voice: "Kore" },
+            { speaker: "Villager 3", text: "I have got cabbage and meat for the soup. Let's all eat together!", voice: "Charon" }
+          ]
         }
       },
       {
         id: 7,
-        title: "Lesson 7: Using Computers",
+        title: "Lesson 7: Using Computers and the Internet",
         type: "song",
         content: {
-          songText: "We can use computers and the Internet for different things. We can use the internet to write emails and to find important information. We can also do other things like play games and chat to friends."
+          songText: "Computers and the Internet are wonderful modern inventions!\n- We can use the Internet to look for important information.\n- We can use the Internet to shop online.\n- We can use the Internet to write and send emails.\n- We can use the Internet to chat to friends online and send photos.\n- We can use digital maps on the Internet to help know where we are."
         }
       },
       {
         id: 8,
-        title: "Lesson 8: Inventions Review",
+        title: "Lesson 8: Unit 3 Revision",
         type: "song",
         content: {
-          songText: "Inventions are new ways to do things. Some inventions, like the saqia and the shadoof, are old but we still use them. Other inventions, like computers and vaccinations, are new and they are very important in our lives today."
+          songText: "There are air conditioners and computers in many of our homes.\nThere are many new inventions and lots of new machines.\nBut the best invention when you're hot is a cold ice cream!\nReview vocabulary: artist, clever, fresh, internet, motor pump, shadoof, saqia, vaccination, parachute."
         }
       }
     ]
   },
   {
-    id: 9,
+    id: 4,
     title: "Wonders of the World",
     arabicTitle: "عجائب العالم",
     color: "bg-cyan-400 text-cyan-950 border-cyan-600",
     icon: "🏛️",
     words: [
-      { id: "w9-1", word: "Wonder", arabic: "أعجوبة", image: "🏛️", example: "Machu Picchu is an amazing old stone wonder.", soundText: "Machu Picchu is an amazing old stone wonder.", unit: 9 },
-      { id: "w9-2", word: "Tomb", arabic: "ضريح / قبر", image: "🪦", example: "The Taj Mahal is a beautiful white marble tomb.", soundText: "The Taj Mahal is a beautiful white marble tomb.", unit: 9 },
-      { id: "w9-3", word: "Stone", arabic: "حجر", image: "🪨", example: "Bedouin Arabs cut tombs into the stone walls.", soundText: "Bedouin Arabs cut tombs into the stone walls.", unit: 9 },
-      { id: "w9-4", word: "Iron", arabic: "حديد", image: "🔗", example: "The Kingdom of Kush was very rich from iron trade.", soundText: "The Kingdom of Kush was very rich from iron trade.", unit: 9 },
-      { id: "w9-5", word: "Theatre", arabic: "مسرح", image: "🎭", example: "The Colosseum was the biggest theatre in Europe.", soundText: "The Colosseum was the biggest theatre in Europe.", unit: 9 },
-      { id: "w9-6", word: "Mountain", arabic: "جبل", image: "⛰️", example: "Machu Picchu was built high in the mountains in Peru.", soundText: "Machu Picchu was built high in the mountains in Peru.", unit: 9 }
+      { id: "w4-1", word: "Wonder", arabic: "أعجوبة", image: "🏛️", example: "Machu Picchu is an amazing old stone wonder.", soundText: "Machu Picchu is an amazing old stone wonder.", unit: 4 },
+      { id: "w4-2", word: "Tomb", arabic: "ضريح / قبر ملكي", image: "🪦", example: "The Taj Mahal is a beautiful white marble tomb.", soundText: "The Taj Mahal is a beautiful white marble tomb.", unit: 4 },
+      { id: "w4-3", word: "Marble", arabic: "رخام", image: "🏛️", example: "The Taj Mahal is made of white marble.", soundText: "The Taj Mahal is made of white marble.", unit: 4 },
+      { id: "w4-4", word: "Iron", arabic: "حديد", image: "🔗", example: "The Kingdom of Kush was very rich from iron trade.", soundText: "The Kingdom of Kush was very rich from iron trade.", unit: 4 },
+      { id: "w4-5", word: "Theatre", arabic: "مسرح", image: "🎭", example: "The Colosseum in Rome was the biggest theatre in Europe.", soundText: "The Colosseum in Rome was the biggest theatre in Europe.", unit: 4 },
+      { id: "w4-6", word: "Treasure", arabic: "كنز", image: "💎", example: "Ferlini damaged pyramids looking for gold treasure.", soundText: "Ferlini damaged pyramids looking for gold treasure.", unit: 4 }
     ],
     lessons: [
       {
         id: 1,
-        title: "Lesson 1: What is a Wonder?",
+        title: "Lesson 1: Wonders of the World Chant",
         type: "song",
         content: {
-          songText: "A wonder is something wonderful. An old, important or beautiful building or city is sometimes called a wonder. 2,400 years ago the history writer Herodotus wrote about the Great Pyramid, one of his seven wonders of the world. This information was important for tourists of that time."
+          songText: "There are many wonders in the world for us all to see:\nThe Taj Mahal in India, the Colosseum in Italy.\nThe city of Petra in Jordan is old, but looks very new.\nThe city of Machu Picchu in the mountains of Peru.\nThe Great Wall of China and the Great Pyramid in Egypt too!\nWalls, mosques, palaces, cities: many wonders to see,\nIf you go and visit them, can you also pay for me?"
         }
       },
       {
         id: 2,
-        title: "Lesson 2: Pyramids of Meroë",
+        title: "Lesson 2: Comparing the Wonders",
         type: "song",
         content: {
-          songText: "Sudan has got beautiful and amazing pyramids. They were tombs for kings and queens who lived about 2,000 years ago. Some of the pyramids are at Meroë. It is about 100km north of Khartoum. The pyramids there are smaller than the pyramids in Egypt."
+          songText: "Comparing the great wonders of the world:\n- Oldest: The Great Pyramid in Egypt is the oldest wonder of the world (about 4,800 years old).\n- Prettiest: In India, the Taj Mahal is called one of the prettiest buildings in the world.\n- Longest: The Great Wall of China is the longest wall in the world (over 6,000 km).\n- Biggest Theatre: The Colosseum in Italy was the biggest theatre in the ancient world.\n- Highest: Machu Picchu in Peru is one of the highest wonders, built high up in the mountains."
         }
       },
       {
         id: 3,
-        title: "Lesson 3: Story of Taj Mahal",
+        title: "Lesson 3: The Story of Taj Mahal",
         type: "song",
         content: {
-          songText: "The Taj Mahal is sometimes called the prettiest building in the world. People think the Taj Mahal is amazing. Tourists from around the world come to Agra to see this building. It is made of white marble and is the tomb of Shah Jahan and his wife, Mumtaz Mahal."
+          songText: "Shah Jahan was born in 1592. He was the Muslim emperor of India from 1628 to 1658. He married Mumtaz Mahal in 1612. She died in 1631. Shah Jahan built the Taj Mahal in Agra to bury her in. Workers started to build it in 1632. 1,000 elephants carried materials and 20,000 workers worked there. It took 20 years to finish. It is made of white marble, and when Shah Jahan died in 1666, it was his tomb too."
         }
       },
       {
         id: 4,
-        title: "Lesson 4: Stone City of Petra",
-        type: "song",
+        title: "Lesson 4: The Stone City of Petra",
+        type: "conversation",
         content: {
-          songText: "Bedouin Arabs built the city of Petra about 2,000 years ago. They built houses, tombs and other buildings into the sides of the desert mountains. Every year thousands of people go to Jordan to see this amazing city and do exciting activities like camel riding."
+          dialogue: [
+            { speaker: "Guide", text: "Welcome to Petra! Do you like exploring old stone cities?", voice: "Charon" },
+            { speaker: "Tourist", text: "Yes! Who built this incredible city in the desert?", voice: "Zephyr" },
+            { speaker: "Guide", text: "Bedouin Arabs built Petra about 2,000 years ago. It was a rich centre of trade.", voice: "Charon" },
+            { speaker: "Tourist", text: "How did they build these huge buildings?", voice: "Zephyr" },
+            { speaker: "Guide", text: "They cut directly into the sides of the sandstone mountains and carved over 800 buildings, tombs and caves!", voice: "Charon" }
+          ]
         }
       },
       {
         id: 5,
-        title: "Lesson 5: Kingdom of Kush",
+        title: "Lesson 5: Pyramids of Meroë (Kush)",
         type: "song",
         content: {
-          songText: "The people of Kush, an important kingdom in the north of Sudan, first started to build pyramids 2,700 years ago. They built about 200 pyramids in the city Meroë and tourists come to Sudan to see them. The city of Meroe is about 200km north of Khartoum on the River Nile."
+          songText: "For 1,100 years, Kush was an important kingdom in Sudan. It started about 2,700 years ago in Napata and then moved to Meroë. Kush was very rich from its trade in iron. Sudan has got amazing pyramids: there are about 220 pyramids in Sudan, while Egypt has got 118! Sudanese pyramids are smaller than Egyptian pyramids, but they are steeper and more numerous. In 1834, an Italian named Giuseppe Ferlini damaged about 40 pyramids searching for gold."
         }
       },
       {
         id: 6,
-        title: "Lesson 6: Giuseppe Ferlini",
-        type: "song",
+        title: "Lesson 6: The Camels at Meroë",
+        type: "conversation",
         content: {
-          songText: "Giuseppe Ferlini was born in Italy 1793. He left Italy in 1815 and travelled to Egypt to work as a doctor. He went to Sudan in the 1830s. During his time in Sudan, he damaged about 40 pyramids before he found something."
+          dialogue: [
+            { speaker: "Camel 1", text: "Where are we going through the desert?", voice: "Puck" },
+            { speaker: "Camel 2", text: "The place is called Meroë. We are carrying an Italian doctor named Giuseppe Ferlini.", voice: "Charon" },
+            { speaker: "Camel 1", text: "Why aren't the men sleeping tonight? What's that loud noise?", voice: "Puck" },
+            { speaker: "Camel 2", text: "They are blowing up the top of the pyramid! They are looking for treasure.", voice: "Charon" },
+            { speaker: "Camel 1", text: "They're crazy! They shouldn't do that! The pyramids of Meroë are old and important!", voice: "Puck" }
+          ]
         }
       },
       {
         id: 7,
-        title: "Lesson 7: The Great Wall",
+        title: "Lesson 7: The Great Wall of China",
         type: "conversation",
         content: {
           dialogue: [
-            { speaker: "Salah", text: "Hello Lee, how are you?", voice: "Kore" },
-            { speaker: "Lee", text: "Hello Salah. I am fine, thank you.", voice: "Zephyr" },
-            { speaker: "Salah", text: "Where are you now?", voice: "Kore" },
-            { speaker: "Lee", text: "I am standing on the Great Wall. It's in the north of China.", voice: "Zephyr" },
-            { speaker: "Salah", text: "How long is the Great Wall of China?", voice: "Kore" },
-            { speaker: "Lee", text: "It is very long. The wall is more than 6,000 kilometres long. The oldest part is 2,500 years old.", voice: "Zephyr" }
+            { speaker: "Salah", text: "Hello Lee! How are you?", voice: "Kore" },
+            { speaker: "Lee", text: "Hello Salah! I'm standing on the Great Wall in the north of China.", voice: "Zephyr" },
+            { speaker: "Salah", text: "How long is the Great Wall?", voice: "Kore" },
+            { speaker: "Lee", text: "It is more than 6,000 kilometres long! The oldest parts are 2,500 years old.", voice: "Zephyr" },
+            { speaker: "Salah", text: "What is it made of, and why did the Chinese build it?", voice: "Kore" },
+            { speaker: "Lee", text: "It is made of stone and bricks. The Chinese built it to protect China from enemies.", voice: "Zephyr" }
           ]
         }
       },
       {
         id: 8,
-        title: "Lesson 8: Rome and Colosseum",
+        title: "Lesson 8: Unit 4 Review & The Colosseum",
         type: "song",
         content: {
-          songText: "2,000 years ago, Rome in Italy was one of the biggest cities in the world. There were many different buildings and one of them is now one of the wonders of the world. The Colosseum was a large theatre in the centre of Rome. Lots of people visit it now."
+          songText: "2,000 years ago, Rome in Italy was one of the biggest cities in the world. The Colosseum was a huge theatre in the centre of Rome where thousands of people watched events. Review materials: The Taj Mahal is made of marble, the Great Wall is made of stone and bricks, and our school books are made of paper."
         }
       }
     ]
   },
   {
-    id: 10,
+    id: 5,
     title: "Special Days",
-    arabicTitle: "الأيام والـمناسبات الخاصة",
+    arabicTitle: "الأيام والمناسبات الخاصة",
     color: "bg-red-400 text-red-950 border-red-600",
     icon: "🎉",
     words: [
-      { id: "w10-1", word: "Festival", arabic: "مهرجان", image: "🎡", example: "Port Sudan holds a shopping and tourism festival.", soundText: "Port Sudan holds a shopping and tourism festival.", unit: 10 },
-      { id: "w10-2", word: "Wedding", arabic: "زفاف", image: "💍", example: "Wedding days are very happy days.", soundText: "Wedding days are very happy days.", unit: 10 },
-      { id: "w10-3", word: "Invitation", arabic: "دعوة", image: "✉️", example: "We send wedding invitations to our friends.", soundText: "We send wedding invitations to our friends.", unit: 10 },
-      { id: "w10-4", word: "Wren", arabic: "طائر الصعو", image: "🐦", example: "A clever little wren won the flying competition.", soundText: "A clever little wren won the flying competition.", unit: 10 },
-      { id: "w10-5", word: "Falcon", arabic: "صقر", image: "🦅", example: "The falcon flew high but he didn't win.", soundText: "The falcon flew high but he didn't win.", unit: 10 },
-      { id: "w10-6", word: "Picnic", arabic: "نزهة", image: "🧺", example: "We played by the river and had a picnic under trees.", soundText: "We played by the river and had a picnic under trees.", unit: 10 }
+      { id: "w5-1", word: "Festival", arabic: "مهرجان", image: "🎡", example: "Port Sudan holds a great tourism and shopping festival.", soundText: "Port Sudan holds a great tourism and shopping festival.", unit: 5 },
+      { id: "w5-2", word: "Wedding", arabic: "حفل زفاف", image: "💍", example: "We received an invitation to Ali and Moussa's wedding.", soundText: "We received an invitation to Ali and Moussa's wedding.", unit: 5 },
+      { id: "w5-3", word: "Invitation", arabic: "بطاقة دعوة", image: "✉️", example: "Would you like to come to my sister's wedding?", soundText: "Would you like to come to my sister's wedding?", unit: 5 },
+      { id: "w5-4", word: "Wren", arabic: "طائر الصعو الصغير", image: "🐦", example: "The clever little wren sat on the falcon's back.", soundText: "The clever little wren sat on the falcon's back.", unit: 5 },
+      { id: "w5-5", word: "Falcon", arabic: "صقر", image: "🦅", example: "The falcon flew high, but he didn't win the race.", soundText: "The falcon flew high, but he didn't win the race.", unit: 5 },
+      { id: "w5-6", word: "Graduation", arabic: "حفل تخرج", image: "🎓", example: "We celebrated my sister's university graduation party.", soundText: "We celebrated my sister's university graduation party.", unit: 5 }
     ],
     lessons: [
       {
         id: 1,
-        title: "Lesson 1: Special Days",
+        title: "Lesson 1: Celebrate Special Days Chant",
         type: "song",
         content: {
-          songText: "We celebrate many special days. School festivals are important and school graduations are important too. This is when we celebrate the last day at school. Eid El Fitr and Eid El Adha are other important special days."
+          songText: "Celebrate, celebrate, special days:\nEid al-Fitr, wedding invitations, school graduations,\nFestivals, Mother's Day.\nWe can smile and keep clapping,\nWhen nice things happen!\nWe can have fun and cheer,\nWhen nice things are here!\nSmile! Laugh! Take a photograph!\nCelebrate, celebrate, special days!"
         }
       },
       {
         id: 2,
-        title: "Lesson 2: Fatma's Sabaloka Trip",
+        title: "Lesson 2: Sabaloka School Trip",
         type: "song",
         content: {
-          songText: "Three days ago, Fatma's class visited Sabaloka on the River Nile. They met early at the school and the bus came and collected them. They had a great time in Sabaloka. They went on a boat tour, played by the river and had a picnic under the trees."
+          songText: "January 10th - Dear Diary:\nYesterday our class went on a special school trip to Sabaloka Cataract on the River Nile! We all met early at the school and got on the bus before seven o'clock in the morning. We stopped on the way and drank tea and ate cakes. During the bus trip, we sang songs and played games. After 3 hours in the bus, we arrived in Sabaloka. We saw the rocks and had a boat tour on the River Nile. In the afternoon, we had a picnic, ate lunch and played by the river. We had a great time!"
         }
       },
       {
         id: 3,
-        title: "Lesson 3: Happy Wedding Invitations",
-        type: "song",
+        title: "Lesson 3: Invitations & Possessives",
+        type: "conversation",
         content: {
-          songText: "Wedding days are happy days. We send people wedding invitations to invite them and we spend time with our friends and our families on wedding days. We also phone and speak to any family or friends who can't come to see us on wedding days."
+          dialogue: [
+            { speaker: "Hala", text: "Dear Ibtisam, would you like to come to my sister's wedding at al-Warda Hotel?", voice: "Zephyr" },
+            { speaker: "Ibtisam", text: "I would love to! When is the date and time?", voice: "Kore" },
+            { speaker: "Hala", text: "It's on Saturday 22nd April at 14:30. Here is your invitation.", voice: "Zephyr" },
+            { speaker: "Mounir", text: "And please come to my 12th birthday party at al-Ahly Sports Club on Friday!", voice: "Puck" },
+            { speaker: "Ahmed", text: "Whose bag is this on the chair? Is it Sara's?", voice: "Charon" },
+            { speaker: "Hala", text: "Yes, it's hers. And these pens are theirs.", voice: "Zephyr" }
+          ]
         }
       },
       {
@@ -316,210 +466,244 @@ export const SMILE_UNITS: UnitItem[] = [
         title: "Lesson 4: Port Sudan Festival",
         type: "song",
         content: {
-          songText: "Visit the Tourism and Shopping Festival in Port Sudan. Buy wonderful presents for your family and friends. Enjoy different activities at the festival. Have a great holiday in Port Sudan. Swim in the warm water. Relax on the beautiful beaches. Take a boat tour. Dive in the Red Sea and watch the amazing fish!"
+          songText: "Welcome to the Port Sudan Tourism and Shopping Festival! Enjoy different activities at this great festival. Have a wonderful holiday in Port Sudan. See the interesting port with its ships from around the world. Swim in the warm waters of the Red Sea. Relax with your family on the beautiful beaches. Take a boat tour, dive in the Red Sea, and watch the amazing colourful fish and coral reefs!"
         }
       },
       {
         id: 5,
-        title: "Lesson 5: Nafisa's Mother's Day",
+        title: "Lesson 5: Honouring Your Mother",
         type: "song",
         content: {
-          songText: "Hello, my name is Nafisa. It's Mother's day today. On Mother's Day, I think about my mum's work and I thank her for her help. In the morning, I made her a card and gave her a flower. I am helping my mother today so she can relax and have fun. At the moment, I am cooking dinner for my sisters."
+          songText: "Who should I honour and give my love to, after Allah and Rasulullah?\nYour mother! Your mother! Your mother!\nAnd after my mother?\nYour father!\nWho listened to you when you started to talk? Who watched you when you started to walk?\nWhen you fell down, who picked you up? Who washed your face and cleaned your cut?\nWhen you were ill, who helped you to be well? When you were afraid, who stayed up at night?\nSo say: Thank you Allah for your mother!\nSay: Alhamdulillah for your mother!\nOn Mother's Day, let's make a card for mum and say thank you."
         }
       },
       {
         id: 6,
-        title: "Lesson 6: The Flying Competition",
-        type: "song",
+        title: "Lesson 6: The Flying Competition & The Wren",
+        type: "conversation",
         content: {
-          songText: "Some birds wanted to find the best flyer of all the birds so they had a competition. The falcon was the strongest and fastest of the birds. He flew high in the sky but he didn't win the competition. A clever little wren sat on the falcon's back and when he was tired, she flew higher than him."
+          dialogue: [
+            { speaker: "Falcon", text: "I am the strongest and fastest bird! I flew higher than anyone!", voice: "Charon" },
+            { speaker: "Wren", text: "Look above you! I sat quietly on your back, and when you were tired, I flew higher!", voice: "Zephyr" },
+            { speaker: "Cat", text: "Aha, little wren! I caught you in the forest. Why are you singing so happily?", voice: "Puck" },
+            { speaker: "Wren", text: "It's my song for help! Listen closely!", voice: "Zephyr" },
+            { speaker: "Cat", text: "Oh no! All the birds of the forest are flying here to protect her! I must run away!", voice: "Puck" }
+          ]
         }
       },
       {
         id: 7,
-        title: "Lesson 7: Getting Ready for Eid",
-        type: "song",
+        title: "Lesson 7: Eid al-Fitr in Sudan",
+        type: "conversation",
         content: {
-          songText: "In towns and villages people in Sudan clean and paint their houses for Eid El Fitr. They make or buy lots of sweets and they buy new clothes for their children. In towns and villages families go to the park and children play games with their friends."
+          dialogue: [
+            { speaker: "Salah", text: "On Eid day, I get up very early in the morning and put on my best clean clothes.", voice: "Kore" },
+            { speaker: "Father", text: "Come Salah, let's walk together to the mosque for Eid prayers.", voice: "Charon" },
+            { speaker: "Salah", text: "Eid Mubarak, Dad! After prayers, everyone greets each other in the street.", voice: "Kore" },
+            { speaker: "Father", text: "Eid Mubarak, son. Then we visit relatives and neighbours, eat delicious sweets, and give presents.", voice: "Charon" },
+            { speaker: "Salah", text: "In the evening, our whole family goes to the park and we play games!", voice: "Kore" }
+          ]
         }
       },
       {
         id: 8,
-        title: "Lesson 8: Celebrations Review",
+        title: "Lesson 8: Unit 5 Revision",
         type: "song",
         content: {
-          songText: "In Sudan people celebrate special many days like Eid El Fitr and Eid El Adha. They celebrate festivals, Mother's Day, weddings and graduations. People enjoy celebrating special days. They smile, have fun and take photographs. They sometimes give presents and make special food."
+          songText: "Special days bring joy and unity. In Sudan we celebrate Eid al-Fitr, Eid al-Adha, weddings, school graduations, and Mother's Day. We write invitation cards, take photographs, eat special food like sweets and cakes, and spend time with beloved family and friends."
         }
       }
     ]
   },
   {
-    id: 11,
+    id: 6,
     title: "Health",
-    arabicTitle: "الصحة",
+    arabicTitle: "الصحة ورعاية الجسم",
     color: "bg-emerald-400 text-emerald-950 border-emerald-600",
     icon: "🩺",
     words: [
-      { id: "w11-1", word: "Stomach", arabic: "معدة", image: "🥗", example: "The stomach helps digest our healthy food.", soundText: "The stomach helps digest our healthy food.", unit: 11 },
-      { id: "w11-2", word: "Shoulder", arabic: "كتف", image: "💪", example: "We have two shoulders on our body.", soundText: "We have two shoulders on our body.", unit: 11 },
-      { id: "w11-3", word: "Protein", arabic: "بروتين", image: "🥩", example: "Milk, meat, chicken and fish give us protein.", soundText: "Milk, meat, chicken and fish give us protein.", unit: 11 },
-      { id: "w11-4", word: "Carbohydrate", arabic: "كربوهيدرات", image: "🍞", example: "Rice, bread and beans give us carbohydrate.", soundText: "Rice, bread and beans give us carbohydrate.", unit: 11 },
-      { id: "w11-5", word: "Knee", arabic: "ركبة", image: "🦵", example: "We need our knees and legs to walk.", soundText: "We need our knees and legs to walk.", unit: 11 },
-      { id: "w11-6", word: "Exercise", arabic: "تمرين", image: "🏃", example: "When we take regular exercise, we can be stronger.", soundText: "When we take regular exercise, we can be stronger.", unit: 11 }
+      { id: "w6-1", word: "Stomach", arabic: "معدة", image: "🥗", example: "We need a stomach when we eat food.", soundText: "We need a stomach when we eat food.", unit: 6 },
+      { id: "w6-2", word: "Shoulder", arabic: "كتف", image: "💪", example: "We need shoulders and elbows so our arms can bend.", soundText: "We need shoulders and elbows so our arms can bend.", unit: 6 },
+      { id: "w6-3", word: "Protein", arabic: "بروتين", image: "🥩", example: "Meat, chicken, eggs and fish give us protein.", soundText: "Meat, chicken, eggs and fish give us protein.", unit: 6 },
+      { id: "w6-4", word: "Carbohydrate", arabic: "كربوهيدرات", image: "🍞", example: "Bread, rice and potatoes give us carbohydrate.", soundText: "Bread, rice and potatoes give us carbohydrate.", unit: 6 },
+      { id: "w6-5", word: "Knee", arabic: "ركبة", image: "🦵", example: "We need knees and legs to walk and run.", soundText: "We need knees and legs to walk and run.", unit: 6 },
+      { id: "w6-6", word: "Routine", arabic: "روتين منتظم", image: "⏰", example: "Keep the same bedtime routine every night.", soundText: "Keep the same bedtime routine every night.", unit: 6 }
     ],
     lessons: [
       {
         id: 1,
-        title: "Lesson 1: Our Body Parts",
+        title: "Lesson 1: Parts of the Body Chant",
         type: "song",
         content: {
-          songText: "We use different parts of our body for different things. When we listen, we use our ears. We hold things with our hands and our fingers. We speak and eat with our mouths. We use our legs, knees, feet and toes when we walk. Singular & Plurals:\n- knee -> knees\n- elbow -> elbows\n- shoulder -> shoulders\n- body -> bodies\n- child -> children\n- person -> people\n- man -> men\n- woman -> women\n- foot -> feet\n- tooth -> teeth"
+          songText: "We need a mouth to talk with, and two eyes to see.\nWe need a face, two ears, teeth and two knees.\nWe need fingers in our gloves where our two hands end.\nWe need shoulders and elbows so our arms can bend.\nWe need a back and a body and a head on the top.\nWe need our toes in our shoes where our two feet stop.\nWe need legs on the ground to take all our weight,\nA backbone and a neck to hold our head straight!\nWe need a nose to smell with and a stomach when we eat,\nWe need a heart in our body to pump and to beat!\n\nSingular & Plural Rules:\n- one knee -> two knees\n- one elbow -> two elbows\n- one foot -> two feet\n- one tooth -> thirty-two teeth\n- one child -> many children\n- one woman -> women / one man -> men"
         }
       },
       {
         id: 2,
-        title: "Lesson 2: Looking After Our Body",
+        title: "Lesson 2: Staying Safe at Home",
         type: "song",
         content: {
-          songText: "Our bodies and our health are very important and we should look after them. We should be careful about dangerous things at home. We should eat healthy food like vegetables and fruit and drink clean water. We should do sports and exercise."
+          songText: "Safety rules in our homes:\n- You mustn't leave shopping bags on the floor where a child can fall over them.\n- You mustn't leave sharp knives where a child can reach them and cut his hand.\n- You mustn't leave medicine where a child can find it and eat it.\n- You mustn't leave hot water where a child can touch it and burn himself.\n- We shouldn't play with matches or candles.\n- We should always wash our hands before eating."
         }
       },
       {
         id: 3,
-        title: "Lesson 3: Healthy Food Groups",
+        title: "Lesson 3: Food Groups & Nutrition",
         type: "song",
         content: {
-          songText: "There are different food groups, for example protein, carbohydrate, fat and fruit and vegetables. These food groups are important for our bodies. Rice, bread and beans give us carbohydrate. Milk, meat, chicken and fish give us protein. Bananas, apples and carrots are examples of fruit and vegetables."
+          songText: "Every day we need healthy foods from different groups:\n1. Protein (about 30g): Meat, chicken, fish, eggs and beans build strong muscles.\n2. Carbohydrate (about 200g): Bread, rice, sugar and potatoes give us energy.\n3. Fat (about 70g): Cheese, butter and oil.\n4. Fruit and Vegetables: Apples, grapes, carrots, tomatoes and onions keep us healthy and protect us from diseases.\nDrink lots of clean water and eat balanced meals!"
         }
       },
       {
         id: 4,
-        title: "Lesson 4: Keeping Fit",
+        title: "Lesson 4: Exercise & Keeping Fit",
         type: "song",
         content: {
-          songText: "Exercise helps us to keep our bodies healthy. When we walk, run, skip, jump or do other sports or games, we make our bones and muscles stronger. When we take regular exercise, we can be stronger, faster, fitter and happier."
+          songText: "Regular exercise is good for us, and more exercise is better! Exercise builds our muscles and bones and makes us strong. Exercise keeps our hearts and bodies healthy. Children who take regular exercise:\n- Have better control of their body weight.\n- Have stronger muscles and bones.\n- Have lower blood pressure than children who don't exercise.\n- Are fitter, faster, and healthier.\n- Are usually calmer and happier!"
         }
       },
       {
         id: 5,
-        title: "Lesson 5: Murad's Story",
+        title: "Lesson 5: Murad - The Boy Who Told Lies",
         type: "conversation",
         content: {
           dialogue: [
-            { speaker: "Murad", text: "Mum, I'm very ill with a high temperature! I need a doctor.", voice: "Puck" },
-            { speaker: "Doctor", text: "I examined Murad. There is nothing wrong with him. He is fine.", voice: "Charon" },
-            { speaker: "Mother", text: "Why did you lie about being sick, Murad?", voice: "Kore" },
-            { speaker: "Murad", text: "Don't be angry, Mum. I did it to make you laugh.", voice: "Puck" }
+            { speaker: "Murad", text: "Mum, I'm very ill with a high temperature! I need a doctor immediately!", voice: "Puck" },
+            { speaker: "Doctor", text: "I examined Murad carefully. There is nothing wrong with him. He is fine.", voice: "Charon" },
+            { speaker: "Mother", text: "Murad, why did you say you were sick when you were fine?", voice: "Zephyr" },
+            { speaker: "Murad", text: "Don't be angry mum, I did it four times to make you laugh!", voice: "Puck" },
+            { speaker: "Murad", text: "Mum! Tonight I am really ill! Can I see the doctor? I'm not lying!", voice: "Puck" },
+            { speaker: "Mother", text: "No Murad, go to bed. We don't believe you anymore.", voice: "Zephyr" }
           ]
         }
       },
       {
         id: 6,
-        title: "Lesson 6: Bedtime Routine",
+        title: "Lesson 6: Good Sleep & Posture Habits",
         type: "song",
         content: {
-          songText: "You should have a routine at bedtime. Do the same things each night before you go to sleep. Drink some warm milk. Read a book or listen to a story. Your body knows when it is time for you to sleep."
+          songText: "Healthy habits for your body and back:\n- Always sit with your back straight in your chair when you are in class.\n- Don't change your habits before bedtime; keep the same routine.\n- Eat a small meal 2 hours before sleep, and don't eat lots of sweets or junk food.\n- Drink some warm milk and read a book for 10 minutes.\n- Never play exciting or noisy games right before bed.\n- Always wear a helmet when you ride your bike!"
         }
       },
       {
         id: 7,
-        title: "Lesson 7: Staying Safe Outside",
-        type: "song",
+        title: "Lesson 7: Street Safety Rules",
+        type: "conversation",
         content: {
-          songText: "Children like playing outside and it is important to be careful and safe outside. Always wear shoes when you go outside. Walk on the left side of the street and ride a bike on the right hand side of the road. Don't run or play games in streets with lots of cars."
+          dialogue: [
+            { speaker: "Teacher", text: "Don't cross the street until you're sure! What should you do first?", voice: "Charon" },
+            { speaker: "Pupil", text: "You listen and look and look some more! Be careful, be calm, be clever, be wise.", voice: "Zephyr" },
+            { speaker: "Teacher", text: "How do you check traffic before crossing?", voice: "Charon" },
+            { speaker: "Pupil", text: "Look left, look right, look left and then check again! Cross busy roads at a traffic light.", voice: "Zephyr" },
+            { speaker: "Teacher", text: "And what should you wear at night?", voice: "Charon" },
+            { speaker: "Pupil", text: "Wear bright clothes when out at night so drivers can see you clearly!", voice: "Zephyr" }
+          ]
         }
       },
       {
         id: 8,
-        title: "Lesson 8: Dangerous Things at Home",
+        title: "Lesson 8: Unit 6 Revision",
         type: "song",
         content: {
-          songText: "Our homes can have dangerous things in them like sharp knives, matches, hot water and cookers. It is important to keep young children safe. There are also dangerous things like cars and buses in towns and cities. We should always make sure we are careful."
+          songText: "Reviewing body and health: We need a mouth to talk with and two eyes to see. We need shoulders, elbows, knees and feet. Regular exercise keeps our heart pumping strong. Eat balanced food from the protein, carbohydrate and vegetable groups, and always be truthful and safe!"
         }
       }
     ]
   },
   {
-    id: 12,
+    id: 7,
     title: "One More Time",
-    arabicTitle: "مراجعة وحماية البيئة",
+    arabicTitle: "مراجعة شاملة وحماية البيئة",
     color: "bg-rose-400 text-rose-950 border-rose-600",
     icon: "♻️",
     words: [
-      { id: "w12-1", word: "Recycle", arabic: "إعادة تدوير", image: "♻️", example: "We can re-use or recycle many things, like glass, wood and metals.", soundText: "We can re-use or recycle many things, like glass, wood and metals.", unit: 12 },
-      { id: "w12-2", word: "Metal", arabic: "معدن", image: "📎", example: "The fan is made of metal.", soundText: "The fan is made of metal.", unit: 12 },
-      { id: "w12-3", word: "Glass", arabic: "زجاج", image: "🥛", example: "Windows are made of glass.", soundText: "Windows are made of glass.", unit: 12 },
-      { id: "w12-4", word: "Brick", arabic: "طوب", image: "🧱", example: "Houses are built of clay and bricks.", soundText: "Houses are built of clay and bricks.", unit: 12 },
-      { id: "w12-5", word: "Wood", arabic: "خشب", image: "🪵", example: "The table is made of wood.", soundText: "The table is made of wood.", unit: 12 },
-      { id: "w12-6", word: "Clay", arabic: "صلصال", image: "🧱", example: "We mix water and clay to make houses.", soundText: "We mix water and clay to make houses.", unit: 12 }
+      { id: "w7-1", word: "Recycle", arabic: "إعادة تدوير", image: "♻️", example: "We can recycle glass, wood, metal and paper.", soundText: "We can recycle glass, wood, metal and paper.", unit: 7 },
+      { id: "w7-2", word: "Metal", arabic: "معدن", image: "📎", example: "Cans and car engines are made of metal.", soundText: "Cans and car engines are made of metal.", unit: 7 },
+      { id: "w7-3", word: "Glass", arabic: "زجاج", image: "🥛", example: "Bottles and windows are made of glass.", soundText: "Bottles and windows are made of glass.", unit: 7 },
+      { id: "w7-4", word: "Brick Maker", arabic: "صانع الطوب", image: "🧱", example: "The brick maker mixes clay and water near the river.", soundText: "The brick maker mixes clay and water near the river.", unit: 7 },
+      { id: "w7-5", word: "Wood", arabic: "خشب", image: "🪵", example: "Desks and tables are made of wood.", soundText: "Desks and tables are made of wood.", unit: 7 },
+      { id: "w7-6", word: "Clay", arabic: "طين / فخار", image: "🏺", example: "People in ancient Iraq wrote symbols on clay.", soundText: "People in ancient Iraq wrote symbols on clay.", unit: 7 }
     ],
     lessons: [
       {
         id: 1,
-        title: "Lesson 1: Being Green",
+        title: "Lesson 1: Be Green & Materials",
         type: "song",
         content: {
-          songText: "Salah and Sara are trying to be green. They take care of the earth. They always turn off the lights when they leave a room and no one needs them. They never waste water. They never throw rubbish on the ground. They always put it in a rubbish bin."
+          songText: "Take care of the Earth and try to be green!\nKeep the Earth healthy and keep it clean!\nWhen you leave a room or go out at night,\nRemember to stop and turn out the light!\nDon't throw down rubbish and leave it behind,\nDon't waste paper or money, don't waste food or time!\nDon't waste water or energy, and try to be green,\nKeep the Earth healthy and keep it clean!\n\nMaterials in English:\n- A window is made of glass.\n- A ruler is made of plastic.\n- A desk is made of wood.\n- A can is made of metal."
         }
       },
       {
         id: 2,
-        title: "Lesson 2: What is Recycling?",
+        title: "Lesson 2: How to Recycle in Class",
         type: "song",
         content: {
-          songText: "When we make new things from old things, we recycle. For example, we can use old newspapers to make new paper. We can re-use or recycle many other things, for example glass, wood and metals. It is important to recycle things so we don't waste money, energy or materials."
+          songText: "How to set up recycling in class:\n1. First, find four large boxes at home and bring them to school.\n2. Second, at school, write four labels: Glass, Metal, Plastic, and Paper.\n3. Third, put one label on each box.\n4. Fourth, put the four boxes with their labels at the front of the classroom.\n5. Fifth, collect items at home and bring them to school.\n6. Finally, put each item into the correct box (for example, jars in the Glass box, cans in the Metal box). Recycling saves energy, money and natural materials!"
         }
       },
       {
         id: 3,
-        title: "Lesson 3: Nile River Villages",
-        type: "song",
+        title: "Lesson 3: Jobs Along the River Nile",
+        type: "conversation",
         content: {
-          songText: "Many people live in villages near the River Nile. A lot of them are farmers, fishermen, herders or brick makers. They live close to their jobs. The river is very important for their lives. They need water from it to drink and to grow food."
+          dialogue: [
+            { speaker: "Khaled", text: "I work near the river. I mix clay, water and straw to make bricks and leave them to dry in the sun.", voice: "Charon" },
+            { speaker: "Salim", text: "I am a fisherman. I have a boat on the River Nile. I catch fish and go to the market to sell them.", voice: "Kore" },
+            { speaker: "Ali", text: "I am a river guide. I take tourists on my boat to visit interesting historical places.", voice: "Puck" },
+            { speaker: "Yasir", text: "I am a farmer. I use a pump to take water from the River Nile to grow dates and vegetables.", voice: "Zephyr" }
+          ]
         }
       },
       {
         id: 4,
-        title: "Lesson 4: Writing Languages",
+        title: "Lesson 4: The History of Writing",
         type: "song",
         content: {
-          songText: "There are more than 3,500 ways of writing in different languages. These ways of writing use different symbols and different letters. People from about 30 languages around the world use Arabic letters when they write. Letters in English and most other European languages are Roman letters."
+          songText: "Writing has a fascinating history:\n- 5,200 years ago: People in Iraq wrote symbols for words on wet clay tablets.\n- 5,000 years ago: Egyptians began to write on stone and on a kind of paper called papyrus.\n- 3,500 years ago: Chinese people began to paint characters with ink brushes.\n- 2,500 years ago: Romans started writing their language using Roman letters (the alphabet used for English today).\n- 1,600 to 1,700 years ago: Arabs began writing in the beautiful Arabic script, now used by over 30 languages.\n- Today, people around the world use digital symbols and texting on mobile phones!"
         }
       },
       {
         id: 5,
-        title: "Lesson 5: Fox and Crow Story",
+        title: "Lesson 5: The Fox and the Crow",
         type: "conversation",
         content: {
           dialogue: [
-            { speaker: "Fox", text: "Mrs Crow, you are so beautiful. Please sing a song to let me hear your sweet voice!", voice: "Charon" },
-            { speaker: "Crow", text: "Oh, thank you! Caw! Caw! Caw!", voice: "Puck" },
-            { speaker: "Fox", text: "Haha! The delicious cheese fell out of your mouth. Goodbye, Mrs Crow!", voice: "Charon" }
+            { speaker: "Narrator", text: "A family had a picnic in the forest and dropped some cheese. A crow flew down and picked up the cheese in her beak.", voice: "Puck" },
+            { speaker: "Fox", text: "Good morning, Mrs Crow! How beautiful your feathers are! What a lovely bird you are!", voice: "Charon" },
+            { speaker: "Narrator", text: "The crow was delighted to hear this praise from the fox.", voice: "Puck" },
+            { speaker: "Fox", text: "Surely someone as beautiful as you must have the sweetest voice in the forest. Please sing me a song!", voice: "Charon" },
+            { speaker: "Crow", text: "Caw! Caw! Caw!", voice: "Zephyr" },
+            { speaker: "Narrator", text: "As soon as the crow opened her beak, the cheese fell straight to the ground. The fox snapped it up and ran away laughing!", voice: "Puck" }
           ]
         }
       },
       {
         id: 6,
-        title: "Lesson 6: Incas and Machu Picchu",
+        title: "Lesson 6: Machu Picchu & Comparison",
         type: "song",
         content: {
-          songText: "Machu Picchu is an old stone city in Peru in South America. It is high up on the east side of the mountains. The Incas, people from Peru, built the city in about 1450 but they all left more than 100 years later. Now, lots of tourists go and visit this amazing place."
+          songText: "Machu Picchu is an ancient stone city in Peru, South America. The Incas built it high in the mountains around 1450. They cut large stones and fitted them together without cement. It was lost for hundreds of years and rediscovered in 1911.\n\nComparison of Wonders:\n- The Great Pyramid: Egypt, ~4,800 years old, 137m high.\n- Petra: Jordan, ~2,300 years old, carved stone city.\n- Machu Picchu: Peru, ~600 years old, 2,400m high in the Andes mountains."
         }
       },
       {
         id: 7,
-        title: "Lesson 7: Graduation Parties",
-        type: "song",
+        title: "Lesson 7: School Graduation & Farewell",
+        type: "conversation",
         content: {
-          songText: "At the end of the school year, Sudanese schools have graduation parties for pupils who are leaving and going to their new schools. There are different activities. Pupils make speeches and often have food. They also play sports and some pupils get prizes."
+          dialogue: [
+            { speaker: "Headmaster", text: "Dear pupils, parents and teachers, welcome to our Grade 6 graduation ceremony!", voice: "Charon" },
+            { speaker: "Student Speaker", text: "We would like to thank our teachers for teaching us and helping us work hard all year.", voice: "Zephyr" },
+            { speaker: "Student Speaker", text: "We also thank our parents who supported us every single day.", voice: "Zephyr" },
+            { speaker: "Headmaster", text: "Congratulations to all pupils receiving prizes today. We wish you success in your new schools!", voice: "Charon" }
+          ]
         }
       },
       {
         id: 8,
-        title: "Lesson 8: The Great River Nile",
+        title: "Lesson 8: Sudan - Our Beloved Homeland",
         type: "song",
         content: {
-          songText: "Sudan is a big country with a long history. The River Nile runs through the centre of the country and there are forests, lakes, deserts, rivers and mountains in it. Young people in school should do their best to study, learn and work hard. The young people of Sudan are important for the country's future."
+          songText: "Sudan is a great country with a rich and proud history. The magnificent River Nile runs through the heart of our land. Sudan has vast plains, golden deserts, lush forests, lakes, and high mountains. To all Sudanese pupils: study hard, learn well, and protect our beloved nation. You are the bright future of Sudan!"
         }
       }
     ]
