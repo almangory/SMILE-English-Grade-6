@@ -1,5 +1,5 @@
 // NAQLA English App - Service Worker for 100% Offline Capability
-const CACHE_NAME = 'naqla-english-v1';
+const CACHE_NAME = 'naqla-english-v2';
 
 const STATIC_ASSETS = [
   '/',
@@ -12,15 +12,23 @@ const STATIC_ASSETS = [
   '/icon-192.png',
   '/icon-512.png',
   '/illustrations/unit1_back_to_school.jpg',
+  '/illustrations/unit1_ostrich_desert.jpg',
   '/illustrations/unit1_secretary_bird.jpg',
   '/illustrations/unit1_sukkar_monkey.jpg',
   '/illustrations/unit2_maths_life.jpg',
   '/illustrations/unit2_thirsty_crow.jpg',
-  '/illustrations/unit3_inventions.svg',
-  '/illustrations/unit4_wonders.svg',
-  '/illustrations/unit5_special_days.svg',
-  '/illustrations/unit6_health.svg',
-  '/illustrations/unit7_green_earth.svg'
+  '/illustrations/unit3_da_vinci.jpg',
+  '/illustrations/unit3_inventions.jpg',
+  '/illustrations/unit4_colosseum.jpg',
+  '/illustrations/unit4_meroe_pyramids.jpg',
+  '/illustrations/unit4_taj_mahal.jpg',
+  '/illustrations/unit5_falcon_wren.jpg',
+  '/illustrations/unit5_special_days.jpg',
+  '/illustrations/unit5_sudanese_wedding.jpg',
+  '/illustrations/unit6_health.jpg',
+  '/illustrations/unit7_fox_crow.jpg',
+  '/illustrations/unit7_green_earth.jpg',
+  '/illustrations/unit7_history_writing.jpg'
 ];
 
 self.addEventListener('install', (event) => {

@@ -112,6 +112,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 8,
         title: "Lesson 8: Unit 1 Revision & Ostrich",
         type: "song",
+        illustration: "/illustrations/unit1_ostrich_desert.jpg",
         content: {
           songText: "An ostrich lives usually in deserts. It weighs about 60 kilograms. Its colour is black and white. Its wings are sometimes 2 metres long! It cannot fly, but it can run very fast across the desert sand. Review words: adult, child, daughter, history, geography, timetable, emblem, crocodile."
         }
@@ -229,7 +230,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "الاختراعات والأشياء الجديدة",
     color: "bg-purple-400 text-purple-950 border-purple-600",
     icon: "💡",
-    illustration: "/illustrations/unit3_inventions.svg",
+    illustration: "/illustrations/unit3_inventions.jpg",
     words: [
       { id: "w3-1", word: "Shadoof", arabic: "شادوف", image: "🪵", example: "A shadoof is smaller than a saqia.", soundText: "A shadoof is smaller than a saqia.", unit: 3 },
       { id: "w3-2", word: "Saqia", arabic: "ساقية", image: "🎡", example: "Animals like donkeys or cows pull the saqia.", soundText: "Animals like donkeys or cows pull the saqia.", unit: 3 },
@@ -256,7 +257,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 2,
         title: "Lesson 2: Irrigation Inventions",
         type: "conversation",
-        illustration: "/illustrations/unit3_inventions.svg",
+        illustration: "/illustrations/unit3_inventions.jpg",
         content: {
           dialogue: [
             { speaker: "Ahmed", text: "Granddad, how do you get water from the River Nile to the fields?", voice: "Kore" },
@@ -280,7 +281,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: Leonardo da Vinci",
         type: "song",
-        illustration: "/illustrations/unit3_inventions.svg",
+        illustration: "/illustrations/unit3_da_vinci.jpg",
         content: {
           songText: "Leonardo da Vinci was born in Italy in 1452. When he was a boy, he was always outside studying birds, animals and plants carefully. When he was an adult, he was a famous artist who painted wonderful pictures. He was also a brilliant inventor who thought of ideas for rockets, planes, helicopters and parachutes hundreds of years before they were built!"
         }
@@ -332,7 +333,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "عجائب العالم",
     color: "bg-cyan-400 text-cyan-950 border-cyan-600",
     icon: "🏛️",
-    illustration: "/illustrations/unit4_wonders.svg",
+    illustration: "/illustrations/unit4_meroe_pyramids.jpg",
     words: [
       { id: "w4-1", word: "Wonder", arabic: "أعجوبة", image: "🏛️", example: "Machu Picchu is an amazing old stone wonder.", soundText: "Machu Picchu is an amazing old stone wonder.", unit: 4 },
       { id: "w4-2", word: "Tomb", arabic: "ضريح / قبر ملكي", image: "🪦", example: "The Taj Mahal is a beautiful white marble tomb.", soundText: "The Taj Mahal is a beautiful white marble tomb.", unit: 4 },
@@ -346,7 +347,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Wonders of the World Chant",
         type: "song",
-        illustration: "/illustrations/unit4_wonders.svg",
+        illustration: "/illustrations/unit4_colosseum.jpg",
         content: {
           songText: "There are many wonders in the world for us all to see:\nThe Taj Mahal in India, the Colosseum in Italy.\nThe city of Petra in Jordan is old, but looks very new.\nThe city of Machu Picchu in the mountains of Peru.\nThe Great Wall of China and the Great Pyramid in Egypt too!\nWalls, mosques, palaces, cities: many wonders to see,\nIf you go and visit them, can you also pay for me?"
         }
@@ -363,6 +364,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: The Story of Taj Mahal",
         type: "song",
+        illustration: "/illustrations/unit4_taj_mahal.jpg",
         content: {
           songText: "Shah Jahan was born in 1592. He was the Muslim emperor of India from 1628 to 1658. He married Mumtaz Mahal in 1612. She died in 1631. Shah Jahan built the Taj Mahal in Agra to bury her in. Workers started to build it in 1632. 1,000 elephants carried materials and 20,000 workers worked there. It took 20 years to finish. It is made of white marble, and when Shah Jahan died in 1666, it was his tomb too."
         }
@@ -385,7 +387,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 5,
         title: "Lesson 5: Pyramids of Meroë (Kush)",
         type: "song",
-        illustration: "/illustrations/unit4_wonders.svg",
+        illustration: "/illustrations/unit4_meroe_pyramids.jpg",
         content: {
           songText: "For 1,100 years, Kush was an important kingdom in Sudan. It started about 2,700 years ago in Napata and then moved to Meroë. Kush was very rich from its trade in iron. Sudan has got amazing pyramids: there are about 220 pyramids in Sudan, while Egypt has got 118! Sudanese pyramids are smaller than Egyptian pyramids, but they are steeper and more numerous. In 1834, an Italian named Giuseppe Ferlini damaged about 40 pyramids searching for gold."
         }
@@ -394,6 +396,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: The Camels at Meroë",
         type: "conversation",
+        illustration: "/illustrations/unit4_meroe_pyramids.jpg",
         content: {
           dialogue: [
             { speaker: "Camel 1", text: "Where are we going through the desert?", voice: "Puck" },
@@ -435,7 +438,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "الأيام والمناسبات الخاصة",
     color: "bg-red-400 text-red-950 border-red-600",
     icon: "🎉",
-    illustration: "/illustrations/unit5_special_days.svg",
+    illustration: "/illustrations/unit5_special_days.jpg",
     words: [
       { id: "w5-1", word: "Festival", arabic: "مهرجان", image: "🎡", example: "Port Sudan holds a great tourism and shopping festival.", soundText: "Port Sudan holds a great tourism and shopping festival.", unit: 5 },
       { id: "w5-2", word: "Wedding", arabic: "حفل زفاف", image: "💍", example: "We received an invitation to Ali and Moussa's wedding.", soundText: "We received an invitation to Ali and Moussa's wedding.", unit: 5 },
@@ -449,7 +452,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Celebrate Special Days Chant",
         type: "song",
-        illustration: "/illustrations/unit5_special_days.svg",
+        illustration: "/illustrations/unit5_special_days.jpg",
         content: {
           songText: "Celebrate, celebrate, special days:\nEid al-Fitr, wedding invitations, school graduations,\nFestivals, Mother's Day.\nWe can smile and keep clapping,\nWhen nice things happen!\nWe can have fun and cheer,\nWhen nice things are here!\nSmile! Laugh! Take a photograph!\nCelebrate, celebrate, special days!"
         }
@@ -466,6 +469,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: Invitations & Possessives",
         type: "conversation",
+        illustration: "/illustrations/unit5_sudanese_wedding.jpg",
         content: {
           dialogue: [
             { speaker: "Hala", text: "Dear Ibtisam, would you like to come to my sister's wedding at al-Warda Hotel?", voice: "Zephyr" },
@@ -497,6 +501,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: The Flying Competition & The Wren",
         type: "conversation",
+        illustration: "/illustrations/unit5_falcon_wren.jpg",
         content: {
           dialogue: [
             { speaker: "Falcon", text: "I am the strongest and fastest bird! I flew higher than anyone!", voice: "Charon" },
@@ -511,7 +516,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 7,
         title: "Lesson 7: Eid al-Fitr in Sudan",
         type: "conversation",
-        illustration: "/illustrations/unit5_special_days.svg",
+        illustration: "/illustrations/unit5_special_days.jpg",
         content: {
           dialogue: [
             { speaker: "Salah", text: "On Eid day, I get up very early in the morning and put on my best clean clothes.", voice: "Kore" },
@@ -538,7 +543,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "الصحة ورعاية الجسم",
     color: "bg-emerald-400 text-emerald-950 border-emerald-600",
     icon: "🩺",
-    illustration: "/illustrations/unit6_health.svg",
+    illustration: "/illustrations/unit6_health.jpg",
     words: [
       { id: "w6-1", word: "Stomach", arabic: "معدة", image: "🥗", example: "We need a stomach when we eat food.", soundText: "We need a stomach when we eat food.", unit: 6 },
       { id: "w6-2", word: "Shoulder", arabic: "كتف", image: "💪", example: "We need shoulders and elbows so our arms can bend.", soundText: "We need shoulders and elbows so our arms can bend.", unit: 6 },
@@ -552,7 +557,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Parts of the Body Chant",
         type: "song",
-        illustration: "/illustrations/unit6_health.svg",
+        illustration: "/illustrations/unit6_health.jpg",
         content: {
           songText: "We need a mouth to talk with, and two eyes to see.\nWe need a face, two ears, teeth and two knees.\nWe need fingers in our gloves where our two hands end.\nWe need shoulders and elbows so our arms can bend.\nWe need a back and a body and a head on the top.\nWe need our toes in our shoes where our two feet stop.\nWe need legs on the ground to take all our weight,\nA backbone and a neck to hold our head straight!\nWe need a nose to smell with and a stomach when we eat,\nWe need a heart in our body to pump and to beat!\n\nSingular & Plural Rules:\n- one knee -> two knees\n- one elbow -> two elbows\n- one foot -> two feet\n- one tooth -> thirty-two teeth\n- one child -> many children\n- one woman -> women / one man -> men"
         }
@@ -569,7 +574,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: Food Groups & Nutrition",
         type: "song",
-        illustration: "/illustrations/unit6_health.svg",
+        illustration: "/illustrations/unit6_health.jpg",
         content: {
           songText: "Every day we need healthy foods from different groups:\n1. Protein (about 30g): Meat, chicken, fish, eggs and beans build strong muscles.\n2. Carbohydrate (about 200g): Bread, rice, sugar and potatoes give us energy.\n3. Fat (about 70g): Cheese, butter and oil.\n4. Fruit and Vegetables: Apples, grapes, carrots, tomatoes and onions keep us healthy and protect us from diseases.\nDrink lots of clean water and eat balanced meals!"
         }
@@ -578,7 +583,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: Exercise & Keeping Fit",
         type: "song",
-        illustration: "/illustrations/unit6_health.svg",
+        illustration: "/illustrations/unit6_health.jpg",
         content: {
           songText: "Regular exercise is good for us, and more exercise is better! Exercise builds our muscles and bones and makes us strong. Exercise keeps our hearts and bodies healthy. Children who take regular exercise:\n- Have better control of their body weight.\n- Have stronger muscles and bones.\n- Have lower blood pressure than children who don't exercise.\n- Are fitter, faster, and healthier.\n- Are usually calmer and happier!"
         }
@@ -637,7 +642,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "مراجعة شاملة وحماية البيئة",
     color: "bg-rose-400 text-rose-950 border-rose-600",
     icon: "♻️",
-    illustration: "/illustrations/unit7_green_earth.svg",
+    illustration: "/illustrations/unit7_green_earth.jpg",
     words: [
       { id: "w7-1", word: "Recycle", arabic: "إعادة تدوير", image: "♻️", example: "We can recycle glass, wood, metal and paper.", soundText: "We can recycle glass, wood, metal and paper.", unit: 7 },
       { id: "w7-2", word: "Metal", arabic: "معدن", image: "📎", example: "Cans and car engines are made of metal.", soundText: "Cans and car engines are made of metal.", unit: 7 },
@@ -651,7 +656,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Be Green & Materials",
         type: "song",
-        illustration: "/illustrations/unit7_green_earth.svg",
+        illustration: "/illustrations/unit7_green_earth.jpg",
         content: {
           songText: "Take care of the Earth and try to be green!\nKeep the Earth healthy and keep it clean!\nWhen you leave a room or go out at night,\nRemember to stop and turn out the light!\nDon't throw down rubbish and leave it behind,\nDon't waste paper or money, don't waste food or time!\nDon't waste water or energy, and try to be green,\nKeep the Earth healthy and keep it clean!\n\nMaterials in English:\n- A window is made of glass.\n- A ruler is made of plastic.\n- A desk is made of wood.\n- A can is made of metal."
         }
@@ -660,7 +665,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 2,
         title: "Lesson 2: How to Recycle in Class",
         type: "song",
-        illustration: "/illustrations/unit7_green_earth.svg",
+        illustration: "/illustrations/unit7_green_earth.jpg",
         content: {
           songText: "How to set up recycling in class:\n1. First, find four large boxes at home and bring them to school.\n2. Second, at school, write four labels: Glass, Metal, Plastic, and Paper.\n3. Third, put one label on each box.\n4. Fourth, put the four boxes with their labels at the front of the classroom.\n5. Fifth, collect items at home and bring them to school.\n6. Finally, put each item into the correct box (for example, jars in the Glass box, cans in the Metal box). Recycling saves energy, money and natural materials!"
         }
@@ -682,6 +687,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: The History of Writing",
         type: "song",
+        illustration: "/illustrations/unit7_history_writing.jpg",
         content: {
           songText: "Writing has a fascinating history:\n- 5,200 years ago: People in Iraq wrote symbols for words on wet clay tablets.\n- 5,000 years ago: Egyptians began to write on stone and on a kind of paper called papyrus.\n- 3,500 years ago: Chinese people began to paint characters with ink brushes.\n- 2,500 years ago: Romans started writing their language using Roman letters (the alphabet used for English today).\n- 1,600 to 1,700 years ago: Arabs began writing in the beautiful Arabic script, now used by over 30 languages.\n- Today, people around the world use digital symbols and texting on mobile phones!"
         }
@@ -690,6 +696,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 5,
         title: "Lesson 5: The Fox and the Crow",
         type: "conversation",
+        illustration: "/illustrations/unit7_fox_crow.jpg",
         content: {
           dialogue: [
             { speaker: "Narrator", text: "A family had a picnic in the forest and dropped some cheese. A crow flew down and picked up the cheese in her beak.", voice: "Puck" },

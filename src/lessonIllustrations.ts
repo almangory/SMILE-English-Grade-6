@@ -60,10 +60,78 @@ export const LESSON_ILLUSTRATIONS: Record<string, string> = {
   "u7_l8": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20600%20340%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22grad_u7_l8%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d9488%22%2F%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%2314b8a6%22%2F%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23ccfbf1%22%2F%3E%20%3C%2FlinearGradient%3E%20%3Cfilter%20id%3D%22shadow_u7_l8%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%224%22%20stdDeviation%3D%226%22%20flood-opacity%3D%220.25%22%2F%3E%20%3C%2Ffilter%3E%20%3C%2Fdefs%3E%20%3C!--%20Vibrant%20Dynamic%20Background%20--%3E%20%3Crect%20width%3D%22600%22%20height%3D%22340%22%20rx%3D%2228%22%20fill%3D%22url(%23grad_u7_l8)%22%2F%3E%20%3C!--%20Stylized%20Background%20Circles%20--%3E%20%3Ccircle%20cx%3D%22530%22%20cy%3D%2260%22%20r%3D%2280%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.1%22%2F%3E%20%3Ccircle%20cx%3D%2270%22%20cy%3D%22270%22%20r%3D%22100%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.1%22%2F%3E%20%3Ccircle%20cx%3D%22300%22%20cy%3D%22170%22%20r%3D%22130%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.08%22%2F%3E%20%3C!--%20Central%20Highlight%20Card%20--%3E%20%3Cg%20transform%3D%22translate(300%2C%20160)%22%20filter%3D%22url(%23shadow_u7_l8)%22%3E%20%3Crect%20x%3D%22-240%22%20y%3D%22-100%22%20width%3D%22480%22%20height%3D%22200%22%20rx%3D%2224%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.95%22%2F%3E%20%3Crect%20x%3D%22-236%22%20y%3D%22-96%22%20width%3D%22472%22%20height%3D%22192%22%20rx%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22%230d9488%22%20stroke-width%3D%222%22%20opacity%3D%220.4%22%2F%3E%20%3C!--%20Top%20Badge%20--%3E%20%3Crect%20x%3D%22-110%22%20y%3D%22-120%22%20width%3D%22220%22%20height%3D%2234%22%20rx%3D%2217%22%20fill%3D%22%230d9488%22%2F%3E%20%3Ctext%20x%3D%220%22%20y%3D%22-98%22%20font-family%3D%22system-ui%2C%20sans-serif%22%20font-size%3D%2212%22%20font-weight%3D%22900%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%221%22%3EUNIT%207%20%E2%80%A2%20LESSON%208%3C%2Ftext%3E%20%3C!--%20Big%20Central%20Educational%20Visual%20Icon%20--%3E%20%3Ccircle%20cx%3D%220%22%20cy%3D%22-20%22%20r%3D%2248%22%20fill%3D%22%23ccfbf1%22%20stroke%3D%22%230d9488%22%20stroke-width%3D%224%22%2F%3E%20%3Ctext%20x%3D%220%22%20y%3D%22-2%22%20font-size%3D%2244%22%20text-anchor%3D%22middle%22%3E%F0%9F%87%B8%F0%9F%87%A9%3C%2Ftext%3E%20%3C!--%20Lesson%20Title%20--%3E%20%3Ctext%20x%3D%220%22%20y%3D%2248%22%20font-family%3D%22system-ui%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22900%22%20fill%3D%22%230f172a%22%20text-anchor%3D%22middle%22%3ESudan%20-%20Our%20Beloved%20Homeland%3C%2Ftext%3E%20%3C!--%20Educational%20Context%20Details%20--%3E%20%3Ctext%20x%3D%220%22%20y%3D%2272%22%20font-family%3D%22system-ui%2C%20sans-serif%22%20font-size%3D%2212%22%20font-weight%3D%22700%22%20fill%3D%22%23475569%22%20text-anchor%3D%22middle%22%3EMagnificent%20Nile%2C%20golden%20deserts%20%26%20bright%20future%3C%2Ftext%3E%20%3C%2Fg%3E%20%3C!--%20Bottom%20Nano%20Banana%20Quality%20Tag%20--%3E%20%3Cg%20transform%3D%22translate(300%2C%20310)%22%3E%20%3Crect%20x%3D%22-140%22%20y%3D%22-14%22%20width%3D%22280%22%20height%3D%2228%22%20rx%3D%2214%22%20fill%3D%22%230f172a%22%20opacity%3D%220.85%22%2F%3E%20%3Ctext%20x%3D%220%22%20y%3D%224%22%20font-family%3D%22system-ui%2C%20sans-serif%22%20font-size%3D%2210%22%20font-weight%3D%22800%22%20fill%3D%22%23facc15%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3E%F0%9F%8E%A8%20NANO%20BANANA%20PRO%20%E2%80%A2%20SMILE%20BOOK%206%3C%2Ftext%3E%20%3C%2Fg%3E%20%3C%2Fsvg%3E"
 };
 
+export const NANO_3D_IMAGES: Record<string, string> = {
+  // Unit 1: Back to School
+  "u1_l1": "/illustrations/unit1_back_to_school.jpg",
+  "u1_l4": "/illustrations/unit1_secretary_bird.jpg",
+  "u1_l5": "/illustrations/unit1_sukkar_monkey.jpg",
+  "u1_l6": "/illustrations/unit1_sukkar_monkey.jpg",
+  "u1_l8": "/illustrations/unit1_ostrich_desert.jpg",
+  
+  // Unit 2: Maths in our Life
+  "u2_l1": "/illustrations/unit2_maths_life.jpg",
+  "u2_l4": "/illustrations/unit2_thirsty_crow.jpg",
+  
+  // Unit 3: Inventions
+  "u3_l1": "/illustrations/unit3_inventions.jpg",
+  "u3_l2": "/illustrations/unit3_inventions.jpg",
+  "u3_l4": "/illustrations/unit3_da_vinci.jpg",
+
+  // Unit 4: Wonders of the World
+  "u4_l1": "/illustrations/unit4_colosseum.jpg",
+  "u4_l3": "/illustrations/unit4_taj_mahal.jpg",
+  "u4_l5": "/illustrations/unit4_meroe_pyramids.jpg",
+  "u4_l6": "/illustrations/unit4_meroe_pyramids.jpg",
+
+  // Unit 5: Special Days
+  "u5_l1": "/illustrations/unit5_special_days.jpg",
+  "u5_l3": "/illustrations/unit5_sudanese_wedding.jpg",
+  "u5_l6": "/illustrations/unit5_falcon_wren.jpg",
+
+  // Unit 6: Health
+  "u6_l1": "/illustrations/unit6_health.jpg",
+  "u6_l3": "/illustrations/unit6_health.jpg",
+  "u6_l4": "/illustrations/unit6_health.jpg",
+
+  // Unit 7: One More Time (Environment & Writing)
+  "u7_l1": "/illustrations/unit7_green_earth.jpg",
+  "u7_l2": "/illustrations/unit7_green_earth.jpg",
+  "u7_l4": "/illustrations/unit7_history_writing.jpg",
+  "u7_l5": "/illustrations/unit7_fox_crow.jpg",
+};
+
+export const UNIT_3D_IMAGES: Record<number, string> = {
+  1: "/illustrations/unit1_back_to_school.jpg",
+  2: "/illustrations/unit2_maths_life.jpg",
+  3: "/illustrations/unit3_inventions.jpg",
+  4: "/illustrations/unit4_meroe_pyramids.jpg",
+  5: "/illustrations/unit5_special_days.jpg",
+  6: "/illustrations/unit6_health.jpg",
+  7: "/illustrations/unit7_green_earth.jpg",
+};
+
 export function getLessonIllustration(unitId: number, lessonId: number, fallback?: string): string {
   const key = `u${unitId}_l${lessonId}`;
+
+  // Priority 1: High-res 3D Pixar Nano Banana Pro lesson artwork
+  if (NANO_3D_IMAGES[key]) {
+    return NANO_3D_IMAGES[key];
+  }
+
+  // Priority 2: Explicit 3D/photo image in fallback (.jpg, .png, .webp)
+  if (fallback && (fallback.endsWith(".jpg") || fallback.endsWith(".png") || fallback.endsWith(".webp"))) {
+    return fallback;
+  }
+
+  // Priority 3: Dedicated vector illustration (instant 0ms)
   if (LESSON_ILLUSTRATIONS[key]) {
     return LESSON_ILLUSTRATIONS[key];
   }
+
+  // Priority 4: Unit 3D illustration
+  if (UNIT_3D_IMAGES[unitId]) {
+    return UNIT_3D_IMAGES[unitId];
+  }
+
   return fallback || "/illustrations/unit1_back_to_school.jpg";
 }
