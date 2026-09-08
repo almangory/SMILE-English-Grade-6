@@ -1061,7 +1061,7 @@ export default function App() {
                     <div className="w-full h-48 sm:h-72 rounded-[24px] sm:rounded-[28px] overflow-hidden border-2 border-indigo-100/90 bg-slate-50 relative group shadow-sm">
                       <img
                         key={`lesson-art-${selectedUnit.id}-${selectedLesson.id}`}
-                        src={getLessonIllustration(selectedUnit.id, selectedLesson.id, selectedLesson.illustration || selectedUnit.illustration)}
+                        src={getLessonIllustration(selectedUnit.id, selectedLesson.id, selectedLesson.illustration)}
                         alt={selectedLesson.title}
                         className="w-full h-full object-cover object-center transition-all duration-200"
                         loading="eager"

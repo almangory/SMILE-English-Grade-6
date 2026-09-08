@@ -61,11 +61,11 @@ export const LESSON_ILLUSTRATIONS: Record<string, string> = {
 };
 
 export const NANO_3D_IMAGES: Record<string, string> = {
-  // Unit 1: Back to School
+  // Unit 1: Back to School (Each lesson has a strictly unique image)
   "u1_l1": "/illustrations/unit1_back_to_school.jpg",
+  "u1_l2": "/illustrations/unit1_lesson2_holiday.jpg",
   "u1_l4": "/illustrations/unit1_secretary_bird.jpg",
   "u1_l5": "/illustrations/unit1_sukkar_monkey.jpg",
-  "u1_l6": "/illustrations/unit1_sukkar_monkey.jpg",
   "u1_l8": "/illustrations/unit1_ostrich_desert.jpg",
   
   // Unit 2: Maths in our Life
@@ -73,7 +73,6 @@ export const NANO_3D_IMAGES: Record<string, string> = {
   "u2_l4": "/illustrations/unit2_thirsty_crow.jpg",
   
   // Unit 3: Inventions
-  "u3_l1": "/illustrations/unit3_inventions.jpg",
   "u3_l2": "/illustrations/unit3_inventions.jpg",
   "u3_l4": "/illustrations/unit3_da_vinci.jpg",
 
@@ -81,7 +80,6 @@ export const NANO_3D_IMAGES: Record<string, string> = {
   "u4_l1": "/illustrations/unit4_colosseum.jpg",
   "u4_l3": "/illustrations/unit4_taj_mahal.jpg",
   "u4_l5": "/illustrations/unit4_meroe_pyramids.jpg",
-  "u4_l6": "/illustrations/unit4_meroe_pyramids.jpg",
 
   // Unit 5: Special Days
   "u5_l1": "/illustrations/unit5_special_days.jpg",
@@ -90,12 +88,9 @@ export const NANO_3D_IMAGES: Record<string, string> = {
 
   // Unit 6: Health
   "u6_l1": "/illustrations/unit6_health.jpg",
-  "u6_l3": "/illustrations/unit6_health.jpg",
-  "u6_l4": "/illustrations/unit6_health.jpg",
 
   // Unit 7: One More Time (Environment & Writing)
   "u7_l1": "/illustrations/unit7_green_earth.jpg",
-  "u7_l2": "/illustrations/unit7_green_earth.jpg",
   "u7_l4": "/illustrations/unit7_history_writing.jpg",
   "u7_l5": "/illustrations/unit7_fox_crow.jpg",
 };

@@ -12,6 +12,7 @@ const STATIC_ASSETS = [
   '/icon-192.png',
   '/icon-512.png',
   '/illustrations/unit1_back_to_school.jpg',
+  '/illustrations/unit1_lesson2_holiday.jpg',
   '/illustrations/unit1_ostrich_desert.jpg',
   '/illustrations/unit1_secretary_bird.jpg',
   '/illustrations/unit1_sukkar_monkey.jpg',

@@ -38,6 +38,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 2,
         title: "Lesson 2: Children's Holidays",
         type: "conversation",
+        illustration: "/illustrations/unit1_lesson2_holiday.jpg",
         content: {
           dialogue: [
             { speaker: "Osama", text: "I was in Port Sudan with my brother. My beach holiday was great!", voice: "Kore" },
@@ -89,7 +90,6 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: Sukkar's Escape (Part 2)",
         type: "conversation",
-        illustration: "/illustrations/unit1_sukkar_monkey.jpg",
         content: {
           dialogue: [
             { speaker: "Sukkar", text: "My heart is in my house in the tree! Can we go back and get it for Mrs Crocodile?", voice: "Puck" },
@@ -396,7 +396,6 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: The Camels at Meroë",
         type: "conversation",
-        illustration: "/illustrations/unit4_meroe_pyramids.jpg",
         content: {
           dialogue: [
             { speaker: "Camel 1", text: "Where are we going through the desert?", voice: "Puck" },
@@ -516,7 +515,6 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 7,
         title: "Lesson 7: Eid al-Fitr in Sudan",
         type: "conversation",
-        illustration: "/illustrations/unit5_special_days.jpg",
         content: {
           dialogue: [
             { speaker: "Salah", text: "On Eid day, I get up very early in the morning and put on my best clean clothes.", voice: "Kore" },
@@ -574,7 +572,6 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: Food Groups & Nutrition",
         type: "song",
-        illustration: "/illustrations/unit6_health.jpg",
         content: {
           songText: "Every day we need healthy foods from different groups:\n1. Protein (about 30g): Meat, chicken, fish, eggs and beans build strong muscles.\n2. Carbohydrate (about 200g): Bread, rice, sugar and potatoes give us energy.\n3. Fat (about 70g): Cheese, butter and oil.\n4. Fruit and Vegetables: Apples, grapes, carrots, tomatoes and onions keep us healthy and protect us from diseases.\nDrink lots of clean water and eat balanced meals!"
         }
@@ -583,7 +580,6 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: Exercise & Keeping Fit",
         type: "song",
-        illustration: "/illustrations/unit6_health.jpg",
         content: {
           songText: "Regular exercise is good for us, and more exercise is better! Exercise builds our muscles and bones and makes us strong. Exercise keeps our hearts and bodies healthy. Children who take regular exercise:\n- Have better control of their body weight.\n- Have stronger muscles and bones.\n- Have lower blood pressure than children who don't exercise.\n- Are fitter, faster, and healthier.\n- Are usually calmer and happier!"
         }
@@ -665,7 +661,6 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 2,
         title: "Lesson 2: How to Recycle in Class",
         type: "song",
-        illustration: "/illustrations/unit7_green_earth.jpg",
         content: {
           songText: "How to set up recycling in class:\n1. First, find four large boxes at home and bring them to school.\n2. Second, at school, write four labels: Glass, Metal, Plastic, and Paper.\n3. Third, put one label on each box.\n4. Fourth, put the four boxes with their labels at the front of the classroom.\n5. Fifth, collect items at home and bring them to school.\n6. Finally, put each item into the correct box (for example, jars in the Glass box, cans in the Metal box). Recycling saves energy, money and natural materials!"
         }
