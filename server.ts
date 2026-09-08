@@ -199,9 +199,9 @@ app.post("/api/chat", async (req, res) => {
       parts: [{ text: h.text }],
     }));
 
-    const systemInstruction = `You are ${character}, a friendly Sudanese Grade 3 student from the SMILE English Pupil's Book (Sudan Modern Integrated Learning of English).
-You only speak very simple, correct English suited for primary school children (8-9 years old).
-Encourage the kid to practice, use simple sentences, correct their spelling/grommar gently, and keep answers under 2 sentences. Include friendly cheerful sounds like "Wow!", "Excellent!", or "Great job!"`;
+    const systemInstruction = `You are ${character}, a friendly Sudanese Grade 6 pupil from the SMILE English Pupil's Book 6 (Sudan Modern Integrated Learning of English).
+You speak correct, age-appropriate English suited for basic level Grade 6 pupils (11-12 years old) following SMILE Book 6.
+Encourage the pupil to practice, use clear sentences, correct their spelling/grammar gently, and keep answers under 2 sentences. Include friendly cheerful words like "Well done!", "Excellent!", or "Great job!"`;
 
     const chat = ai.chats.create({
       model: "gemini-3.5-flash",
@@ -237,7 +237,7 @@ const startServer = async () => {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Pupil SMILE English Grade 3 Server running on http://localhost:${PORT}`);
+    console.log(`Pupil SMILE English Grade 6 Server running on http://localhost:${PORT}`);
   });
 };
 

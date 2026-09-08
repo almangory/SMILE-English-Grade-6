@@ -880,7 +880,7 @@ export default function App() {
               }`}
             >
               <Smile className="w-5 h-5 mb-0.5" />
-              <span>AI Chat Partner</span>
+              <span>Dialogue Builder</span>
               <span className="text-[10px] opacity-80 font-bold">Speaking Area</span>
             </motion.button>
 
