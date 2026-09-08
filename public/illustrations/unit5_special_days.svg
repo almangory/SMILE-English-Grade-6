@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="partyGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff1f2"/>
+      <stop offset="40%" stop-color="#ffe4e6"/>
+      <stop offset="100%" stop-color="#fecdd3"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <filter id="shadow5" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#partyGrad5)"/>
+
+  <!-- Confetti and stars -->
+  <circle cx="120" cy="100" r="6" fill="#f43f5e" opacity="0.6"/>
+  <circle cx="180" cy="60" r="4" fill="#fbbf24" opacity="0.8"/>
+  <circle cx="280" cy="110" r="5" fill="#38bdf8" opacity="0.7"/>
+  <circle cx="620" cy="80" r="6" fill="#ec4899" opacity="0.7"/>
+  <circle cx="710" cy="130" r="4" fill="#10b981" opacity="0.8"/>
+  <polygon points="680,60 684,70 695,72 686,80 689,90 680,84 671,90 674,80 665,72 676,70" fill="#fbbf24" opacity="0.8"/>
+
+  <!-- 1. Eid al-Fitr Crescent & Lantern (Left) -->
+  <g transform="translate(160, 240)" filter="url(#shadow5)">
+    <!-- Crescent Moon -->
+    <path d="M-20 -70 A70 70 0 1 0 50 60 A55 55 0 1 1 -20 -70 Z" fill="url(#goldGrad)"/>
+    <!-- Hanging Lantern (Fanous) -->
+    <line x1="10" y1="-80" x2="10" y2="0" stroke="#b45309" stroke-width="3"/>
+    <polygon points="0,0 20,0 25,25 10,40 -5,25" fill="#e11d48"/>
+    <polygon points="5,5 15,5 18,22 10,32 2,22" fill="#fef08a"/>
+    <text x="0" y="85" font-family="sans-serif" font-size="14" font-weight="900" fill="#9f1239" text-anchor="middle">Eid al-Fitr المبارك</text>
+  </g>
+
+  <!-- 2. The Falcon & Clever Wren (Center) -->
+  <g transform="translate(400, 210)" filter="url(#shadow5)">
+    <!-- Sky cloud platform -->
+    <path d="M-90 80 Q-40 60 0 80 Q40 60 90 80 Q100 110 0 110 Q-100 110 -90 80 Z" fill="#ffffff" opacity="0.85"/>
+    
+    <!-- Falcon Body -->
+    <ellipse cx="0" cy="20" rx="45" ry="30" fill="#78350f"/>
+    <!-- Falcon Wings Spread -->
+    <path d="M-40 10 Q-90 -30 -110 -70 Q-60 -40 -10 -5 Z" fill="#92400e"/>
+    <path d="M40 10 Q90 -30 110 -70 Q60 -40 10 -5 Z" fill="#92400e"/>
+    <!-- Falcon Head & Sharp Beak -->
+    <circle cx="0" cy="-10" r="18" fill="#78350f"/>
+    <polygon points="0,-15 15,-8 0,-2" fill="#f59e0b"/>
+    <circle cx="-5" cy="-12" r="3" fill="#ffffff"/>
+    <circle cx="-5" cy="-12" r="1.5" fill="#000000"/>
+    
+    <!-- The Clever Tiny Wren sitting on Falcon's Back -->
+    <ellipse cx="0" cy="-32" rx="14" ry="10" fill="#f97316"/>
+    <circle cx="8" cy="-36" r="7" fill="#ea580c"/>
+    <polygon points="12,-37 20,-35 12,-33" fill="#fbbf24"/><!-- tiny beak -->
+    <circle cx="10" cy="-38" r="1.5" fill="#000000"/><!-- eye -->
+    <polygon points="-8,-34 -18,-42 -10,-30" fill="#c2410c"/><!-- tail feathers up -->
+    
+    <text x="0" y="70" font-family="sans-serif" font-size="13" font-weight="900" fill="#9a3412" text-anchor="middle">The Falcon &amp; Clever Wren</text>
+  </g>
+
+  <!-- 3. Graduation & Celebrations (Right) -->
+  <g transform="translate(640, 240)" filter="url(#shadow5)">
+    <!-- Graduation Mortarboard Cap -->
+    <polygon points="0,-60 -55,-40 0,-20 55,-40" fill="#1e293b"/>
+    <rect x="-25" y="-30" width="50" height="25" rx="5" fill="#0f172a"/>
+    <circle cx="0" cy="-40" r="4" fill="#fbbf24"/>
+    <!-- Golden Tassel -->
+    <path d="M0 -40 Q25 -30 35 -10" stroke="#f59e0b" stroke-width="3" fill="none"/>
+    <rect x="30" y="-10" width="10" height="15" fill="#f59e0b"/>
+    
+    <!-- Rolled Diploma with Red Ribbon -->
+    <rect x="-35" y="10" width="70" height="18" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <rect x="-5" y="8" width="10" height="22" rx="2" fill="#e11d48"/>
+    
+    <text x="0" y="60" font-family="sans-serif" font-size="14" font-weight="900" fill="#be123c" text-anchor="middle">Graduations &amp; Weddings</text>
+  </g>
+
+  <!-- Header Banner Badge -->
+  <g transform="translate(400, 45)">
+    <rect x="-160" y="-22" width="320" height="44" rx="22" fill="#ffffff" filter="url(#shadow5)"/>
+    <text x="0" y="6" font-family="sans-serif" font-size="18" font-weight="900" fill="#be123c" text-anchor="middle" letter-spacing="1">UNIT 5: SPECIAL DAYS</text>
+  </g>
+</svg>

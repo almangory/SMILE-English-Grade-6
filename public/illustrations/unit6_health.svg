@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="healthGrad6" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ecfdf5"/>
+      <stop offset="60%" stop-color="#d1fae5"/>
+      <stop offset="100%" stop-color="#a7f3d0"/>
+    </linearGradient>
+    <filter id="shadow6" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#healthGrad6)"/>
+
+  <!-- Pulse ECG heartbeat line running across -->
+  <path d="M0 240 L180 240 L195 210 L210 270 L225 190 L240 290 L255 240 L800 240" stroke="#10b981" stroke-width="4" fill="none" opacity="0.4"/>
+
+  <!-- 1. Strong Heart & Stethoscope (Left) -->
+  <g transform="translate(180, 220)" filter="url(#shadow6)">
+    <!-- Big Beating Heart -->
+    <path d="M0 25 C-35 -15 -75 20 -75 60 C-75 105 0 145 0 155 C0 145 75 105 75 60 C75 20 35 -15 0 25 Z" fill="#ef4444"/>
+    <ellipse cx="-25" cy="45" rx="15" ry="8" fill="#f87171" transform="rotate(-30 -25 45)"/>
+    <!-- Stethoscope curving around -->
+    <path d="M-60 120 C-90 140 -110 180 -100 200 C-90 220 -40 210 -20 180" stroke="#0284c7" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <circle cx="-18" cy="180" r="14" fill="#64748b" stroke="#0284c7" stroke-width="3"/>
+    <text x="0" y="180" font-family="sans-serif" font-size="14" font-weight="900" fill="#991b1b" text-anchor="middle">Strong Heart &amp; Body</text>
+  </g>
+
+  <!-- 2. Balanced Healthy Food Plate (Center) -->
+  <g transform="translate(420, 240)" filter="url(#shadow6)">
+    <!-- Plate -->
+    <circle cx="0" cy="0" r="95" fill="#ffffff" stroke="#cbd5e1" stroke-width="6"/>
+    <circle cx="0" cy="0" r="80" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+    
+    <!-- Quadrants: Protein, Carbs, Veggies, Fruits -->
+    <!-- Vegetables (Green top left) -->
+    <path d="M0 0 L-75 0 A75 75 0 0 1 0 -75 Z" fill="#22c55e"/>
+    <text x="-35" y="-30" font-family="sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">Veggies</text>
+    
+    <!-- Fruits (Red top right) -->
+    <path d="M0 0 L0 -75 A75 75 0 0 1 75 0 Z" fill="#f97316"/>
+    <text x="35" y="-30" font-family="sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">Fruits</text>
+    
+    <!-- Protein (Purple bottom right) -->
+    <path d="M0 0 L75 0 A75 75 0 0 1 0 75 Z" fill="#a855f7"/>
+    <text x="35" y="45" font-family="sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">Protein</text>
+    
+    <!-- Carbohydrate (Yellow bottom left) -->
+    <path d="M0 0 L0 75 A75 75 0 0 1 -75 0 Z" fill="#eab308"/>
+    <text x="-35" y="45" font-family="sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">Carbs</text>
+    
+    <text x="0" y="115" font-family="sans-serif" font-size="14" font-weight="900" fill="#065f46" text-anchor="middle">Healthy Food Groups</text>
+  </g>
+
+  <!-- 3. Exercise & Street Safety (Right) -->
+  <g transform="translate(640, 230)" filter="url(#shadow6)">
+    <!-- Bike Helmet icon -->
+    <path d="M-40 0 C-40 -40 40 -40 40 0 C30 5 -30 5 -40 0 Z" fill="#0284c7"/>
+    <rect x="-35" y="-8" width="70" height="10" rx="3" fill="#38bdf8"/>
+    <circle cx="0" cy="-15" r="4" fill="#ffffff"/>
+    
+    <!-- Running Figure / Dumbbell -->
+    <rect x="-30" y="30" width="60" height="10" rx="5" fill="#475569"/>
+    <circle cx="-30" cy="35" r="16" fill="#1e293b"/>
+    <circle cx="30" cy="35" r="16" fill="#1e293b"/>
+    <circle cx="-30" cy="35" r="10" fill="#64748b"/>
+    <circle cx="30" cy="35" r="10" fill="#64748b"/>
+    
+    <text x="0" y="85" font-family="sans-serif" font-size="14" font-weight="900" fill="#075985" text-anchor="middle">Regular Exercise</text>
+  </g>
+
+  <!-- Header Banner Badge -->
+  <g transform="translate(400, 45)">
+    <rect x="-140" y="-22" width="280" height="44" rx="22" fill="#ffffff" filter="url(#shadow6)"/>
+    <text x="0" y="6" font-family="sans-serif" font-size="18" font-weight="900" fill="#065f46" text-anchor="middle" letter-spacing="1">UNIT 6: HEALTH</text>
+  </g>
+</svg>

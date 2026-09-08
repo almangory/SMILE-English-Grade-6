@@ -955,6 +955,22 @@ export default function App() {
                   </div>
 
                   <div className="bg-white p-6 sm:p-8 rounded-[40px] border-b-8 border-r-8 border-indigo-100 flex flex-col gap-4 relative overflow-hidden">
+                    {/* Lesson Illustration Banner */}
+                    {(selectedLesson.illustration || selectedUnit.illustration) && (
+                      <div className="w-full h-48 sm:h-64 rounded-[28px] overflow-hidden border-2 border-indigo-100 bg-slate-50 relative group shadow-sm">
+                        <img
+                          src={selectedLesson.illustration || selectedUnit.illustration}
+                          alt={selectedLesson.title}
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                        <div className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-white text-[11px] font-black px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                          <span>Nano Banana Pro Digital Art</span>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-lg font-black text-indigo-950 flex items-center gap-2 uppercase tracking-wide">
                         {selectedLesson.type === "song" && <Music className="w-5 h-5 text-indigo-500" />}
@@ -1827,6 +1843,16 @@ export default function App() {
                         }`}
                       >
                         <div>
+                          {unit.illustration && (
+                            <div className="w-full h-36 rounded-[20px] overflow-hidden border border-slate-200/80 mb-3 bg-slate-50 relative group shadow-sm">
+                              <img
+                                src={unit.illustration}
+                                alt={unit.title}
+                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                                loading="lazy"
+                              />
+                            </div>
+                          )}
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-3xl">{unit.icon}</span>
                             <span className="text-[10px] bg-slate-100 text-slate-600 font-extrabold px-2.5 py-1 rounded-full uppercase">

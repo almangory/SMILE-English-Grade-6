@@ -7,6 +7,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "العودة إلى المدرسة",
     color: "bg-blue-400 text-blue-950 border-blue-600",
     icon: "🎒",
+    illustration: "/illustrations/unit1_back_to_school.jpg",
     words: [
       { id: "w1-1", word: "Secretary Bird", arabic: "طائر الكاتب / صقر الجديان", image: "🦅", example: "The secretary bird is the emblem of Sudan.", soundText: "The secretary bird is the emblem of Sudan.", unit: 1 },
       { id: "w1-2", word: "Emblem", arabic: "شعار رسمي", image: "🇸🇩", example: "The secretary bird is the emblem of our country.", soundText: "The secretary bird is the emblem of our country.", unit: 1 },
@@ -20,6 +21,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Welcome Back & Timetable",
         type: "conversation",
+        illustration: "/illustrations/unit1_back_to_school.jpg",
         content: {
           songText: "Welcome back from holiday! Welcome back to school today!\nIt was nice with your family, with your mum and dad.\nBut you're with your friends, so don't be sad!\nThere's science and maths, lots of subjects are new.\nThere's geography and history, and English too!\nSmile! Be happy! Be happy you are here,\nTo learn lots of new things in school this year!",
           dialogue: [
@@ -57,6 +59,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: The Secretary Bird",
         type: "conversation",
+        illustration: "/illustrations/unit1_secretary_bird.jpg",
         content: {
           dialogue: [
             { speaker: "Amna", text: "What is the official emblem of Sudan?", voice: "Zephyr" },
@@ -72,6 +75,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 5,
         title: "Lesson 5: Sukkar and the Crocodile (Part 1)",
         type: "conversation",
+        illustration: "/illustrations/unit1_sukkar_monkey.jpg",
         content: {
           dialogue: [
             { speaker: "Sukkar", text: "Hello Mr Crocodile! These delicious mangoes are for your wife.", voice: "Puck" },
@@ -85,6 +89,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: Sukkar's Escape (Part 2)",
         type: "conversation",
+        illustration: "/illustrations/unit1_sukkar_monkey.jpg",
         content: {
           dialogue: [
             { speaker: "Sukkar", text: "My heart is in my house in the tree! Can we go back and get it for Mrs Crocodile?", voice: "Puck" },
@@ -119,6 +124,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "الرياضيات في حياتنا",
     color: "bg-orange-400 text-orange-950 border-orange-600",
     icon: "🧮",
+    illustration: "/illustrations/unit2_maths_life.jpg",
     words: [
       { id: "w2-1", word: "Calculate", arabic: "يحسب", image: "💻", example: "We use numbers when we need to calculate.", soundText: "We use numbers when we need to calculate things.", unit: 2 },
       { id: "w2-2", word: "Symbol", arabic: "رمز", image: "➕", example: "Arabs invented new symbols for the numbers one to nine.", soundText: "Arabs invented new symbols for the numbers one to nine.", unit: 2 },
@@ -132,6 +138,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Numbers Everywhere & Dates",
         type: "song",
+        illustration: "/illustrations/unit2_maths_life.jpg",
         content: {
           songText: "Look to the left and look to the right,\nAnd look up and down.\nWhich numbers can we see,\nWhen we look around?\nNumbers, numbers everywhere,\nNumbers when we look\nAt prices, computers and mobile phones,\nOr on the pages of our book.\nNumbers on coins, numbers on money,\nNumbers to give the time or date,\nNumbers on watches, numbers on clocks,\nNumbers to count or calculate!\n\nDates Practice:\n- 23rd March 2020: The twenty-third of March, two thousand and twenty.\n- 5th December 1868: The fifth of December, eighteen sixty-eight.\n- 30th April 1968: The thirtieth of April, nineteen sixty-eight.\n- 2nd July 2013: The second of July, two thousand and thirteen."
         }
@@ -163,6 +170,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: The Thirsty Crow",
         type: "conversation",
+        illustration: "/illustrations/unit2_thirsty_crow.jpg",
         content: {
           dialogue: [
             { speaker: "Hassan", text: "One hot day, a thirsty crow flew over the fields looking for water.", voice: "Puck" },
@@ -221,6 +229,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "الاختراعات والأشياء الجديدة",
     color: "bg-purple-400 text-purple-950 border-purple-600",
     icon: "💡",
+    illustration: "/illustrations/unit3_inventions.svg",
     words: [
       { id: "w3-1", word: "Shadoof", arabic: "شادوف", image: "🪵", example: "A shadoof is smaller than a saqia.", soundText: "A shadoof is smaller than a saqia.", unit: 3 },
       { id: "w3-2", word: "Saqia", arabic: "ساقية", image: "🎡", example: "Animals like donkeys or cows pull the saqia.", soundText: "Animals like donkeys or cows pull the saqia.", unit: 3 },
@@ -247,6 +256,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 2,
         title: "Lesson 2: Irrigation Inventions",
         type: "conversation",
+        illustration: "/illustrations/unit3_inventions.svg",
         content: {
           dialogue: [
             { speaker: "Ahmed", text: "Granddad, how do you get water from the River Nile to the fields?", voice: "Kore" },
@@ -270,6 +280,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: Leonardo da Vinci",
         type: "song",
+        illustration: "/illustrations/unit3_inventions.svg",
         content: {
           songText: "Leonardo da Vinci was born in Italy in 1452. When he was a boy, he was always outside studying birds, animals and plants carefully. When he was an adult, he was a famous artist who painted wonderful pictures. He was also a brilliant inventor who thought of ideas for rockets, planes, helicopters and parachutes hundreds of years before they were built!"
         }
@@ -321,6 +332,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "عجائب العالم",
     color: "bg-cyan-400 text-cyan-950 border-cyan-600",
     icon: "🏛️",
+    illustration: "/illustrations/unit4_wonders.svg",
     words: [
       { id: "w4-1", word: "Wonder", arabic: "أعجوبة", image: "🏛️", example: "Machu Picchu is an amazing old stone wonder.", soundText: "Machu Picchu is an amazing old stone wonder.", unit: 4 },
       { id: "w4-2", word: "Tomb", arabic: "ضريح / قبر ملكي", image: "🪦", example: "The Taj Mahal is a beautiful white marble tomb.", soundText: "The Taj Mahal is a beautiful white marble tomb.", unit: 4 },
@@ -334,6 +346,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Wonders of the World Chant",
         type: "song",
+        illustration: "/illustrations/unit4_wonders.svg",
         content: {
           songText: "There are many wonders in the world for us all to see:\nThe Taj Mahal in India, the Colosseum in Italy.\nThe city of Petra in Jordan is old, but looks very new.\nThe city of Machu Picchu in the mountains of Peru.\nThe Great Wall of China and the Great Pyramid in Egypt too!\nWalls, mosques, palaces, cities: many wonders to see,\nIf you go and visit them, can you also pay for me?"
         }
@@ -372,6 +385,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 5,
         title: "Lesson 5: Pyramids of Meroë (Kush)",
         type: "song",
+        illustration: "/illustrations/unit4_wonders.svg",
         content: {
           songText: "For 1,100 years, Kush was an important kingdom in Sudan. It started about 2,700 years ago in Napata and then moved to Meroë. Kush was very rich from its trade in iron. Sudan has got amazing pyramids: there are about 220 pyramids in Sudan, while Egypt has got 118! Sudanese pyramids are smaller than Egyptian pyramids, but they are steeper and more numerous. In 1834, an Italian named Giuseppe Ferlini damaged about 40 pyramids searching for gold."
         }
@@ -421,6 +435,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "الأيام والمناسبات الخاصة",
     color: "bg-red-400 text-red-950 border-red-600",
     icon: "🎉",
+    illustration: "/illustrations/unit5_special_days.svg",
     words: [
       { id: "w5-1", word: "Festival", arabic: "مهرجان", image: "🎡", example: "Port Sudan holds a great tourism and shopping festival.", soundText: "Port Sudan holds a great tourism and shopping festival.", unit: 5 },
       { id: "w5-2", word: "Wedding", arabic: "حفل زفاف", image: "💍", example: "We received an invitation to Ali and Moussa's wedding.", soundText: "We received an invitation to Ali and Moussa's wedding.", unit: 5 },
@@ -434,6 +449,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Celebrate Special Days Chant",
         type: "song",
+        illustration: "/illustrations/unit5_special_days.svg",
         content: {
           songText: "Celebrate, celebrate, special days:\nEid al-Fitr, wedding invitations, school graduations,\nFestivals, Mother's Day.\nWe can smile and keep clapping,\nWhen nice things happen!\nWe can have fun and cheer,\nWhen nice things are here!\nSmile! Laugh! Take a photograph!\nCelebrate, celebrate, special days!"
         }
@@ -495,6 +511,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 7,
         title: "Lesson 7: Eid al-Fitr in Sudan",
         type: "conversation",
+        illustration: "/illustrations/unit5_special_days.svg",
         content: {
           dialogue: [
             { speaker: "Salah", text: "On Eid day, I get up very early in the morning and put on my best clean clothes.", voice: "Kore" },
@@ -521,6 +538,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "الصحة ورعاية الجسم",
     color: "bg-emerald-400 text-emerald-950 border-emerald-600",
     icon: "🩺",
+    illustration: "/illustrations/unit6_health.svg",
     words: [
       { id: "w6-1", word: "Stomach", arabic: "معدة", image: "🥗", example: "We need a stomach when we eat food.", soundText: "We need a stomach when we eat food.", unit: 6 },
       { id: "w6-2", word: "Shoulder", arabic: "كتف", image: "💪", example: "We need shoulders and elbows so our arms can bend.", soundText: "We need shoulders and elbows so our arms can bend.", unit: 6 },
@@ -534,6 +552,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Parts of the Body Chant",
         type: "song",
+        illustration: "/illustrations/unit6_health.svg",
         content: {
           songText: "We need a mouth to talk with, and two eyes to see.\nWe need a face, two ears, teeth and two knees.\nWe need fingers in our gloves where our two hands end.\nWe need shoulders and elbows so our arms can bend.\nWe need a back and a body and a head on the top.\nWe need our toes in our shoes where our two feet stop.\nWe need legs on the ground to take all our weight,\nA backbone and a neck to hold our head straight!\nWe need a nose to smell with and a stomach when we eat,\nWe need a heart in our body to pump and to beat!\n\nSingular & Plural Rules:\n- one knee -> two knees\n- one elbow -> two elbows\n- one foot -> two feet\n- one tooth -> thirty-two teeth\n- one child -> many children\n- one woman -> women / one man -> men"
         }
@@ -550,6 +569,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: Food Groups & Nutrition",
         type: "song",
+        illustration: "/illustrations/unit6_health.svg",
         content: {
           songText: "Every day we need healthy foods from different groups:\n1. Protein (about 30g): Meat, chicken, fish, eggs and beans build strong muscles.\n2. Carbohydrate (about 200g): Bread, rice, sugar and potatoes give us energy.\n3. Fat (about 70g): Cheese, butter and oil.\n4. Fruit and Vegetables: Apples, grapes, carrots, tomatoes and onions keep us healthy and protect us from diseases.\nDrink lots of clean water and eat balanced meals!"
         }
@@ -558,6 +578,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 4,
         title: "Lesson 4: Exercise & Keeping Fit",
         type: "song",
+        illustration: "/illustrations/unit6_health.svg",
         content: {
           songText: "Regular exercise is good for us, and more exercise is better! Exercise builds our muscles and bones and makes us strong. Exercise keeps our hearts and bodies healthy. Children who take regular exercise:\n- Have better control of their body weight.\n- Have stronger muscles and bones.\n- Have lower blood pressure than children who don't exercise.\n- Are fitter, faster, and healthier.\n- Are usually calmer and happier!"
         }
@@ -616,6 +637,7 @@ export const SMILE_UNITS: UnitItem[] = [
     arabicTitle: "مراجعة شاملة وحماية البيئة",
     color: "bg-rose-400 text-rose-950 border-rose-600",
     icon: "♻️",
+    illustration: "/illustrations/unit7_green_earth.svg",
     words: [
       { id: "w7-1", word: "Recycle", arabic: "إعادة تدوير", image: "♻️", example: "We can recycle glass, wood, metal and paper.", soundText: "We can recycle glass, wood, metal and paper.", unit: 7 },
       { id: "w7-2", word: "Metal", arabic: "معدن", image: "📎", example: "Cans and car engines are made of metal.", soundText: "Cans and car engines are made of metal.", unit: 7 },
@@ -629,6 +651,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Be Green & Materials",
         type: "song",
+        illustration: "/illustrations/unit7_green_earth.svg",
         content: {
           songText: "Take care of the Earth and try to be green!\nKeep the Earth healthy and keep it clean!\nWhen you leave a room or go out at night,\nRemember to stop and turn out the light!\nDon't throw down rubbish and leave it behind,\nDon't waste paper or money, don't waste food or time!\nDon't waste water or energy, and try to be green,\nKeep the Earth healthy and keep it clean!\n\nMaterials in English:\n- A window is made of glass.\n- A ruler is made of plastic.\n- A desk is made of wood.\n- A can is made of metal."
         }
@@ -637,6 +660,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 2,
         title: "Lesson 2: How to Recycle in Class",
         type: "song",
+        illustration: "/illustrations/unit7_green_earth.svg",
         content: {
           songText: "How to set up recycling in class:\n1. First, find four large boxes at home and bring them to school.\n2. Second, at school, write four labels: Glass, Metal, Plastic, and Paper.\n3. Third, put one label on each box.\n4. Fourth, put the four boxes with their labels at the front of the classroom.\n5. Fifth, collect items at home and bring them to school.\n6. Finally, put each item into the correct box (for example, jars in the Glass box, cans in the Metal box). Recycling saves energy, money and natural materials!"
         }

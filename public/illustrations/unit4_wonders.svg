@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sunsetSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="30%" stop-color="#701a75"/>
+      <stop offset="70%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+    <linearGradient id="pyramidSudan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </linearGradient>
+    <filter id="shadow4" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Dramatic Sunset Sky -->
+  <rect width="800" height="450" fill="url(#sunsetSky)"/>
+  <circle cx="400" cy="220" r="85" fill="#fef08a" opacity="0.9" filter="url(#shadow4)"/>
+  <circle cx="400" cy="220" r="110" fill="#fed7aa" opacity="0.4"/>
+
+  <!-- Desert Dunes Horizon -->
+  <path d="M0 340 Q250 310 500 330 T800 320 L800 450 L0 450 Z" fill="#c2410c"/>
+  <path d="M0 370 Q200 340 450 360 T800 350 L800 450 L0 450 Z" fill="#b45309"/>
+
+  <!-- Sudanese Steep Pyramids of Meroe (Left and Center-Left) -->
+  <g transform="translate(140, 260)" filter="url(#shadow4)">
+    <!-- Steep Nubian Pyramid 1 -->
+    <polygon points="0,-130 -65,110 65,110" fill="url(#pyramidSudan)"/>
+    <polygon points="0,-130 0,110 65,110" fill="#92400e" opacity="0.75"/>
+    <!-- Pylon chapel entrance -->
+    <rect x="-15" y="60" width="30" height="50" fill="#78350f"/>
+    <rect x="-8" y="75" width="16" height="35" fill="#18181b"/>
+  </g>
+  <g transform="translate(240, 290)" filter="url(#shadow4)">
+    <!-- Steep Nubian Pyramid 2 -->
+    <polygon points="0,-100 -50,80 50,80" fill="url(#pyramidSudan)"/>
+    <polygon points="0,-100 0,80 50,80" fill="#92400e" opacity="0.75"/>
+    <rect x="-10" y="45" width="20" height="35" fill="#78350f"/>
+  </g>
+
+  <!-- Camels silhouette in Sudan desert -->
+  <g transform="translate(80, 395) scale(0.6)">
+    <ellipse cx="40" cy="20" rx="30" ry="18" fill="#451a03"/>
+    <circle cx="25" cy="5" r="10" fill="#451a03"/><!-- hump -->
+    <circle cx="55" cy="5" r="10" fill="#451a03"/><!-- hump -->
+    <path d="M10 25 Q-10 10 -15 -5 Q-15 -15 -5 -15 Q5 -15 15 5" fill="#451a03"/><!-- neck -->
+    <circle cx="-10" cy="-18" r="7" fill="#451a03"/><!-- head -->
+    <line x1="20" y1="35" x2="15" y2="75" stroke="#451a03" stroke-width="6"/>
+    <line x1="30" y1="35" x2="35" y2="75" stroke="#451a03" stroke-width="6"/>
+    <line x1="50" y1="35" x2="45" y2="75" stroke="#451a03" stroke-width="6"/>
+    <line x1="60" y1="35" x2="65" y2="75" stroke="#451a03" stroke-width="6"/>
+  </g>
+
+  <!-- Taj Mahal (Center Right) -->
+  <g transform="translate(480, 295)" filter="url(#shadow4)">
+    <!-- Main base -->
+    <rect x="-60" y="0" width="120" height="70" fill="#f8fafc"/>
+    <rect x="-20" y="15" width="40" height="55" rx="20" fill="#e2e8f0"/>
+    <rect x="-12" y="25" width="24" height="45" rx="12" fill="#334155"/>
+    <!-- Dome -->
+    <path d="M-35 0 Q0 -65 0 -70 Q0 -65 35 0 Z" fill="#f8fafc"/>
+    <line x1="0" y1="-70" x2="0" y2="-85" stroke="#f59e0b" stroke-width="3"/>
+    <!-- Minarets -->
+    <rect x="-85" y="-30" width="10" height="100" fill="#f8fafc"/>
+    <circle cx="-80" cy="-35" r="7" fill="#f8fafc"/>
+    <rect x="75" y="-30" width="10" height="100" fill="#f8fafc"/>
+    <circle cx="80" cy="-35" r="7" fill="#f8fafc"/>
+  </g>
+
+  <!-- Great Wall of China (Right Ridge) -->
+  <g transform="translate(680, 290)" filter="url(#shadow4)">
+    <!-- Stone Watchtower -->
+    <rect x="-40" y="-30" width="80" height="80" fill="#64748b"/>
+    <polygon points="-45,-30 -40,-45 40,-45 45,-30" fill="#475569"/>
+    <!-- Battlements -->
+    <rect x="-35" y="-55" width="12" height="10" fill="#475569"/>
+    <rect x="-5" y="-55" width="12" height="10" fill="#475569"/>
+    <rect x="25" y="-55" width="12" height="10" fill="#475569"/>
+    <!-- Arched Windows -->
+    <rect x="-20" y="-10" width="14" height="25" rx="7" fill="#1e293b"/>
+    <rect x="6" y="-10" width="14" height="25" rx="7" fill="#1e293b"/>
+    <!-- Wall running down hill -->
+    <path d="M40 0 Q80 30 120 70 L120 100 L40 50 Z" fill="#475569"/>
+  </g>
+
+  <!-- Header Banner Badge -->
+  <g transform="translate(400, 45)">
+    <rect x="-190" y="-22" width="380" height="44" rx="22" fill="#ffffff" filter="url(#shadow4)"/>
+    <text x="0" y="6" font-family="sans-serif" font-size="18" font-weight="900" fill="#0e7490" text-anchor="middle" letter-spacing="1">UNIT 4: WONDERS OF THE WORLD</text>
+  </g>
+</svg>

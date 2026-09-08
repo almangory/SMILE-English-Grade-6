@@ -14,6 +14,7 @@ export interface UnitItem {
   arabicTitle: string;
   color: string;
   icon: string;
+  illustration?: string;
   lessons: Lesson[];
   words: WordItem[];
 }
@@ -22,6 +23,7 @@ export interface Lesson {
   id: number;
   title: string;
   type: "phonics" | "vocab" | "conversation" | "game" | "song";
+  illustration?: string;
   content: {
     dialogue?: Array<{ speaker: string; text: string; voice?: string }>;
     letters?: string[];
