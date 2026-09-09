@@ -9,10 +9,28 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+// Security Hardening: Disable X-Powered-By & Add Essential Security Headers
+app.disable("x-powered-by");
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
+});
 
-// Audio cache to optimize speed and API quota
+app.use(express.json({ limit: "1mb" }));
+
+// Bounded in-memory audio cache to prevent memory exhaustion (DoS)
+const MAX_CACHE_ITEMS = 200;
 const audioCache: Record<string, string> = {};
+
+function saveToAudioCache(key: string, data: string) {
+  const keys = Object.keys(audioCache);
+  if (keys.length >= MAX_CACHE_ITEMS) {
+    delete audioCache[keys[0]]; // Evict oldest entry (FIFO)
+  }
+  audioCache[key] = data;
+}
 
 // Server-side Gemini API client
 let ai: GoogleGenAI | null = null;
@@ -43,6 +61,9 @@ app.get("/api/tts", async (req, res) => {
   }
 
   const cleanText = text.trim();
+  if (cleanText.length > 500) {
+    return res.status(400).send("Text exceeds maximum allowed length of 500 characters");
+  }
   try {
     const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
     const googleRes = await fetch(ttsUrl, {
@@ -88,7 +109,13 @@ app.post("/api/tts", async (req, res) => {
   }
 
   const cleanText = text.trim();
-  const cacheKey = `${voice}:${cleanText}`;
+  if (cleanText.length > 500) {
+    return res.status(400).json({ error: "Text exceeds maximum allowed length of 500 characters" });
+  }
+
+  // Sanitize voice to prevent unexpected parameter injection
+  const safeVoice = typeof voice === "string" && /^[a-zA-Z0-9_-]{1,30}$/.test(voice) ? voice : "Kore";
+  const cacheKey = `${safeVoice}:${cleanText}`;
 
   // Serve from cache if available
   if (audioCache[cacheKey]) {
@@ -128,7 +155,7 @@ app.post("/api/tts", async (req, res) => {
     // If Gemini client isn't available, automatically fallback to Google Translate TTS which is 100% reliable and doesn't require keys
     try {
       const base64Audio = await fetchTranslateTTS(cleanText);
-      audioCache[cacheKey] = base64Audio;
+      saveToAudioCache(cacheKey, base64Audio);
       return res.json({ audio: base64Audio });
     } catch (e: any) {
       console.error("Translate TTS direct generation error:", e.message || e);
@@ -146,7 +173,7 @@ app.post("/api/tts", async (req, res) => {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: voice as any },
+            prebuiltVoiceConfig: { voiceName: safeVoice as any },
           },
         },
       },
@@ -155,7 +182,7 @@ app.post("/api/tts", async (req, res) => {
     const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
 
     if (base64Audio) {
-      audioCache[cacheKey] = base64Audio;
+      saveToAudioCache(cacheKey, base64Audio);
       return res.json({ audio: base64Audio });
     } else {
       throw new Error("No audio content returned from Gemini Live TTS");
@@ -164,7 +191,7 @@ app.post("/api/tts", async (req, res) => {
     console.error("Gemini TTS Error, switching back to elegant translate TTS:", error.message || error);
     try {
       const base64Audio = await fetchTranslateTTS(cleanText);
-      audioCache[cacheKey] = base64Audio;
+      saveToAudioCache(cacheKey, base64Audio);
       return res.json({ audio: base64Audio });
     } catch (e: any) {
       console.error("Translate TTS secondary generation error:", e.message || e);
@@ -177,12 +204,24 @@ app.post("/api/tts", async (req, res) => {
 app.post("/api/chat", async (req, res) => {
   const { message, character = "Ahmed", history = [] } = req.body;
 
+  if (!message || typeof message !== "string" || message.trim().length === 0) {
+    return res.status(400).json({ error: "Message is required" });
+  }
+
+  if (message.length > 500) {
+    return res.status(400).json({ error: "Message too long (max 500 characters)" });
+  }
+
+  // Whitelist character names to prevent Prompt Injection into system instructions
+  const ALLOWED_CHARACTERS = ["Ahmed", "Sara", "Salah", "Elham", "Mona", "Omar", "Ali"];
+  const safeCharacter = ALLOWED_CHARACTERS.includes(character) ? character : "Ahmed";
+
   if (!ai) {
     // Simulated simple responses if Gemini key is missing
     const promptLower = (message || "").toLowerCase();
     let reply = "Hello! Let's practice English together!";
     if (promptLower.includes("hello") || promptLower.includes("hi")) {
-      reply = `Hello! I am ${character}. Welcome to SMILE English, Lesson 1! What is your name?`;
+      reply = `Hello! I am ${safeCharacter}. Welcome to SMILE English, Lesson 1! What is your name?`;
     } else if (promptLower.includes("name")) {
       reply = "That is a beautiful name! Nice to meet you! Happy studying!";
     } else if (promptLower.includes("how are you")) {
@@ -194,12 +233,14 @@ app.post("/api/chat", async (req, res) => {
   }
 
   try {
-    const chatHistory = history.map((h: any) => ({
-      role: h.role, // "user" or "model"
-      parts: [{ text: h.text }],
-    }));
+    const safeHistory = Array.isArray(history)
+      ? history.slice(-10).filter((h: any) => h && typeof h.text === "string").map((h: any) => ({
+          role: h.role === "user" ? "user" : "model",
+          parts: [{ text: String(h.text).slice(0, 500) }],
+        }))
+      : [];
 
-    const systemInstruction = `You are ${character}, a friendly Sudanese Grade 6 pupil from the SMILE English Pupil's Book 6 (Sudan Modern Integrated Learning of English).
+    const systemInstruction = `You are ${safeCharacter}, a friendly Sudanese Grade 6 pupil from the SMILE English Pupil's Book 6 (Sudan Modern Integrated Learning of English).
 You speak correct, age-appropriate English suited for basic level Grade 6 pupils (11-12 years old) following SMILE Book 6.
 Encourage the pupil to practice, use clear sentences, correct their spelling/grammar gently, and keep answers under 2 sentences. Include friendly cheerful words like "Well done!", "Excellent!", or "Great job!"`;
 
@@ -209,10 +250,10 @@ Encourage the pupil to practice, use clear sentences, correct their spelling/gra
         systemInstruction,
         temperature: 0.7,
       },
-      history: chatHistory,
+      history: safeHistory,
     });
 
-    const response = await chat.sendMessage({ message });
+    const response = await chat.sendMessage({ message: message.trim() });
     return res.json({ text: response.text });
   } catch (error: any) {
     console.error("Gemini Chat Error:", error);
