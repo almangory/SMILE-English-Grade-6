@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { 
   BookOpen, 
   Volume2, 
@@ -44,6 +44,87 @@ import { UnitItem, Lesson, WordItem, ChatMessage } from "./types";
 import { generateQuiz } from "./quizGenerator";
 import { generateSudanExams, ExamPaper } from "./examGenerator";
 import { getLessonIllustration } from "./lessonIllustrations";
+
+interface InteractiveTextReaderProps {
+  text: string;
+  blockId: string;
+  activeSpeakingBlockId: string | null;
+  audioPlaybackActive: boolean;
+  activeWordCharIndex: number | null;
+  activeWordIndex: number | null;
+  onWordClick: (word: string, wordIdx: number, blockId: string) => void;
+  className?: string;
+  activeHighlightClass?: string;
+}
+
+const InteractiveTextReader: React.FC<InteractiveTextReaderProps> = ({
+  text,
+  blockId,
+  activeSpeakingBlockId,
+  audioPlaybackActive,
+  activeWordCharIndex,
+  activeWordIndex,
+  onWordClick,
+  className = "",
+  activeHighlightClass = "",
+}) => {
+  const tokens = useMemo(() => {
+    const list: Array<{ text: string; isWord: boolean; charStart: number; charEnd: number; wordIndex: number }> = [];
+    const regex = /([a-zA-Z0-9'’]+)|([^a-zA-Z0-9'’]+)/g;
+    let match: RegExpExecArray | null;
+    let wordIdx = 0;
+    while ((match = regex.exec(text)) !== null) {
+      const isWord = Boolean(match[1]);
+      list.push({
+        text: match[0],
+        isWord,
+        charStart: match.index,
+        charEnd: match.index + match[0].length,
+        wordIndex: isWord ? wordIdx++ : -1,
+      });
+    }
+    return list;
+  }, [text]);
+
+  const isBlockSpeaking = activeSpeakingBlockId === blockId && audioPlaybackActive;
+
+  return (
+    <span className={`inline leading-relaxed ${className}`}>
+      {tokens.map((token, i) => {
+        if (!token.isWord) {
+          return (
+            <span key={i} className="whitespace-pre-wrap">
+              {token.text}
+            </span>
+          );
+        }
+
+        const isHighlighted = isBlockSpeaking && (
+          (activeWordCharIndex !== null && activeWordCharIndex >= token.charStart && activeWordCharIndex < token.charEnd) ||
+          (activeWordIndex !== null && activeWordIndex === token.wordIndex)
+        );
+
+        return (
+          <span
+            key={i}
+            onClick={(e) => {
+              e.stopPropagation();
+              onWordClick(token.text, token.wordIndex, blockId);
+            }}
+            title="انقر للاستماع لنطق هذه الكلمة • Click to pronounce"
+            className={`cursor-pointer transition-all duration-150 select-none ${
+              isHighlighted
+                ? activeHighlightClass || "bg-amber-300 text-amber-950 font-black rounded-lg px-1.5 py-0.5 shadow-md ring-2 ring-amber-400 scale-105 inline-block z-10 animate-pulse"
+                : "hover:bg-amber-100/90 hover:text-amber-950 rounded px-0.5 transition-colors"
+            }`}
+          >
+            {token.text}
+          </span>
+        );
+      })}
+    </span>
+  );
+};
 
 export default function App() {
   const [selectedUnit, setSelectedUnit] = useState<UnitItem>(SMILE_UNITS[0]);
@@ -464,10 +545,14 @@ export default function App() {
     setQuizIsConfiguring(false);
   };
 
-  // Audio state
+  // Audio state & Interactive Word Reader state
   const [speakingText, setSpeakingText] = useState<string | null>(null);
   const [audioPlaybackActive, setAudioPlaybackActive] = useState(false);
+  const [activeSpeakingBlockId, setActiveSpeakingBlockId] = useState<string | null>(null);
+  const [activeWordCharIndex, setActiveWordCharIndex] = useState<number | null>(null);
+  const [activeWordIndex, setActiveWordIndex] = useState<number | null>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const speechFallbackTimerRef = useRef<any>(null);
 
   // Warm up system voices queue
   useEffect(() => {
@@ -617,33 +702,164 @@ export default function App() {
     setIsPlayingEntireDialogue(false);
   };
 
+  // Stop all reading audio and clear active highlighting immediately
+  const stopReading = () => {
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.pause();
+      audioPlayerRef.current.currentTime = 0;
+    }
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    if (speechFallbackTimerRef.current) {
+      clearInterval(speechFallbackTimerRef.current);
+      speechFallbackTimerRef.current = null;
+    }
+    setAudioPlaybackActive(false);
+    setSpeakingText(null);
+    setActiveSpeakingBlockId(null);
+    setActiveWordCharIndex(null);
+    setActiveWordIndex(null);
+    setIsPlayingEntireDialogue(false);
+    setActiveSpeakingLineIndex(null);
+  };
+
   // Synchronize first lesson whenever unit changes
   const handleUnitSelect = (unit: UnitItem) => {
+    stopReading();
     navigateToUnit(unit);
   };
 
   const handleLessonSelect = (lesson: Lesson) => {
+    stopReading();
     navigateToLesson(lesson);
+  };
+
+  // Pronounce a single clicked word with immediate highlighting
+  const speakSingleWord = (word: string, wordIdx: number, blockId: string) => {
+    stopReading();
+    const cleanWord = word.replace(/[^a-zA-Z0-9'-]/g, "").trim();
+    if (!cleanWord) return;
+
+    setActiveSpeakingBlockId(blockId);
+    setActiveWordIndex(wordIdx);
+    setActiveWordCharIndex(null);
+    setSpeakingText(cleanWord);
+    setAudioPlaybackActive(true);
+
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      const utterance = new SpeechSynthesisUtterance(cleanWord);
+      utterance.lang = "en-US";
+      utterance.rate = 0.82; // clear educational rate
+
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find(v => v.lang.startsWith("en-") && (v.name.includes("Google") || v.name.includes("Natural") || v.name.includes("Microsoft")))
+        || voices.find(v => v.lang.startsWith("en-"))
+        || voices[0];
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+
+      utterance.onend = () => {
+        stopReading();
+      };
+      utterance.onerror = () => {
+        stopReading();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } else {
+      speakText(cleanWord, "Kore");
+    }
+  };
+
+  // Read full text (song chant or dialogue line) with synchronized real-time word highlighting
+  const speakWithWordHighlight = (text: string, blockId: string, voiceName: string = "Kore") => {
+    // If this exact block is currently playing, toggle stop
+    if (activeSpeakingBlockId === blockId && audioPlaybackActive) {
+      stopReading();
+      return;
+    }
+
+    stopReading();
+    const cleanText = text.trim();
+    if (!cleanText) return;
+
+    setActiveSpeakingBlockId(blockId);
+    setSpeakingText(cleanText);
+    setAudioPlaybackActive(true);
+    setActiveWordCharIndex(0);
+    setActiveWordIndex(null);
+
+    const wordsList = cleanText.split(/\s+/).filter(Boolean);
+
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = "en-US";
+      utterance.rate = 0.82; // child-friendly pacing
+
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find(v => v.lang.startsWith("en-") && (v.name.includes("Google") || v.name.includes("Natural") || v.name.includes("Microsoft")))
+        || voices.find(v => v.lang.startsWith("en-"))
+        || voices[0];
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+
+      let boundaryFired = false;
+
+      utterance.onboundary = (event) => {
+        boundaryFired = true;
+        if (event.name === "word" || event.charIndex !== undefined) {
+          setActiveWordCharIndex(event.charIndex);
+        }
+      };
+
+      utterance.onstart = () => {
+        // Fallback timer if onboundary is not supported by device
+        setTimeout(() => {
+          if (!boundaryFired && wordsList.length > 0) {
+            let currentWordIdx = 0;
+            const msPerWord = 380;
+            speechFallbackTimerRef.current = setInterval(() => {
+              if (currentWordIdx < wordsList.length) {
+                setActiveWordIndex(currentWordIdx);
+                currentWordIdx++;
+              } else {
+                if (speechFallbackTimerRef.current) {
+                  clearInterval(speechFallbackTimerRef.current);
+                  speechFallbackTimerRef.current = null;
+                }
+              }
+            }, msPerWord);
+          }
+        }, 400);
+      };
+
+      utterance.onend = () => {
+        stopReading();
+      };
+
+      utterance.onerror = () => {
+        stopReading();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } else {
+      speakText(cleanText, voiceName);
+    }
   };
 
   // Text-To-Speech function using full-stack API or speech synthesis fallback
   const speakText = (text: string, voiceName: string = "Kore") => {
     // If the exact same text is playing, toggle pause
     if (speakingText === text && audioPlaybackActive) {
-      if (audioPlayerRef.current) {
-        audioPlayerRef.current.pause();
-      }
-      window.speechSynthesis.cancel();
-      setAudioPlaybackActive(false);
-      setSpeakingText(null);
+      stopReading();
       return;
     }
 
     // Cancel any previous audio immediately (prevents overlapping/stuck sounds)
-    if (audioPlayerRef.current) {
-      audioPlayerRef.current.pause();
-    }
-    window.speechSynthesis.cancel();
+    stopReading();
 
     const cleanText = text.trim();
     setSpeakingText(cleanText);
@@ -684,8 +900,7 @@ export default function App() {
       audioPlayerRef.current.load(); // Prepare media decoder
 
       audioPlayerRef.current.onended = () => {
-        setAudioPlaybackActive(false);
-        setSpeakingText(null);
+        stopReading();
       };
 
       audioPlayerRef.current.onerror = (e) => {
@@ -732,12 +947,10 @@ export default function App() {
     utterance.lang = "en-US";
     utterance.rate = 0.85; // Speak moderately slow for children
     utterance.onend = () => {
-      setAudioPlaybackActive(false);
-      setSpeakingText(null);
+      stopReading();
     };
     utterance.onerror = () => {
-      setAudioPlaybackActive(false);
-      setSpeakingText(null);
+      stopReading();
     };
     window.speechSynthesis.speak(utterance);
   };
@@ -1163,38 +1376,66 @@ export default function App() {
                     {selectedLesson.type === "song" && selectedLesson.content.songText && (
                       <div className="bg-indigo-50 p-6 rounded-[32px] border-b-4 border-r-4 border-indigo-200 flex flex-col items-center text-center gap-5">
                         <span className="text-5xl animate-bounce">🎵</span>
+                        
+                        {/* Interactive Word Notice */}
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-100/90 text-indigo-900 text-xs font-black shadow-xs select-none">
+                          <span>👆 اضغط على أي كلمة للاستماع لنطقها منفردة مع التظليل الفوري</span>
+                        </div>
+
                         <div className="max-w-md mx-auto">
                           <p className="text-lg sm:text-xl font-black text-indigo-950 leading-relaxed font-serif italic">
-                            "{selectedLesson.content.songText}"
+                            “
+                            <InteractiveTextReader 
+                              text={selectedLesson.content.songText} 
+                              blockId={`song-${selectedLesson.id}`}
+                              activeSpeakingBlockId={activeSpeakingBlockId}
+                              audioPlaybackActive={audioPlaybackActive}
+                              activeWordCharIndex={activeWordCharIndex}
+                              activeWordIndex={activeWordIndex}
+                              onWordClick={speakSingleWord}
+                            />
+                            ”
                           </p>
                         </div>
-                        <motion.button
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => speakText(selectedLesson.content.songText || "")}
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white font-black uppercase py-4 px-8 rounded-[24px] shadow-[0_5px_0_0_#4338ca] hover:shadow-[0_2px_0_0_#4338ca] transition-all flex items-center justify-center gap-2 transform active:translate-y-1 cursor-pointer"
-                        >
-                          {speakingText === selectedLesson.content.songText && audioPlaybackActive ? (
-                            <>
-                              <VolumeX className="w-5 h-5 animate-spin" />
-                              <span>Stop Singing</span>
-                            </>
+                        
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                          {activeSpeakingBlockId === `song-${selectedLesson.id}` && audioPlaybackActive ? (
+                            <motion.button
+                              whileHover={{ scale: 1.05, y: -2 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={stopReading}
+                              className="bg-rose-600 hover:bg-rose-700 text-white font-black uppercase py-4 px-8 rounded-[24px] shadow-[0_5px_0_0_#9f1239] hover:shadow-[0_2px_0_0_#9f1239] transition-all flex items-center justify-center gap-2 transform active:translate-y-1 cursor-pointer animate-pulse"
+                            >
+                              <Square className="w-5 h-5 fill-current" />
+                              <span>إيقاف القراءة (STOP) ⏹️</span>
+                            </motion.button>
                           ) : (
-                            <>
+                            <motion.button
+                              whileHover={{ scale: 1.05, y: -2 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => speakWithWordHighlight(selectedLesson.content.songText || "", `song-${selectedLesson.id}`)}
+                              className="bg-indigo-600 hover:bg-indigo-700 text-white font-black uppercase py-4 px-8 rounded-[24px] shadow-[0_5px_0_0_#4338ca] hover:shadow-[0_2px_0_0_#4338ca] transition-all flex items-center justify-center gap-2 transform active:translate-y-1 cursor-pointer"
+                            >
                               <Volume2 className="w-5 h-5" />
                               <span>Listen and Sing! 🎙</span>
-                            </>
+                            </motion.button>
                           )}
-                        </motion.button>
+                        </div>
                       </div>
                     )}
 
                     {/* Lesson conversation dialogue layout */}
                     {selectedLesson.type === "conversation" && selectedLesson.content.dialogue && (
                       <div className="flex flex-col gap-4 max-w-xl mx-auto w-full mt-2">
+                        <div className="text-center">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-100 text-sky-900 text-xs font-black shadow-xs select-none">
+                            💡 اضغط على أي كلمة لنطقها وتظليلها، أو اضغط على السطر للاستماع كاملاً
+                          </span>
+                        </div>
                         {selectedLesson.content.dialogue.map((line, key) => {
+                          const lineBlockId = `dialogue-${selectedLesson.id}-${key}`;
                           const isSpecial = line.speaker === "Mrs. Hind" || line.speaker === "Mrs Hind" || line.speaker === "Teacher" || line.speaker === "Policeman";
-                          const isPlaying = speakingText === line.text && audioPlaybackActive;
+                          const isLineSpeaking = activeSpeakingBlockId === lineBlockId && audioPlaybackActive;
                           return (
                             <div 
                               key={key} 
@@ -1204,30 +1445,56 @@ export default function App() {
                                 {line.speaker === "Ahmed" ? "👦" : line.speaker === "Badr" ? "👶" : line.speaker === "Cathy" ? "👧" : "👩"}
                               </div>
                               <motion.div 
-                                onClick={() => speakText(line.text, line.voice)}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
+                                onClick={() => {
+                                  if (isLineSpeaking) {
+                                    stopReading();
+                                  } else {
+                                    speakWithWordHighlight(line.text, lineBlockId, line.voice);
+                                  }
+                                }}
+                                whileHover={{ scale: 1.01 }}
+                                whileTap={{ scale: 0.99 }}
                                 className={`flex-1 p-5 rounded-[24px] shadow-sm border-b-6 border-r-6 cursor-pointer transition-all ${
                                   isSpecial 
-                                    ? isPlaying 
-                                      ? "bg-amber-100/90 border-amber-400 text-amber-950" 
+                                    ? isLineSpeaking 
+                                      ? "bg-amber-100/95 border-amber-400 text-amber-950 ring-2 ring-amber-300 shadow-md" 
                                       : "bg-amber-50/60 border-amber-200 hover:border-amber-400 text-slate-800"
-                                    : isPlaying 
-                                      ? "bg-sky-100/90 border-sky-400 text-sky-950" 
+                                    : isLineSpeaking 
+                                      ? "bg-sky-100/95 border-sky-400 text-sky-950 ring-2 ring-sky-300 shadow-md" 
                                       : "bg-slate-50/70 border-slate-200 hover:border-sky-400 text-slate-800"
                                 }`}
                               >
-                                <div className="flex justify-between items-center mb-1">
+                                <div className="flex justify-between items-center mb-1.5">
                                   <span className="text-xs font-black text-slate-500 uppercase tracking-widest">{line.speaker}</span>
-                                  <div className="text-slate-400 p-1">
-                                    {isPlaying ? (
-                                      <VolumeX className="w-5 h-5 text-red-500 animate-pulse" />
+                                  <div className="p-1">
+                                    {isLineSpeaking ? (
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          stopReading();
+                                        }}
+                                        className="flex items-center gap-1 text-xs font-black text-rose-600 bg-rose-100 hover:bg-rose-200 px-2 py-0.5 rounded-full cursor-pointer animate-pulse"
+                                        title="إيقاف القراءة"
+                                      >
+                                        <Square className="w-3 h-3 fill-current" />
+                                        <span>إيقاف</span>
+                                      </button>
                                     ) : (
                                       <Volume2 className="w-5 h-5 text-slate-500 hover:scale-110 transition-transform" />
                                     )}
                                   </div>
                                 </div>
-                                <p className="text-[16px] font-black leading-snug">{line.text}</p>
+                                <p className="text-[16px] font-black leading-snug">
+                                  <InteractiveTextReader 
+                                    text={line.text} 
+                                    blockId={lineBlockId}
+                                    activeSpeakingBlockId={activeSpeakingBlockId}
+                                    audioPlaybackActive={audioPlaybackActive}
+                                    activeWordCharIndex={activeWordCharIndex}
+                                    activeWordIndex={activeWordIndex}
+                                    onWordClick={speakSingleWord}
+                                  />
+                                </p>
                               </motion.div>
                             </div>
                           );
@@ -1753,14 +2020,28 @@ export default function App() {
                             className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-[24px] p-4 text-[11px] font-bold text-slate-600 space-y-1.5 overflow-hidden"
                           >
                             <span className="text-[10px] text-purple-600 font-extrabold uppercase block mb-1">📖 Textbook Dialogue Guide (SMILE Book):</span>
-                            {allBookDialogueLessons[selectedDialogueIndex]?.dialogue.map((lin, idx) => (
-                              <div key={idx} className="flex gap-2 items-start text-xs border-b border-slate-100/50 pb-1">
-                                <span className="font-mono bg-indigo-100 text-indigo-800 rounded px-1.5 py-0.2 select-none shrink-0">{idx+1}</span>
-                                <span>
-                                  <strong>{lin.speaker}:</strong> "{lin.text}"
-                                </span>
-                              </div>
-                            ))}
+                            {allBookDialogueLessons[selectedDialogueIndex]?.dialogue.map((lin, idx) => {
+                              const guideBlockId = `guide-${selectedDialogueIndex}-${idx}`;
+                              return (
+                                <div key={idx} className="flex gap-2 items-start text-xs border-b border-slate-100/50 pb-1">
+                                  <span className="font-mono bg-indigo-100 text-indigo-800 rounded px-1.5 py-0.2 select-none shrink-0">{idx+1}</span>
+                                  <span>
+                                    <strong>{lin.speaker}:</strong>{" "}
+                                    "
+                                    <InteractiveTextReader 
+                                      text={lin.text} 
+                                      blockId={guideBlockId}
+                                      activeSpeakingBlockId={activeSpeakingBlockId}
+                                      audioPlaybackActive={audioPlaybackActive}
+                                      activeWordCharIndex={activeWordCharIndex}
+                                      activeWordIndex={activeWordIndex}
+                                      onWordClick={speakSingleWord}
+                                    />
+                                    "
+                                  </span>
+                                </div>
+                              );
+                            })}
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -2994,6 +3275,45 @@ export default function App() {
               </button>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Global Audio Stop Bar */}
+      <AnimatePresence>
+        {audioPlaybackActive && (
+          <motion.div
+            initial={{ y: 80, opacity: 0, scale: 0.9 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 80, opacity: 0, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-950/95 text-white px-5 py-3 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-2 border-rose-500/70 backdrop-blur-lg flex items-center gap-3 max-w-[92vw] sm:max-w-md w-auto justify-between select-none"
+          >
+            <div className="flex items-center gap-2.5 overflow-hidden">
+              <span className="relative flex h-3 w-3 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+              </span>
+              <div className="flex items-center gap-1.5 overflow-hidden">
+                <span className="text-amber-400 font-extrabold text-xs shrink-0 flex items-center gap-1">
+                  <Volume2 className="w-3.5 h-3.5 animate-pulse" />
+                  <span>جاري القراءة:</span>
+                </span>
+                <span className="truncate text-xs font-semibold text-slate-200 max-w-[140px] sm:max-w-[200px]">
+                  "{speakingText}"
+                </span>
+              </div>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={stopReading}
+              className="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-black text-xs px-4 py-2 rounded-full shadow-md flex items-center gap-1.5 transition-all shrink-0 cursor-pointer border border-rose-400/40"
+            >
+              <Square className="w-3.5 h-3.5 fill-current" />
+              <span>إيقاف القراءة (Stop)</span>
+            </motion.button>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

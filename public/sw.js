@@ -1,5 +1,5 @@
 // NAQLA English App - Service Worker for 100% Offline Capability
-const CACHE_NAME = 'naqla-english-v3';
+const CACHE_NAME = 'naqla-english-v4';
 
 const STATIC_ASSETS = [
   '/',
