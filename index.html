@@ -35,6 +35,35 @@
         });
       }
     </script>
+    
+    <!-- 🇸🇩 جسر الدخول الموحد التلقائي من منصة المناهج السودانية (Naqla SSO Receiver) -->
+    <script>
+      (function() {
+        try {
+          const hash = window.location.hash;
+          if (hash && hash.includes('naqla_sso=')) {
+            const params = new URLSearchParams(hash.replace(/^#/, ''));
+            const ssoData = params.get('naqla_sso');
+            if (ssoData) {
+              const user = JSON.parse(decodeURIComponent(escape(atob(ssoData))));
+              // التحقق من صلاحية التوكن (10 دقائق من تاريخ الإرسال)
+              if (user && user.ts && (Date.now() - user.ts < 10 * 60 * 1000)) {
+                console.log('🇸🇩 [منصة المناهج] تم تسجيل الدخول تلقائياً للمستخدم:', user.username);
+                localStorage.setItem('sudan_auth_user', JSON.stringify(user));
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('user', JSON.stringify(user));
+                // تنظيف شريط العنوان بحرفية
+                params.delete('naqla_sso');
+                const cleanHash = params.toString() ? '#' + params.toString() : '';
+                window.history.replaceState(null, '', window.location.pathname + window.location.search + cleanHash);
+              }
+            }
+          }
+        } catch (e) {
+          console.warn('Naqla SSO receiver error:', e);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

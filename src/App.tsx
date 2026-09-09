@@ -59,6 +59,48 @@ export default function App() {
   // Back button interception & Exit confirm state
   const [showExitConfirm, setShowExitConfirm] = useState(false);
 
+  // 🇸🇩 حالة المستخدم المسجل عبر لاقط الدخول الموحد (Naqla SSO)
+  const [currentUser, setCurrentUser] = useState<any>(() => {
+    try {
+      const saved = localStorage.getItem("sudan_auth_user") || localStorage.getItem("currentUser") || localStorage.getItem("user");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // 🇸🇩 لاقط جلسة الدخول الموحد التلقائي من منصة المناهج السودانية
+  useEffect(() => {
+    const handleSSO = () => {
+      const hash = window.location.hash;
+      if (hash && hash.includes("naqla_sso=")) {
+        try {
+          const params = new URLSearchParams(hash.replace(/^#/, ""));
+          const ssoData = params.get("naqla_sso");
+          if (ssoData) {
+            const user = JSON.parse(decodeURIComponent(escape(atob(ssoData))));
+            if (user && user.ts && Date.now() - user.ts < 10 * 60 * 1000) {
+              console.log("🇸🇩 [منصة المناهج] تم تسجيل الدخول تلقائياً للمستخدم:", user.username);
+              localStorage.setItem("sudan_auth_user", JSON.stringify(user));
+              localStorage.setItem("currentUser", JSON.stringify(user));
+              localStorage.setItem("user", JSON.stringify(user));
+              setCurrentUser(user);
+              params.delete("naqla_sso");
+              const cleanHash = params.toString() ? "#" + params.toString() : "";
+              window.history.replaceState(null, "", window.location.pathname + window.location.search + cleanHash);
+            }
+          }
+        } catch (err) {
+          console.warn("SSO receiver error:", err);
+        }
+      }
+    };
+
+    handleSSO();
+    window.addEventListener("hashchange", handleSSO);
+    return () => window.removeEventListener("hashchange", handleSSO);
+  }, []);
+
   // A4 Printable Worksheet / Exam states
   const [watermarkRemoved, setWatermarkRemoved] = useState(false);
   const [watermarkPassword, setWatermarkPassword] = useState("");
@@ -725,6 +767,32 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-sky-50/50 flex flex-col font-sans select-none antialiased p-3 sm:p-6 pb-24 md:pb-6">
+      {/* 🇸🇩 شريط الربط بمنظومة المناهج السودانية التفاعلية وموقع نقلة الرئيسي (SEO Backlink Bar) */}
+      <div className="w-full bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-900 text-white px-3 sm:px-6 py-2 text-xs font-sans flex items-center justify-between shadow-md border-b border-emerald-500/20 -mt-3 -mx-3 sm:-mt-6 sm:-mx-6 mb-5 no-print">
+        <div className="flex items-center gap-2 font-bold">
+          <span className="text-base">🇸🇩</span>
+          <span className="hidden sm:inline font-black tracking-wide text-emerald-100">ضمن منظومة المناهج السودانية التفاعلية | منصة نقلة</span>
+          <span className="sm:hidden font-extrabold text-emerald-100">منظومة المناهج السودانية</span>
+        </div>
+        <div className="flex items-center gap-2.5">
+          {currentUser && (
+            <span className="text-emerald-200 text-[11px] font-bold bg-emerald-800/90 px-2.5 py-0.5 rounded-full border border-emerald-500/40 flex items-center gap-1 shadow-sm">
+              <span>👤</span>
+              <span>{currentUser.username || currentUser.name || "الطالب"}</span>
+            </span>
+          )}
+          <a
+            href="https://sudan-interactive-curricula.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-200 hover:text-white font-black text-[11px] flex items-center gap-1.5 transition-all bg-emerald-800/80 hover:bg-emerald-700 px-3 py-1 rounded-xl border border-emerald-500/40 shadow-sm"
+          >
+            <span>العودة للمنصة الرئيسية</span>
+            <span className="text-xs">↗</span>
+          </a>
+        </div>
+      </div>
+
       {/* Top Header section with App Icon badge and PWA Install */}
       <header className="max-w-6xl w-full mx-auto mb-6 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
         <div className="flex items-center gap-3.5 w-full md:w-auto justify-between md:justify-start">
