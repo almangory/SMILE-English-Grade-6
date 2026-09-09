@@ -61,20 +61,33 @@ export const LESSON_ILLUSTRATIONS: Record<string, string> = {
 };
 
 export const NANO_3D_IMAGES: Record<string, string> = {
-  // Unit 1: Back to School (Each lesson has a strictly unique image)
+  // Unit 1: Back to School (100% COMPLETE - 8 of 8 lessons)
   "u1_l1": "/illustrations/unit1_back_to_school.jpg",
   "u1_l2": "/illustrations/unit1_lesson2_holiday.jpg",
+  "u1_l3": "/illustrations/unit1_lesson3_nile.jpg",
   "u1_l4": "/illustrations/unit1_secretary_bird.jpg",
   "u1_l5": "/illustrations/unit1_sukkar_monkey.jpg",
+  "u1_l6": "/illustrations/unit1_lesson6_sukkar_escape.jpg",
+  "u1_l7": "/illustrations/unit1_lesson7_independence.jpg",
   "u1_l8": "/illustrations/unit1_ostrich_desert.jpg",
   
-  // Unit 2: Maths in our Life
+  // Unit 2: Maths in our Life (100% COMPLETE - 8 of 8 lessons)
   "u2_l1": "/illustrations/unit2_maths_life.jpg",
+  "u2_l2": "/illustrations/unit2_lesson2_history_numbers.jpg",
+  "u2_l3": "/illustrations/unit2_lesson3_body_numbers.jpg",
   "u2_l4": "/illustrations/unit2_thirsty_crow.jpg",
+  "u2_l5": "/illustrations/unit2_lesson5_pyramids_trip.jpg",
+  "u2_l6": "/illustrations/unit2_lesson6_bad_dream.jpg",
+  "u2_l7": "/illustrations/unit2_lesson7_maths_jobs.jpg",
+  "u2_l8": "/illustrations/unit2_lesson8_revision.jpg",
   
-  // Unit 3: Inventions
+  // Unit 3: Inventions & New Things (6 of 8 lessons)
+  "u3_l1": "/illustrations/unit3_lesson1_travel.jpg",
   "u3_l2": "/illustrations/unit3_inventions.jpg",
+  "u3_l3": "/illustrations/unit3_lesson3_vaccines.jpg",
   "u3_l4": "/illustrations/unit3_da_vinci.jpg",
+  "u3_l5": "/illustrations/unit3_lesson5_winter_traveller.jpg",
+  "u3_l6": "/illustrations/unit3_lesson6_stone_soup.jpg",
 
   // Unit 4: Wonders of the World
   "u4_l1": "/illustrations/unit4_colosseum.jpg",

@@ -52,6 +52,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: Along the River Nile",
         type: "song",
+        illustration: "/illustrations/unit1_lesson3_nile.jpg",
         content: {
           songText: "Along the River Nile, dates grow on tall palm trees,\nAnd sharks swim in the warm waters of the Red Sea.\nCamels walk on the sand through the desert heat,\nAnd birds fly over the mountains of the west and east.\nHerders look after their cattle in the evening dark,\nElephants and ibexes sleep in Dinder Park.\nEvery man, woman and child across our great land,\nStand up and say: 'This is our Sudan!'"
         }
@@ -90,6 +91,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: Sukkar's Escape (Part 2)",
         type: "conversation",
+        illustration: "/illustrations/unit1_lesson6_sukkar_escape.jpg",
         content: {
           dialogue: [
             { speaker: "Sukkar", text: "My heart is in my house in the tree! Can we go back and get it for Mrs Crocodile?", voice: "Puck" },
@@ -104,6 +106,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 7,
         title: "Lesson 7: Sudan Independence Day",
         type: "song",
+        illustration: "/illustrations/unit1_lesson7_independence.jpg",
         content: {
           songText: "It is the first of January, 1956. It is a sunny and hot day here in Khartoum, and a beautiful day for Sudan! Prime Minister Ismail Al-Azhari is raising the Sudanese flag. There are thousands of people in the streets. Men, women and children are standing and watching. People are clapping, children are waving flags and cheering. Sudan is now an independent country! Everyone is happy and smiling."
         }
@@ -148,6 +151,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 2,
         title: "Lesson 2: History of Numbers",
         type: "conversation",
+        illustration: "/illustrations/unit2_lesson2_history_numbers.jpg",
         content: {
           dialogue: [
             { speaker: "Salah", text: "When did people first start to count?", voice: "Kore" },
@@ -163,6 +167,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: Amazing Body Numbers",
         type: "song",
+        illustration: "/illustrations/unit2_lesson3_body_numbers.jpg",
         content: {
           songText: "Our body is full of amazing numbers!\n- 32: The number of teeth in our mouth.\n- 206: The number of bones in our body.\n- 100,000: The average number of hairs on a human head.\n- 100,000: The average number of beats our heart makes in 24 hours.\n- 5,000: The average number of steps we take in one day.\n- 1095: The number of days in three years.\n- Our heart weighs about 300 grams and pumps blood in only 20 seconds."
         }
@@ -187,6 +192,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 5,
         title: "Lesson 5: Pyramids Trip (Quantities)",
         type: "conversation",
+        illustration: "/illustrations/unit2_lesson5_pyramids_trip.jpg",
         content: {
           dialogue: [
             { speaker: "Teacher", text: "How much fruit and food do we need for the bus trip?", voice: "Charon" },
@@ -210,6 +216,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 7,
         title: "Lesson 7: Maths in Different Jobs",
         type: "song",
+        illustration: "/illustrations/unit2_lesson7_maths_jobs.jpg",
         content: {
           songText: "Maths is important in many jobs:\n- A nurse uses maths to take temperatures and check blood pressure.\n- A builder uses maths to calculate the number of bricks and materials for a house.\n- A shopkeeper uses maths to weigh food and calculate prices.\n- A teacher uses numbers to help young people learn.\n- A carpenter uses maths to calculate how much wood to use for chairs and tables.\n- An astronaut uses maths to control rockets in space."
         }
@@ -244,6 +251,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 1,
         title: "Lesson 1: Ways to Travel & Communicate",
         type: "conversation",
+        illustration: "/illustrations/unit3_lesson1_travel.jpg",
         content: {
           dialogue: [
             { speaker: "Ali", text: "Which is the newest of these ways to travel?", voice: "Kore" },
@@ -273,6 +281,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 3,
         title: "Lesson 3: Staying Healthy & Vaccinations",
         type: "song",
+        illustration: "/illustrations/unit3_lesson3_vaccines.jpg",
         content: {
           songText: "Rules to stay healthy:\n- We must clean our teeth after we eat.\n- We must wash our hands before meals.\n- We must drink clean water when we exercise.\n- We mustn't watch lots of TV all day.\n- We mustn't eat lots of junk food and sweets.\n- Health Facts: Vaccinations are important inventions! Doctors and nurses give vaccinations to protect children and adults against dangerous diseases like tetanus and measles."
         }
@@ -298,6 +307,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: Making Stone Soup",
         type: "conversation",
+        illustration: "/illustrations/unit3_lesson6_stone_soup.jpg",
         content: {
           dialogue: [
             { speaker: "Villager 1", text: "What are you doing over that fire?", voice: "Zephyr" },
