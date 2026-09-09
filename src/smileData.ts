@@ -208,6 +208,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 6,
         title: "Lesson 6: Hassan's Bad Dream",
         type: "song",
+        illustration: "/illustrations/unit2_lesson6_bad_dream.jpg",
         content: {
           songText: "Hassan didn't sleep well last night. He had a bad dream about a day without numbers!\nHe couldn't read his clock, so he got up late.\nHe couldn't watch TV because there were no channel numbers.\nHe couldn't catch the bus because there were no bus numbers.\nHe couldn't phone his friends, buy anything, or find his page in his book!\nWhen he woke up and saw numbers on his phone and clock, he was very happy!"
         }
@@ -225,6 +226,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 8,
         title: "Lesson 8: Unit 2 Revision",
         type: "song",
+        illustration: "/illustrations/unit2_lesson8_revision.jpg",
         content: {
           songText: "Reviewing numbers and grammar: We use 'how much' for uncountable things like water, money and fruit. We use 'how many' for countable things like oranges, bottles and teeth. Remember: People started to count 25,000 years ago. Indians invented zero, and Arabs gave the world numbers 1 to 9."
         }
@@ -299,6 +301,7 @@ export const SMILE_UNITS: UnitItem[] = [
         id: 5,
         title: "Lesson 5: The Winter Traveller",
         type: "song",
+        illustration: "/illustrations/unit3_lesson5_winter_traveller.jpg",
         content: {
           songText: "A poor traveller arrived in a village late on a cold night in winter. The moon and stars were in the sky. The traveller didn't have any food or money. He went from house to house asking: 'Can you help me?' But no one gave him food. The answer was always: 'I can't help, ask my neighbour.' The traveller was cold and hungry, so he thought of a clever new 'invention'!"
         }
